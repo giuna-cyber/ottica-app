@@ -58,6 +58,15 @@ function Freccia() {
   );
 }
 
+function IconaTelefono() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
+      <path d="M10 18.5h4" />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#F4F7F6] text-[#102A2E] pb-24">
@@ -153,124 +162,112 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(169,214,222,0.28),transparent_42%),linear-gradient(180deg,#F4F7F6_0%,#EDF4F4_100%)]" />
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="mb-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#4E7F86]">
+            Servizi
+          </p>
+          <h2 className="mt-2 text-3xl font-black tracking-[-0.04em]">
+            Tutto per la tua vista.
+          </h2>
+        </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-          <div className="mb-7 max-w-2xl">
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#3D7881]">
-              Servizi
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Link
+            href="/catalogo"
+            className="rounded-3xl border border-[#D9E5E5] bg-white p-5 shadow-[0_12px_28px_rgba(16,42,46,0.07)] transition active:scale-[0.99]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0C252B] text-white">
+              <IconaOcchiali />
+            </div>
+            <h3 className="mt-4 text-xl font-black">Montature</h3>
+            <p className="mt-2 text-sm leading-6 text-[#657B80]">
+              Vista, sole, uomo, donna e bambino.
             </p>
+          </Link>
 
-            <h2 className="mt-2 text-3xl font-black tracking-[-0.045em] sm:text-4xl">
-              Servizi pensati
-              <span className="block text-[#1D6E7A]">
-                per il tuo sguardo.
-              </span>
-            </h2>
-
-            <p className="mt-3 max-w-xl text-sm leading-6 text-[#657B80] sm:text-base">
-              Scopri le collezioni, prenota il tuo controllo e approfitta
-              delle promozioni dedicate.
+          <Link
+            href="/appuntamenti"
+            className="rounded-3xl border border-[#D9E5E5] bg-white p-5 shadow-[0_12px_28px_rgba(16,42,46,0.07)] transition active:scale-[0.99]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1F5963] text-white">
+              <IconaCalendario />
+            </div>
+            <h3 className="mt-4 text-xl font-black">Controllo visivo</h3>
+            <p className="mt-2 text-sm leading-6 text-[#657B80]">
+              Prenota giorno e orario in pochi secondi.
             </p>
-          </div>
+          </Link>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Link
-              href="/catalogo"
-              className="group relative overflow-hidden rounded-[28px] border border-[#D7E5E6] bg-white/95 p-5 shadow-[0_18px_50px_rgba(16,42,46,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(16,42,46,0.13)] active:scale-[0.99]"
-            >
-              <div className="absolute inset-x-0 top-0 h-1 bg-[#0C252B]" />
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#0C252B]/5" />
+          <Link
+            href="/promozioni"
+            className="rounded-3xl border border-[#D9E5E5] bg-white p-5 shadow-[0_12px_28px_rgba(16,42,46,0.07)] transition active:scale-[0.99]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#6CAAB2] text-white">
+              <IconaPromo />
+            </div>
+            <h3 className="mt-4 text-xl font-black">Promozioni</h3>
+            <p className="mt-2 text-sm leading-6 text-[#657B80]">
+              Offerte dedicate su prodotti e servizi.
+            </p>
+          </Link>
+        </div>
+      </section>
 
-              <div className="relative">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0C252B] text-white shadow-lg shadow-[#0C252B]/15 transition duration-300 group-hover:scale-105">
-                  <IconaOcchiali />
-                </div>
+      <section className="mx-auto max-w-6xl px-4 pb-10 sm:px-6 sm:pb-14">
+        <div className="relative overflow-hidden rounded-[32px] border border-[#B7CED1] bg-[#0C252B] p-5 text-white shadow-[0_20px_50px_rgba(12,37,43,0.16)] sm:p-8">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-white/10" />
+          <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full border border-[#78C4CC]/15" />
 
-                <h3 className="mt-5 text-xl font-black tracking-[-0.02em]">
-                  Montature
-                </h3>
-
-                <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#657B80]">
-                  Collezioni da vista e da sole per ogni stile e personalità.
-                </p>
-
-                <div className="mt-5 flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-[0.12em] text-[#0C252B]">
-                    Esplora
-                  </span>
-
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F1F5F5] text-[#0C252B] transition duration-300 group-hover:translate-x-1 group-hover:bg-[#0C252B] group-hover:text-white">
-                    <Freccia />
-                  </span>
-                </div>
+          <div className="relative grid items-center gap-7 md:grid-cols-[1fr_280px]">
+            <div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-[#A7E7EC] ring-1 ring-white/15">
+                <IconaTelefono />
               </div>
-            </Link>
 
-            <Link
-              href="/appuntamenti"
-              className="group relative overflow-hidden rounded-[28px] border border-[#D7E5E6] bg-white/95 p-5 shadow-[0_18px_50px_rgba(16,42,46,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(16,42,46,0.13)] active:scale-[0.99]"
-            >
-              <div className="absolute inset-x-0 top-0 h-1 bg-[#1F5963]" />
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#1F5963]/6" />
+              <p className="mt-5 text-[10px] font-black uppercase tracking-[0.22em] text-[#92D8DF]">
+                Ottica App sul tuo smartphone
+              </p>
 
-              <div className="relative">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1F5963] text-white shadow-lg shadow-[#1F5963]/15 transition duration-300 group-hover:scale-105">
-                  <IconaCalendario />
-                </div>
+              <h2 className="mt-2 max-w-xl text-3xl font-black tracking-[-0.04em] sm:text-4xl">
+                Porta il tuo centro ottico sempre con te.
+              </h2>
 
-                <h3 className="mt-5 text-xl font-black tracking-[-0.02em]">
-                  Controllo visivo
-                </h3>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
+                Scansiona il QR code con la fotocamera del telefono e apri Ottica App.
+                Da Chrome o Safari puoi aggiungerla alla schermata Home e usarla come una vera app.
+              </p>
 
-                <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#657B80]">
-                  Scegli giorno e orario e prenota il tuo controllo in pochi secondi.
+              <a
+                href="https://ottica-app-theta.vercel.app/"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-sm font-black text-[#0C252B] shadow-xl transition hover:brightness-95 active:scale-[0.98]"
+              >
+                Apri Ottica App
+                <Freccia />
+              </a>
+
+              <p className="mt-3 break-all text-[11px] font-bold text-white/45">
+                ottica-app-theta.vercel.app
+              </p>
+            </div>
+
+            <div className="mx-auto w-full max-w-[280px] rounded-[28px] bg-white p-4 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
+              <img
+                src="/images/OtticaApp.png"
+                alt="QR code per aprire Ottica App"
+                className="aspect-square w-full object-contain"
+              />
+              <div className="mt-3 text-center">
+                <p className="text-sm font-black text-[#0C252B]">
+                  Scansiona e apri
                 </p>
-
-                <div className="mt-5 flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-[0.12em] text-[#1F5963]">
-                    Prenota
-                  </span>
-
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F1F5F5] text-[#1F5963] transition duration-300 group-hover:translate-x-1 group-hover:bg-[#1F5963] group-hover:text-white">
-                    <Freccia />
-                  </span>
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              href="/promozioni"
-              className="group relative overflow-hidden rounded-[28px] border border-[#D7E5E6] bg-white/95 p-5 shadow-[0_18px_50px_rgba(16,42,46,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(16,42,46,0.13)] active:scale-[0.99]"
-            >
-              <div className="absolute inset-x-0 top-0 h-1 bg-[#6CAAB2]" />
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#6CAAB2]/10" />
-
-              <div className="relative">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#6CAAB2] text-white shadow-lg shadow-[#6CAAB2]/20 transition duration-300 group-hover:scale-105">
-                  <IconaPromo />
-                </div>
-
-                <h3 className="mt-5 text-xl font-black tracking-[-0.02em]">
-                  Promozioni
-                </h3>
-
-                <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#657B80]">
-                  Scopri le offerte attive su montature, prodotti e servizi.
+                <p className="mt-1 text-[11px] font-medium text-[#789095]">
+                  Usa la fotocamera del telefono
                 </p>
-
-                <div className="mt-5 flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-[0.12em] text-[#4F8F98]">
-                    Scopri
-                  </span>
-
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F1F5F5] text-[#4F8F98] transition duration-300 group-hover:translate-x-1 group-hover:bg-[#6CAAB2] group-hover:text-white">
-                    <Freccia />
-                  </span>
-                </div>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </section>

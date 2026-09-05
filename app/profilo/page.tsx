@@ -139,6 +139,7 @@ export default function ProfiloPage() {
   const [telefono, setTelefono] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [mostraPassword, setMostraPassword] = useState(false);
 
   const [errore, setErrore] = useState("");
   const [messaggio, setMessaggio] = useState("");
@@ -500,12 +501,68 @@ export default function ProfiloPage() {
                 <span className="mb-2 block text-sm font-black">
                   Password *
                 </span>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
-                />
+
+                <div className="relative">
+                  <input
+                    type={mostraPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full rounded-xl border border-[#C9DADC] px-4 py-3 pr-12"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setMostraPassword((v) => !v)}
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-[#5D858C]"
+                    aria-label={
+                      mostraPassword
+                        ? "Nascondi password"
+                        : "Mostra password"
+                    }
+                    title={
+                      mostraPassword
+                        ? "Nascondi password"
+                        : "Mostra password"
+                    }
+                  >
+                    {mostraPassword ? (
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M3 3l18 18" />
+                        <path d="M10.6 10.7a2 2 0 0 0 2.7 2.7" />
+                        <path d="M9.9 4.2A10.5 10.5 0 0 1 12 4c5.5 0 9 5.5 9 5.5a16.5 16.5 0 0 1-3.2 3.8" />
+                        <path d="M6.2 6.2C4.2 7.6 3 9.5 3 9.5S6.5 15 12 15c1.2 0 2.3-.3 3.3-.7" />
+                      </svg>
+                    ) : (
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-5 w-5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+                        <circle cx="12" cy="12" r="2.5" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+
+                {modalita === "login" && (
+                  <div className="mt-2 text-right">
+                    <Link
+                      href="/recupera-password"
+                      className="text-xs font-black text-[#1D6E7A] underline underline-offset-2"
+                    >
+                      Password dimenticata?
+                    </Link>
+                  </div>
+                )}
               </label>
 
               <button

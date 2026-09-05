@@ -1,0 +1,12 @@
+Sql1955419
+
+Hostname/IP:
+
+31.11.39.231
+
+Dominio associato:
+
+agentiplusdb.net
+user Sql1955419
+passw DBAgentiPlus_2026
+porta 3306

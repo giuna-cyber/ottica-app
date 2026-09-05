@@ -1,0 +1,25 @@
+{
+  "name": "Ottica App",
+  "short_name": "Ottica App",
+  "description": "Catalogo, promozioni, prenotazioni e servizi del centro ottico.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F9F9",
+  "theme_color": "#0C252B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

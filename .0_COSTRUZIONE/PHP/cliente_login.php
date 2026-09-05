@@ -34,7 +34,7 @@ try {
             email,
             password_hash
         FROM clienti
-        WHERE email = ?
+        WHERE LOWER(TRIM(email)) = LOWER(TRIM(?))
         LIMIT 1
     ");
     $stmt->execute([$email]);

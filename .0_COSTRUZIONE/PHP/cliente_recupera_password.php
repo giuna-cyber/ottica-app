@@ -26,6 +26,7 @@ if ($email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 function generaPasswordTemporanea($lunghezza = 10) {
+    // Niente caratteri ambigui: O, 0, I, l, 1
     $caratteri = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
     $password = "";
 
@@ -42,7 +43,7 @@ try {
     $stmt = $pdo->prepare("
         SELECT id, nome, cognome, email
         FROM clienti
-        WHERE LOWER(email) = LOWER(?)
+        WHERE LOWER(TRIM(email)) = LOWER(TRIM(?))
         LIMIT 1
     ");
     $stmt->execute([$email]);
@@ -61,6 +62,10 @@ try {
     $passwordTemporanea = generaPasswordTemporanea(10);
     $hash = password_hash($passwordTemporanea, PASSWORD_DEFAULT);
 
+    if ($hash === false) {
+        throw new Exception("Impossibile generare l'hash della password.");
+    }
+
     $stmt = $pdo->prepare("
         UPDATE clienti
         SET password_hash = ?
@@ -68,8 +73,29 @@ try {
     ");
     $stmt->execute([
         $hash,
-        $cliente["id"]
+        (int)$cliente["id"]
     ]);
+
+    if ($stmt->rowCount() < 1) {
+        // Può anche essere 0 in alcuni casi, quindi verifichiamo dal DB.
+        $check = $pdo->prepare("
+            SELECT password_hash
+            FROM clienti
+            WHERE id = ?
+            LIMIT 1
+        ");
+        $check->execute([(int)$cliente["id"]]);
+        $salvato = $check->fetchColumn();
+    } else {
+        $salvato = $hash;
+    }
+
+    if (
+        !$salvato ||
+        !password_verify($passwordTemporanea, $salvato)
+    ) {
+        throw new Exception("Verifica della nuova password fallita.");
+    }
 
     $nomeCliente = trim(
         ($cliente["nome"] ?? "") . " " .
@@ -81,9 +107,10 @@ try {
     $messaggio =
         "Ciao " . ($nomeCliente !== "" ? $nomeCliente : "Cliente") . ",\n\n" .
         "hai richiesto il recupero della password di Ottica App.\n\n" .
-        "La tua nuova password temporanea è:\n\n" .
+        "La tua nuova password temporanea e':\n\n" .
         $passwordTemporanea . "\n\n" .
-        "Accedi con questa password e poi cambiala dalla sezione Profilo.\n\n" .
+        "Copiala esattamente, rispettando maiuscole e minuscole.\n" .
+        "Dopo l'accesso puoi cambiarla dalla sezione Profilo.\n\n" .
         "Ottica App";
 
     $headers = [];
@@ -100,14 +127,10 @@ try {
     );
 
     if (!$inviata) {
-        // Ripristiniamo una password casuale non nota all'utente?
-        // No: evitiamo di lasciare l'account inutilizzabile.
-        // Poiché non conosciamo la password precedente in chiaro,
-        // segnaliamo errore ma il nuovo hash è già stato salvato.
         http_response_code(500);
         echo json_encode([
             "ok" => false,
-            "errore" => "La password è stata rigenerata ma l'email non è stata inviata. Contatta il negozio."
+            "errore" => "Password aggiornata, ma l'email non e' stata inviata. Contatta il negozio."
         ]);
         exit;
     }

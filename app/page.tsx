@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import InstallAppPrompt from "./install-app-prompt";
 
 function IconaHome() {
   return (
@@ -70,6 +71,7 @@ function IconaTelefono() {
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#F4F7F6] text-[#102A2E] pb-24">
+      <InstallAppPrompt />
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0C252B]/95 text-white backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">

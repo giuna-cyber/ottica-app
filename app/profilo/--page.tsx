@@ -140,12 +140,6 @@ export default function ProfiloPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mostraPassword, setMostraPassword] = useState(false);
-  const [passwordAttuale, setPasswordAttuale] = useState("");
-  const [nuovaPassword, setNuovaPassword] = useState("");
-  const [confermaPassword, setConfermaPassword] = useState("");
-  const [mostraPasswordAttuale, setMostraPasswordAttuale] = useState(false);
-  const [mostraNuovaPassword, setMostraNuovaPassword] = useState(false);
-  const [mostraConfermaPassword, setMostraConfermaPassword] = useState(false);
 
   const [errore, setErrore] = useState("");
   const [messaggio, setMessaggio] = useState("");
@@ -369,68 +363,6 @@ export default function ProfiloPage() {
         e instanceof Error
           ? e.message
           : "Aggiornamento non riuscito."
-      );
-    } finally {
-      setCaricamento(false);
-    }
-  }
-
-  async function cambiaPassword() {
-    if (!cliente) return;
-
-    setErrore("");
-    setMessaggio("");
-
-    if (!passwordAttuale || !nuovaPassword || !confermaPassword) {
-      setErrore("Compila tutti i campi password.");
-      return;
-    }
-
-    if (nuovaPassword.length < 8) {
-      setErrore("La nuova password deve contenere almeno 8 caratteri.");
-      return;
-    }
-
-    if (nuovaPassword !== confermaPassword) {
-      setErrore("La conferma password non coincide.");
-      return;
-    }
-
-    setCaricamento(true);
-
-    try {
-      const risposta = await fetch("/api/cliente/cambia-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cliente_id: cliente.id,
-          password_attuale: passwordAttuale,
-          nuova_password: nuovaPassword,
-        }),
-      });
-
-      const dati = await risposta.json();
-
-      if (!risposta.ok || !dati.ok) {
-        throw new Error(
-          dati.errore || "Impossibile cambiare la password."
-        );
-      }
-
-      setPasswordAttuale("");
-      setNuovaPassword("");
-      setConfermaPassword("");
-      setMostraPasswordAttuale(false);
-      setMostraNuovaPassword(false);
-      setMostraConfermaPassword(false);
-      setMessaggio("Password aggiornata correttamente.");
-    } catch (e) {
-      setErrore(
-        e instanceof Error
-          ? e.message
-          : "Impossibile cambiare la password."
       );
     } finally {
       setCaricamento(false);
@@ -767,95 +699,6 @@ export default function ProfiloPage() {
             className="mt-5 w-full rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white disabled:opacity-50"
           >
             Salva modifiche
-          </button>
-        </div>
-
-        <div className="mt-6 rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
-                Sicurezza account
-              </p>
-              <h2 className="mt-1 text-2xl font-black">
-                Cambia password
-              </h2>
-            </div>
-
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#EEF6F6] text-[#083B4C]">
-              🔒
-            </div>
-          </div>
-
-          <div className="mt-5 grid gap-4">
-            {[
-              {
-                label: "Password attuale",
-                value: passwordAttuale,
-                setter: setPasswordAttuale,
-                mostra: mostraPasswordAttuale,
-                setMostra: setMostraPasswordAttuale,
-              },
-              {
-                label: "Nuova password",
-                value: nuovaPassword,
-                setter: setNuovaPassword,
-                mostra: mostraNuovaPassword,
-                setMostra: setMostraNuovaPassword,
-              },
-              {
-                label: "Conferma nuova password",
-                value: confermaPassword,
-                setter: setConfermaPassword,
-                mostra: mostraConfermaPassword,
-                setMostra: setMostraConfermaPassword,
-              },
-            ].map((campo) => (
-              <label key={campo.label}>
-                <span className="mb-2 block text-sm font-black">
-                  {campo.label}
-                </span>
-
-                <div className="relative">
-                  <input
-                    type={campo.mostra ? "text" : "password"}
-                    value={campo.value}
-                    onChange={(e) => campo.setter(e.target.value)}
-                    className="w-full rounded-xl border border-[#C9DADC] px-4 py-3 pr-12"
-                    autoComplete={
-                      campo.label === "Password attuale"
-                        ? "current-password"
-                        : "new-password"
-                    }
-                  />
-
-                  <button
-                    type="button"
-                    onClick={() => campo.setMostra((v) => !v)}
-                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-[#5D858C]"
-                    aria-label={
-                      campo.mostra
-                        ? `Nascondi ${campo.label.toLowerCase()}`
-                        : `Mostra ${campo.label.toLowerCase()}`
-                    }
-                  >
-                    {campo.mostra ? "🙈" : "👁️"}
-                  </button>
-                </div>
-              </label>
-            ))}
-          </div>
-
-          <p className="mt-3 text-xs leading-5 text-[#789095]">
-            La nuova password deve contenere almeno 8 caratteri.
-          </p>
-
-          <button
-            type="button"
-            onClick={cambiaPassword}
-            disabled={caricamento}
-            className="mt-5 w-full rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white disabled:opacity-50"
-          >
-            {caricamento ? "Attendere..." : "Aggiorna password"}
           </button>
         </div>
 

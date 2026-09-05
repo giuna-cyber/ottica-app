@@ -1,12 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { Articolo, RispostaCatalogo } from "../types";
+import type { Articolo } from "../types";
 
 const API_ARUBA =
   "https://www.agentiplusdb.net/ottica-api/catalogo.php";
 
 type PageProps = {
   params: Promise<{ id: string }>;
+};
+
+type RispostaCatalogo = {
+  ok: boolean;
+  articoli?: Articolo[];
+  errore?: string;
 };
 
 async function caricaProdotto(id: number): Promise<Articolo | null> {
@@ -35,7 +41,7 @@ async function caricaProdotto(id: number): Promise<Articolo | null> {
 
     return (
       (dati.articoli ?? []).find(
-        (prodotto) => Number(prodotto.id) === id
+        (prodotto: Articolo) => Number(prodotto.id) === id
       ) ?? null
     );
   } catch {
@@ -222,14 +228,14 @@ export default async function DettaglioProdottoPage({
             </div>
           </div>
 
-          {prodotto.varianti?.length > 0 && (
+          {(prodotto.varianti?.length ?? 0) > 0 && (
             <div className="mt-6">
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
                 Varianti disponibili
               </p>
 
               <div className="mt-3 grid gap-2">
-                {prodotto.varianti.map((variante) => (
+                {(prodotto.varianti ?? []).map((variante) => (
                   <div
                     key={variante.id}
                     className="flex items-center justify-between rounded-xl border border-[#DCE8E9] bg-white px-4 py-3 text-sm"

@@ -315,7 +315,7 @@ export default function HomePage() {
           <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-white/10" />
           <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full border border-[#78C4CC]/15" />
 
-          <div className="relative grid items-center gap-7 md:grid-cols-[1fr_280px]">
+          <div className="relative">
             <div>
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-[#A7E7EC] ring-1 ring-white/15">
                 <IconaTelefono />
@@ -326,42 +326,82 @@ export default function HomePage() {
               </p>
 
               <h2 className="mt-2 max-w-xl text-3xl font-black tracking-[-0.04em] sm:text-4xl">
-                Porta il tuo centro ottico sempre con te.
+                Installa Ottica App.
               </h2>
 
               <p className="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
-                Scansiona il QR code con la fotocamera del telefono e apri Ottica App.
-                Da Chrome o Safari puoi aggiungerla alla schermata Home e usarla come una vera app.
-              </p>
-
-              <a
-                href="https://appottica.xcodelab.it"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-sm font-black text-[#0C252B] shadow-xl transition hover:brightness-95 active:scale-[0.98]"
-              >
-                Apri Ottica App
-                <Freccia />
-              </a>
-
-              <p className="mt-3 break-all text-[11px] font-bold text-white/45">
-                appottica.xcodelab.it
+                Scegli il QR code in base al tuo dispositivo.
               </p>
             </div>
 
-            <div className="mx-auto w-full max-w-[280px] rounded-[28px] bg-white p-4 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
-              <img
-                src="/images/OtticaApp.png"
-                alt="QR code per aprire Ottica App"
-                className="aspect-square w-full object-contain"
-              />
-              <div className="mt-3 text-center">
-                <p className="text-sm font-black text-[#0C252B]">
-                  Scansiona e apri
+            <div className="mt-7 grid gap-5 sm:grid-cols-2">
+              <div className="rounded-[28px] bg-white p-5 text-[#0C252B] shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#789095]">
+                      Apple
+                    </p>
+                    <h3 className="mt-1 text-xl font-black">
+                      iPhone / iPad
+                    </h3>
+                  </div>
+                  <div className="text-3xl"></div>
+                </div>
+
+                <img
+                  src="/images/qr-apple.png"
+                  alt="QR code Apple per aprire Ottica App"
+                  className="mx-auto mt-4 aspect-square w-full max-w-[230px] object-contain"
+                />
+
+                <p className="mt-4 text-center text-sm font-black">
+                  Apri la versione web
                 </p>
-                <p className="mt-1 text-[11px] font-medium text-[#789095]">
-                  Usa la fotocamera del telefono
+                <p className="mt-1 text-center text-[11px] leading-5 text-[#789095]">
+                  Da Safari puoi usare “Aggiungi alla schermata Home”.
                 </p>
+
+                <a
+                  href="https://appottica.xcodelab.it"
+                  className="mt-4 flex w-full items-center justify-center rounded-2xl bg-[#0C252B] px-4 py-3 text-sm font-black text-white"
+                >
+                  Apri su Apple
+                </a>
+              </div>
+
+              <div className="rounded-[28px] bg-white p-5 text-[#0C252B] shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#789095]">
+                      Android
+                    </p>
+                    <h3 className="mt-1 text-xl font-black">
+                      Scarica APK
+                    </h3>
+                  </div>
+                  <div className="text-3xl">🤖</div>
+                </div>
+
+                <img
+                  src="/images/qr-android.png"
+                  alt="QR code Android per scaricare Ottica App APK"
+                  className="mx-auto mt-4 aspect-square w-full max-w-[230px] object-contain"
+                />
+
+                <p className="mt-4 text-center text-sm font-black">
+                  Download diretto APK
+                </p>
+                <p className="mt-1 text-center text-[11px] leading-5 text-[#789095]">
+                  Scansiona il QR e installa Ottica App sul dispositivo Android.
+                </p>
+
+                <a
+                  href="/downloads/OtticaApp.apk"
+                  download
+                  className="mt-4 flex w-full items-center justify-center rounded-2xl bg-[#1D6E7A] px-4 py-3 text-sm font-black text-white"
+                >
+                  Scarica APK
+                </a>
               </div>
             </div>
           </div>

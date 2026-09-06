@@ -316,30 +316,45 @@ export default function AdminSlotPage() {
               </div>
 
               <div className="mt-5 grid min-w-0 gap-3">
-                <input
-                  value={nuovoNome}
-                  onChange={(e) => setNuovoNome(e.target.value)}
-                  placeholder="Nome servizio"
-                  className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3"
-                />
-
-                <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_120px]">
+                <label className="min-w-0">
+                  <span className="mb-1.5 block text-xs font-black text-[#506B71]">
+                    Nome servizio
+                  </span>
                   <input
-                    value={nuovaDescrizione}
-                    onChange={(e) => setNuovaDescrizione(e.target.value)}
-                    placeholder="Descrizione"
+                    value={nuovoNome}
+                    onChange={(e) => setNuovoNome(e.target.value)}
+                    placeholder="Es. Controllo visivo"
                     className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3"
                   />
+                </label>
 
-                  <input
-                    type="number"
-                    min="5"
-                    step="5"
-                    value={nuovaDurata}
-                    onChange={(e) => setNuovaDurata(e.target.value)}
-                    className="rounded-xl border border-[#C9DADC] px-3 py-3"
-                    aria-label="Durata minuti"
-                  />
+                <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_120px]">
+                  <label className="min-w-0">
+                    <span className="mb-1.5 block text-xs font-black text-[#506B71]">
+                      Descrizione
+                    </span>
+                    <input
+                      value={nuovaDescrizione}
+                      onChange={(e) => setNuovaDescrizione(e.target.value)}
+                      placeholder="Descrizione del servizio"
+                      className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                    />
+                  </label>
+
+                  <label className="min-w-0">
+                    <span className="mb-1.5 block text-xs font-black text-[#506B71]">
+                      Durata (min)
+                    </span>
+                    <input
+                      type="number"
+                      min="5"
+                      step="5"
+                      value={nuovaDurata}
+                      onChange={(e) => setNuovaDurata(e.target.value)}
+                      className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-3 py-3"
+                      aria-label="Durata minuti"
+                    />
+                  </label>
                 </div>
 
                 <button
@@ -367,31 +382,46 @@ export default function AdminSlotPage() {
                   >
                     {modificaId === t.id ? (
                       <div className="grid gap-3">
-                        <input
-                          value={modificaNome}
-                          onChange={(e) => setModificaNome(e.target.value)}
-                          className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
-                        />
+                        <label className="min-w-0">
+                          <span className="mb-1 block text-[11px] font-black text-[#506B71]">
+                            Nome servizio
+                          </span>
+                          <input
+                            value={modificaNome}
+                            onChange={(e) => setModificaNome(e.target.value)}
+                            className="min-w-0 w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
+                          />
+                        </label>
 
                         <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_110px]">
-                          <input
-                            value={modificaDescrizione}
-                            onChange={(e) =>
-                              setModificaDescrizione(e.target.value)
-                            }
-                            className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
-                          />
+                          <label className="min-w-0">
+                            <span className="mb-1 block text-[11px] font-black text-[#506B71]">
+                              Descrizione
+                            </span>
+                            <input
+                              value={modificaDescrizione}
+                              onChange={(e) =>
+                                setModificaDescrizione(e.target.value)
+                              }
+                              className="min-w-0 w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
+                            />
+                          </label>
 
-                          <input
-                            type="number"
-                            min="5"
-                            step="5"
-                            value={modificaDurata}
-                            onChange={(e) =>
-                              setModificaDurata(e.target.value)
-                            }
-                            className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
-                          />
+                          <label className="min-w-0">
+                            <span className="mb-1 block text-[11px] font-black text-[#506B71]">
+                              Durata (min)
+                            </span>
+                            <input
+                              type="number"
+                              min="5"
+                              step="5"
+                              value={modificaDurata}
+                              onChange={(e) =>
+                                setModificaDurata(e.target.value)
+                              }
+                              className="min-w-0 w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
+                            />
+                          </label>
                         </div>
 
                         <div className="grid grid-cols-2 gap-2">

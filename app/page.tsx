@@ -125,9 +125,9 @@ export default function HomePage() {
   }, []);
 
   const whatsappUrl = whatsapp
-    ? `https://wa.me/${preparaNumeroWhatsApp(
+    ? `https://api.whatsapp.com/send?phone=${preparaNumeroWhatsApp(
         whatsapp
-      )}?text=${encodeURIComponent(
+      )}&text=${encodeURIComponent(
         "Ciao, vorrei avere informazioni."
       )}`
     : "";
@@ -300,7 +300,7 @@ export default function HomePage() {
 
               <p className="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
                 Scansiona il QR code con la fotocamera del telefono e apri Ottica App.
-                Da Chrome o Safari e installala sul tuo cellulare.
+                Da Chrome o Safari puoi aggiungerla alla schermata Home e usarla come una vera app.
               </p>
 
               <a
@@ -340,8 +340,6 @@ export default function HomePage() {
       {whatsappUrl && (
         <a
           href={whatsappUrl}
-          target="_blank"
-          rel="noreferrer"
           aria-label="Chatta con noi su WhatsApp"
           className="fixed bottom-[92px] right-4 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_12px_28px_rgba(37,211,102,0.35)] ring-4 ring-white transition active:scale-95 sm:bottom-6 sm:right-6"
         >

@@ -1,5 +1,5 @@
 const API =
-  "https://www.agentiplusdb.net/ottica-api/admin_slot.php";
+  "https://www.agentiplusdb.net/ottica-api/admin_tipi_appuntamento.php";
 
 export async function GET() {
   try {

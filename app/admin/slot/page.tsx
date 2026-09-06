@@ -42,6 +42,7 @@ export default function AdminSlotPage() {
   const [slot, setSlot] = useState<Slot[]>([]);
   const [tipoId, setTipoId] = useState<number | null>(null);
   const [data, setData] = useState("");
+  const [giornoVisualizzato, setGiornoVisualizzato] = useState("");
   const [oraInizio, setOraInizio] = useState("09:00");
   const [oraFine, setOraFine] = useState("13:00");
 
@@ -73,6 +74,7 @@ export default function AdminSlotPage() {
       .slice(0, 10);
 
     setData(locale);
+    setGiornoVisualizzato(locale);
 
     caricaTipi();
     caricaSlot();
@@ -143,36 +145,46 @@ export default function AdminSlotPage() {
     [tipi, tipoId]
   );
 
-  const slotPerData = useMemo(() => {
-    const mappa = new Map<string, Slot[]>();
+  const slotDelGiorno = useMemo(() => {
+    return [...slot]
+      .filter((s) => s.data_appuntamento === giornoVisualizzato)
+      .sort((a, b) => a.ora_inizio.localeCompare(b.ora_inizio));
+  }, [slot, giornoVisualizzato]);
 
-    [...slot]
-      .sort((a, b) => {
-        const d = a.data_appuntamento.localeCompare(b.data_appuntamento);
-        return d !== 0 ? d : a.ora_inizio.localeCompare(b.ora_inizio);
-      })
-      .forEach((s) => {
-        const elenco = mappa.get(s.data_appuntamento) ?? [];
-        elenco.push(s);
-        mappa.set(s.data_appuntamento, elenco);
-      });
+  function cambiaGiorno(delta: number) {
+    if (!giornoVisualizzato) return;
 
-    return Array.from(mappa.entries());
-  }, [slot]);
+    const d = new Date(`${giornoVisualizzato}T12:00:00`);
+    d.setDate(d.getDate() + delta);
+
+    const locale = new Date(
+      d.getTime() - d.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, 10);
+
+    setGiornoVisualizzato(locale);
+  }
+
+  function selezionaTuttiGiorno() {
+    const ids = slotDelGiorno.map((s) => s.id);
+    const tuttiSelezionati =
+      ids.length > 0 && ids.every((id) => selezionati.includes(id));
+
+    setSelezionati((correnti) => {
+      if (tuttiSelezionati) {
+        return correnti.filter((id) => !ids.includes(id));
+      }
+
+      return Array.from(new Set([...correnti, ...ids]));
+    });
+  }
 
   function seleziona(id: number) {
     setSelezionati((correnti) =>
       correnti.includes(id)
         ? correnti.filter((x) => x !== id)
         : [...correnti, id]
-    );
-  }
-
-  function selezionaTutti() {
-    const ids = slot.map((s) => s.id);
-
-    setSelezionati((correnti) =>
-      correnti.length === ids.length ? [] : ids
     );
   }
 
@@ -252,7 +264,7 @@ export default function AdminSlotPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F5F9F9] pb-12 text-[#102A2E]">
+    <main className="min-h-screen overflow-x-hidden bg-[#F5F9F9] pb-12 text-[#102A2E]">
       <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6">
           <div>
@@ -273,7 +285,7 @@ export default function AdminSlotPage() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+      <section className="mx-auto w-full max-w-7xl px-3 py-6 sm:px-6">
         {errore && (
           <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-black text-red-700">
             {errore}
@@ -286,8 +298,8 @@ export default function AdminSlotPage() {
           </div>
         )}
 
-        <div className="grid gap-6 xl:grid-cols-[430px_1fr]">
-          <aside className="space-y-6">
+        <div className="grid min-w-0 gap-6 xl:grid-cols-[390px_minmax(0,1fr)]">
+          <aside className="min-w-0 space-y-6">
             <div className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -566,27 +578,70 @@ export default function AdminSlotPage() {
             </div>
           </aside>
 
-          <div>
-            <div className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
-                    Calendario
-                  </p>
-                  <h2 className="mt-1 text-2xl font-black">
-                    Slot creati
-                  </h2>
-                </div>
+          <div className="min-w-0">
+            <div className="min-w-0 rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
+                      Calendario
+                    </p>
+                    <h2 className="mt-1 text-2xl font-black">
+                      Slot creati
+                    </h2>
+                  </div>
 
-                <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
-                    onClick={selezionaTutti}
-                    className="rounded-xl border border-[#C9DADC] bg-white px-4 py-2.5 text-xs font-black"
+                    onClick={caricaSlot}
+                    className="self-start rounded-xl bg-[#083B4C] px-4 py-2.5 text-xs font-black text-white"
                   >
-                    {selezionati.length === slot.length && slot.length > 0
-                      ? "Deseleziona tutti"
-                      : "Seleziona tutti"}
+                    Aggiorna
+                  </button>
+                </div>
+
+                <div className="rounded-2xl border border-[#C9DADC] bg-[#F8FBFB] p-3 sm:p-4">
+                  <div className="grid grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => cambiaGiorno(-1)}
+                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-xl font-black text-[#083B4C]"
+                      aria-label="Giorno precedente"
+                    >
+                      ←
+                    </button>
+
+                    <div className="min-w-0 text-center">
+                      <p className="truncate text-base font-black capitalize sm:text-lg">
+                        {giornoVisualizzato ? dataIt(giornoVisualizzato) : "-"}
+                      </p>
+                      <input
+                        type="date"
+                        value={giornoVisualizzato}
+                        onChange={(e) => setGiornoVisualizzato(e.target.value)}
+                        className="mt-2 w-full max-w-[220px] rounded-xl border border-[#C9DADC] bg-white px-3 py-2 text-center text-sm font-bold"
+                      />
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => cambiaGiorno(1)}
+                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-xl font-black text-[#083B4C]"
+                      aria-label="Giorno successivo"
+                    >
+                      →
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={selezionaTuttiGiorno}
+                    disabled={slotDelGiorno.length === 0}
+                    className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5 text-xs font-black disabled:opacity-40"
+                  >
+                    Seleziona tutti del giorno
                   </button>
 
                   <button
@@ -598,99 +653,76 @@ export default function AdminSlotPage() {
                         ids: selezionati,
                       })
                     }
-                    className="rounded-xl bg-red-600 px-4 py-2.5 text-xs font-black text-white disabled:opacity-35"
+                    className="rounded-xl bg-red-600 px-3 py-2.5 text-xs font-black text-white disabled:opacity-35"
                   >
                     Elimina selezionati ({selezionati.length})
                   </button>
-
-                  <button
-                    type="button"
-                    onClick={caricaSlot}
-                    className="rounded-xl bg-[#083B4C] px-4 py-2.5 text-xs font-black text-white"
-                  >
-                    Aggiorna
-                  </button>
                 </div>
+
+                {slotDelGiorno.length === 0 ? (
+                  <div className="rounded-2xl bg-[#F5F9F9] p-8 text-center">
+                    <div className="text-3xl">📅</div>
+                    <p className="mt-3 text-sm font-black text-[#506B71]">
+                      Nessuno slot per questo giorno
+                    </p>
+                    <p className="mt-1 text-xs text-[#789095]">
+                      Usa le frecce oppure scegli una data dal calendario.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+                    {slotDelGiorno.map((s) => {
+                      const selezionato = selezionati.includes(s.id);
+                      const libero = Number(s.disponibile) === 1;
+
+                      return (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => seleziona(s.id)}
+                          className={`relative min-w-0 overflow-hidden rounded-2xl border p-3 text-left transition ${
+                            selezionato
+                              ? "border-[#083B4C] bg-[#DCEFF1] ring-2 ring-[#083B4C]/15"
+                              : libero
+                              ? "border-emerald-200 bg-white"
+                              : "border-red-200 bg-red-50"
+                          }`}
+                        >
+                          <span
+                            className={`absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded border text-[10px] font-black ${
+                              selezionato
+                                ? "border-[#083B4C] bg-[#083B4C] text-white"
+                                : "border-[#AFC5C8] bg-white text-transparent"
+                            }`}
+                          >
+                            ✓
+                          </span>
+
+                          <p className="pr-7 text-lg font-black leading-none">
+                            {s.ora_inizio.slice(0, 5)}
+                          </p>
+
+                          <p className="mt-1 text-[10px] font-bold text-[#789095]">
+                            fino {s.ora_fine.slice(0, 5)}
+                          </p>
+
+                          <p className="mt-3 line-clamp-2 break-words text-[10px] font-black leading-4 text-[#1D6E7A]">
+                            {s.tipo_appuntamento}
+                          </p>
+
+                          <p
+                            className={`mt-2 text-[9px] font-black ${
+                              libero ? "text-emerald-700" : "text-red-700"
+                            }`}
+                          >
+                            {libero ? "LIBERO" : "NON DISPONIBILE"}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-
-              {slotPerData.length === 0 ? (
-                <div className="mt-6 rounded-2xl bg-[#F5F9F9] p-8 text-center text-sm font-bold text-[#6D8287]">
-                  Nessuno slot creato.
-                </div>
-              ) : (
-                <div className="mt-6 grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-                  {slotPerData.map(([giorno, elenco]) => (
-                    <section
-                      key={giorno}
-                      className="overflow-hidden rounded-2xl border border-[#C9DADC] bg-[#F8FBFB]"
-                    >
-                      <div className="flex items-center justify-between border-b border-[#DCE8E9] bg-[#EAF4F5] px-4 py-3">
-                        <div>
-                          <p className="text-sm font-black capitalize">
-                            {dataIt(giorno)}
-                          </p>
-                          <p className="text-[10px] font-bold text-[#789095]">
-                            {elenco.length} slot
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3">
-                        {elenco.map((s) => {
-                          const selezionato = selezionati.includes(s.id);
-                          const libero = Number(s.disponibile) === 1;
-
-                          return (
-                            <button
-                              key={s.id}
-                              type="button"
-                              onClick={() => seleziona(s.id)}
-                              className={`relative min-h-[92px] rounded-xl border p-3 text-left transition ${
-                                selezionato
-                                  ? "border-[#083B4C] bg-[#DCEFF1] ring-2 ring-[#083B4C]/15"
-                                  : libero
-                                  ? "border-emerald-200 bg-white"
-                                  : "border-red-200 bg-red-50"
-                              }`}
-                            >
-                              <span
-                                className={`absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded border text-[10px] font-black ${
-                                  selezionato
-                                    ? "border-[#083B4C] bg-[#083B4C] text-white"
-                                    : "border-[#AFC5C8] bg-white text-transparent"
-                                }`}
-                              >
-                                ✓
-                              </span>
-
-                              <p className="pr-6 text-base font-black">
-                                {s.ora_inizio.slice(0, 5)}
-                              </p>
-                              <p className="text-[10px] font-bold text-[#789095]">
-                                fino {s.ora_fine.slice(0, 5)}
-                              </p>
-
-                              <p className="mt-2 line-clamp-2 text-[10px] font-black leading-4 text-[#1D6E7A]">
-                                {s.tipo_appuntamento}
-                              </p>
-
-                              <p
-                                className={`mt-1 text-[9px] font-black ${
-                                  libero
-                                    ? "text-emerald-700"
-                                    : "text-red-700"
-                                }`}
-                              >
-                                {libero ? "LIBERO" : "NON DISPONIBILE"}
-                              </p>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </section>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </div>

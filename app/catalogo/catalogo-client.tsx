@@ -264,7 +264,7 @@ export default function CatalogoClient({
             Nessun prodotto trovato.
           </div>
         ) : (
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+          <div className="mt-6 grid grid-cols-2 gap-3 [grid-auto-rows:1fr] sm:gap-5 lg:grid-cols-3">
             {filtrati.map((articolo) => {
               const promo =
                 articolo.in_promozione &&
@@ -273,7 +273,7 @@ export default function CatalogoClient({
               return (
                 <article
                   key={articolo.id}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-[20px] border-[1.5px] border-[#566F75] bg-white shadow-[0_10px_24px_rgba(12,37,43,.09)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(12,37,43,.14)] sm:rounded-[26px]"
+                  className="group relative flex min-h-full w-full flex-col overflow-hidden rounded-[20px] border-[1.5px] border-[#566F75] bg-white shadow-[0_10px_24px_rgba(12,37,43,.09)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(12,37,43,.14)] sm:rounded-[26px]"
                 >
                   <div
                     className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[3px]"
@@ -335,18 +335,16 @@ export default function CatalogoClient({
                     </p>
 
                     <Link href={`/catalogo/${articolo.id}`}>
-                      <h2 className="mt-1 line-clamp-2 min-h-[34px] text-[13px] font-black leading-[1.25] tracking-[-0.02em] text-[#102A2E] sm:min-h-0 sm:text-[1.15rem]">
+                      <h2 className="mt-1 line-clamp-2 h-[34px] text-[13px] font-black leading-[1.25] tracking-[-0.02em] text-[#102A2E] sm:h-[46px] sm:text-[1.15rem]">
                         {articolo.nome}
                       </h2>
                     </Link>
 
-                    {articolo.modello && (
-                      <p className="mt-1 truncate text-[10px] font-medium text-[#6D8287] sm:text-sm">
-                        {articolo.modello}
-                      </p>
-                    )}
+                    <p className="mt-1 h-[14px] truncate text-[10px] font-medium leading-[14px] text-[#6D8287] sm:h-[20px] sm:text-sm sm:leading-5">
+                      {articolo.modello || " "}
+                    </p>
 
-                    <div className="mt-3 sm:mt-4">
+                    <div className="mt-3 flex min-h-[42px] items-end sm:mt-4 sm:min-h-[48px]">
                       {promo ? (
                         <div className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:items-end sm:gap-x-2">
                           <span
@@ -397,7 +395,7 @@ export default function CatalogoClient({
 
                     <Link
                       href={`/catalogo/${articolo.id}`}
-                      className="mt-auto flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-xl px-2.5 py-2.5 text-[10px] font-black text-white shadow-[0_7px_16px_rgba(8,59,76,.18)] transition hover:brightness-110 sm:min-h-[48px] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm"
+                      className="mt-auto flex h-[42px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl px-2.5 text-[10px] font-black text-white shadow-[0_7px_16px_rgba(8,59,76,.18)] transition hover:brightness-110 sm:h-[48px] sm:rounded-2xl sm:px-4 sm:text-sm"
                       style={{
                         marginTop: 16,
                         background:

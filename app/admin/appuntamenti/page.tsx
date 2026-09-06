@@ -198,7 +198,7 @@ export default function AdminAppuntamentiPage() {
   }, [appuntamenti, filtro, ricerca]);
 
   return (
-    <main className="min-h-screen bg-[#F5F9F9] pb-10 text-[#102A2E]">
+    <main className="min-h-screen overflow-x-hidden bg-[#F5F9F9] pb-10 text-[#102A2E]">
       <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <div className="flex items-center justify-between gap-4">
@@ -224,21 +224,21 @@ export default function AdminAppuntamentiPage() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+      <section className="mx-auto w-full max-w-6xl px-3 py-6 sm:px-6">
         {errore && (
           <div className="mb-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm font-black text-red-700">
             {errore}
           </div>
         )}
 
-        <div className="mb-5 rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm">
-          <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+        <div className="mb-5 min-w-0 rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
             <input
               type="search"
               value={ricerca}
               onChange={(evento) => setRicerca(evento.target.value)}
               placeholder="Cerca cliente, telefono, email, servizio..."
-              className="w-full rounded-xl border border-[#C9DADC] px-4 py-3 text-sm outline-none focus:border-[#1D6E7A]"
+              className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3 text-sm outline-none focus:border-[#1D6E7A]"
             />
 
             <button
@@ -250,7 +250,7 @@ export default function AdminAppuntamentiPage() {
             </button>
           </div>
 
-          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+          <div className="mt-3 flex max-w-full gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {["Tutti", "Da confermare", "Confermato", "Annullato"].map(
               (voce) => (
                 <button
@@ -287,12 +287,12 @@ export default function AdminAppuntamentiPage() {
             {elencoFiltrato.map((appuntamento) => (
               <article
                 key={appuntamento.id}
-                className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm"
+                className="min-w-0 overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5"
               >
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="text-xl font-black">
+                <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex min-w-0 flex-wrap items-center gap-2">
+                      <h2 className="min-w-0 break-words text-xl font-black">
                         {appuntamento.nome_cliente}
                       </h2>
                       <span
@@ -324,7 +324,7 @@ export default function AdminAppuntamentiPage() {
                         <strong>Telefono:</strong>{" "}
                         <a
                           href={`tel:${appuntamento.telefono}`}
-                          className="font-black text-[#1D6E7A]"
+                          className="break-all font-black text-[#1D6E7A]"
                         >
                           {appuntamento.telefono}
                         </a>
@@ -335,7 +335,7 @@ export default function AdminAppuntamentiPage() {
                           <strong>Email:</strong>{" "}
                           <a
                             href={`mailto:${appuntamento.email}`}
-                            className="font-black text-[#1D6E7A]"
+                            className="break-all font-black text-[#1D6E7A]"
                           >
                             {appuntamento.email}
                           </a>
@@ -350,12 +350,12 @@ export default function AdminAppuntamentiPage() {
                     </div>
                   </div>
 
-                  <div className="grid min-w-[190px] gap-2">
+                  <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 lg:w-[190px] lg:grid-cols-1">
                     <a
                       href={urlWhatsApp(appuntamento)}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-xs font-black text-white shadow-sm transition hover:brightness-95"
+                      className="flex min-w-0 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-3 py-3 text-center text-[11px] font-black text-white shadow-sm transition hover:brightness-95 sm:text-xs"
                     >
                       <IconaWhatsApp />
                       Invia messaggio
@@ -367,7 +367,7 @@ export default function AdminAppuntamentiPage() {
                       onClick={() =>
                         cambiaStato(appuntamento.id, "Confermato")
                       }
-                      className="rounded-xl bg-emerald-600 px-4 py-3 text-xs font-black text-white disabled:opacity-50"
+                      className="min-w-0 rounded-xl bg-emerald-600 px-3 py-3 text-[11px] font-black text-white disabled:opacity-50 sm:text-xs"
                     >
                       Conferma
                     </button>
@@ -378,7 +378,7 @@ export default function AdminAppuntamentiPage() {
                       onClick={() =>
                         cambiaStato(appuntamento.id, "Da confermare")
                       }
-                      className="rounded-xl bg-amber-500 px-4 py-3 text-xs font-black text-white disabled:opacity-50"
+                      className="min-w-0 rounded-xl bg-amber-500 px-3 py-3 text-[11px] font-black text-white disabled:opacity-50 sm:text-xs"
                     >
                       Da confermare
                     </button>
@@ -389,7 +389,7 @@ export default function AdminAppuntamentiPage() {
                       onClick={() =>
                         cambiaStato(appuntamento.id, "Annullato")
                       }
-                      className="rounded-xl bg-red-600 px-4 py-3 text-xs font-black text-white disabled:opacity-50"
+                      className="min-w-0 rounded-xl bg-red-600 px-3 py-3 text-[11px] font-black text-white disabled:opacity-50 sm:text-xs"
                     >
                       Annulla
                     </button>

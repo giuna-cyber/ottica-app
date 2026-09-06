@@ -10,14 +10,14 @@ function out($data, $status = 200) {
 }
 
 $campi = [
-    "nome_centro",
+    "nome_negozio",
     "ragione_sociale",
     "indirizzo",
     "cap",
     "citta",
     "provincia",
     "telefono",
-    "telefono_whatsapp",
+    "whatsapp",
     "email",
     "sito_web",
     "partita_iva",
@@ -67,10 +67,10 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 $input = json_decode(file_get_contents("php://input"), true);
 
-$nomeCentro = trim($input["nome_centro"] ?? "");
-$whatsapp = trim($input["telefono_whatsapp"] ?? "");
+$nome = trim($input["nome_negozio"] ?? "");
+$whatsapp = trim($input["whatsapp"] ?? "");
 
-if ($nomeCentro === "" || $whatsapp === "") {
+if ($nome === "" || $whatsapp === "") {
     out([
         "ok" => false,
         "errore" => "Nome centro ottico e numero WhatsApp sono obbligatori."
@@ -78,7 +78,6 @@ if ($nomeCentro === "" || $whatsapp === "") {
 }
 
 $valori = [];
-
 foreach ($campi as $campo) {
     $valori[$campo] = trim((string)($input[$campo] ?? ""));
 }

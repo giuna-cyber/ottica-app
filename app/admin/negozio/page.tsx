@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 type Negozio = {
@@ -38,6 +39,7 @@ const vuoto: Negozio = {
 };
 
 export default function AdminNegozioPage() {
+  const router = useRouter();
   const [dati, setDati] = useState<Negozio>(vuoto);
   const [caricamento, setCaricamento] = useState(true);
   const [salvataggio, setSalvataggio] = useState(false);
@@ -114,7 +116,8 @@ export default function AdminNegozioPage() {
       }
 
       setMessaggio("Dati del centro ottico aggiornati.");
-      await carica();
+      router.push("/admin");
+      router.refresh();
     } catch (e) {
       setErrore(
         e instanceof Error

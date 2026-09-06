@@ -65,10 +65,21 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     ], 405);
 }
 
-$input = json_decode(file_get_contents("php://input"), true);
+/*
+ * Accetta sia application/x-www-form-urlencoded
+ * sia JSON. In questo modo il salvataggio è più robusto su Aruba.
+ */
+$input = $_POST;
 
-$nome = trim($input["nome_negozio"] ?? "");
-$whatsapp = trim($input["whatsapp"] ?? "");
+if (!$input || count($input) === 0) {
+    $json = json_decode(file_get_contents("php://input"), true);
+    if (is_array($json)) {
+        $input = $json;
+    }
+}
+
+$nome = trim((string)($input["nome_negozio"] ?? ""));
+$whatsapp = trim((string)($input["whatsapp"] ?? ""));
 
 if ($nome === "" || $whatsapp === "") {
     out([
@@ -83,11 +94,16 @@ foreach ($campi as $campo) {
 }
 
 try {
-    $conteggio = (int)$pdo
-        ->query("SELECT COUNT(*) FROM impostazioni_negozio")
-        ->fetchColumn();
+    $stmtId = $pdo->query(
+        "SELECT id
+         FROM impostazioni_negozio
+         ORDER BY id ASC
+         LIMIT 1"
+    );
 
-    if ($conteggio === 0) {
+    $id = $stmtId->fetchColumn();
+
+    if ($id === false) {
         $nomi = implode(", ", array_keys($valori));
         $segnaposto = implode(", ", array_fill(0, count($valori), "?"));
 
@@ -106,13 +122,16 @@ try {
             )
         );
 
+        $parametri = array_values($valori);
+        $parametri[] = (int)$id;
+
         $stmt = $pdo->prepare(
             "UPDATE impostazioni_negozio
              SET $set
-             LIMIT 1"
+             WHERE id = ?"
         );
 
-        $stmt->execute(array_values($valori));
+        $stmt->execute($parametri);
     }
 
     out([

@@ -266,26 +266,26 @@ export default function AdminSlotPage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#F5F9F9] pb-12 text-[#102A2E]">
       <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col items-start gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#CBEDEF]">
               Area amministrativa
             </p>
-            <h1 className="mt-1 text-3xl font-black">
+            <h1 className="mt-1 break-words text-2xl font-black leading-tight sm:text-3xl">
               Disponibilità e servizi
             </h1>
           </div>
 
           <Link
             href="/admin"
-            className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-black"
+            className="shrink-0 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-black"
           >
             Dashboard
           </Link>
         </div>
       </header>
 
-      <section className="mx-auto w-full max-w-7xl px-3 py-6 sm:px-6">
+      <section className="mx-auto w-full max-w-7xl px-2.5 py-5 sm:px-6 sm:py-6">
         {errore && (
           <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-black text-red-700">
             {errore}
@@ -298,15 +298,15 @@ export default function AdminSlotPage() {
           </div>
         )}
 
-        <div className="grid min-w-0 gap-6 xl:grid-cols-[390px_minmax(0,1fr)]">
+        <div className="grid w-full min-w-0 grid-cols-1 gap-5 xl:grid-cols-[390px_minmax(0,1fr)] xl:gap-6">
           <aside className="min-w-0 space-y-6">
-            <div className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
-              <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5">
+              <div className="flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
                     Configurazione
                   </p>
-                  <h2 className="mt-1 text-2xl font-black">
+                  <h2 className="mt-1 break-words text-xl font-black leading-tight sm:text-2xl">
                     Tipi di appuntamento
                   </h2>
                 </div>
@@ -315,20 +315,20 @@ export default function AdminSlotPage() {
                 </span>
               </div>
 
-              <div className="mt-5 grid gap-3">
+              <div className="mt-5 grid min-w-0 gap-3">
                 <input
                   value={nuovoNome}
                   onChange={(e) => setNuovoNome(e.target.value)}
                   placeholder="Nome servizio"
-                  className="rounded-xl border border-[#C9DADC] px-4 py-3"
+                  className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3"
                 />
 
-                <div className="grid grid-cols-[1fr_120px] gap-3">
+                <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_120px]">
                   <input
                     value={nuovaDescrizione}
                     onChange={(e) => setNuovaDescrizione(e.target.value)}
                     placeholder="Descrizione"
-                    className="rounded-xl border border-[#C9DADC] px-4 py-3"
+                    className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3"
                   />
 
                   <input
@@ -363,7 +363,7 @@ export default function AdminSlotPage() {
                 {tipi.map((t) => (
                   <div
                     key={t.id}
-                    className="rounded-2xl border border-[#DCE8E9] bg-[#F8FBFB] p-4"
+                    className="min-w-0 overflow-hidden rounded-2xl border border-[#DCE8E9] bg-[#F8FBFB] p-4"
                   >
                     {modificaId === t.id ? (
                       <div className="grid gap-3">
@@ -373,7 +373,7 @@ export default function AdminSlotPage() {
                           className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
                         />
 
-                        <div className="grid grid-cols-[1fr_110px] gap-2">
+                        <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_110px]">
                           <input
                             value={modificaDescrizione}
                             onChange={(e) =>
@@ -422,14 +422,14 @@ export default function AdminSlotPage() {
                       </div>
                     ) : (
                       <>
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="font-black">{t.nome}</p>
+                        <div className="flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:justify-between">
+                          <div className="min-w-0">
+                            <p className="break-words font-black">{t.nome}</p>
                             <p className="mt-1 text-xs font-bold text-[#1D6E7A]">
                               {t.durata_minuti} minuti
                             </p>
                             {t.descrizione && (
-                              <p className="mt-1 text-xs text-[#6D8287]">
+                              <p className="mt-1 break-words text-xs text-[#6D8287]">
                                 {t.descrizione}
                               </p>
                             )}
@@ -446,11 +446,11 @@ export default function AdminSlotPage() {
                           </span>
                         </div>
 
-                        <div className="mt-3 flex flex-wrap gap-2">
+                        <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
                           <button
                             type="button"
                             onClick={() => apriModifica(t)}
-                            className="rounded-xl border border-[#1D6E7A] px-3 py-2 text-[11px] font-black text-[#1D6E7A]"
+                            className="w-full rounded-xl border border-[#1D6E7A] px-3 py-2 text-[11px] font-black text-[#1D6E7A]"
                           >
                             Modifica
                           </button>
@@ -464,7 +464,7 @@ export default function AdminSlotPage() {
                                 attivo: Number(t.attivo) === 1 ? 0 : 1,
                               })
                             }
-                            className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2 text-[11px] font-black"
+                            className="w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2 text-[11px] font-black"
                           >
                             {Number(t.attivo) === 1
                               ? "Disattiva"
@@ -479,7 +479,7 @@ export default function AdminSlotPage() {
                                 id: t.id,
                               })
                             }
-                            className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[11px] font-black text-red-700"
+                            className="w-full rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[11px] font-black text-red-700"
                           >
                             Elimina
                           </button>
@@ -491,11 +491,11 @@ export default function AdminSlotPage() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
+            <div className="min-w-0 overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
                 Nuova disponibilità
               </p>
-              <h2 className="mt-1 text-2xl font-black">
+              <h2 className="mt-1 break-words text-xl font-black leading-tight sm:text-2xl">
                 Genera orari
               </h2>
 
@@ -529,7 +529,7 @@ export default function AdminSlotPage() {
                   />
                 </label>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <label>
                     <span className="mb-2 block text-sm font-black">
                       Dalle
@@ -586,7 +586,7 @@ export default function AdminSlotPage() {
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
                       Calendario
                     </p>
-                    <h2 className="mt-1 text-2xl font-black">
+                    <h2 className="mt-1 break-words text-xl font-black leading-tight sm:text-2xl">
                       Slot creati
                     </h2>
                   </div>
@@ -601,11 +601,11 @@ export default function AdminSlotPage() {
                 </div>
 
                 <div className="rounded-2xl border border-[#C9DADC] bg-[#F8FBFB] p-3 sm:p-4">
-                  <div className="grid grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-2">
+                  <div className="grid min-w-0 grid-cols-[40px_minmax(0,1fr)_40px] items-center gap-2 sm:grid-cols-[44px_minmax(0,1fr)_44px]">
                     <button
                       type="button"
                       onClick={() => cambiaGiorno(-1)}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-xl font-black text-[#083B4C]"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-lg font-black text-[#083B4C] sm:h-11 sm:w-11 sm:text-xl"
                       aria-label="Giorno precedente"
                     >
                       ←
@@ -626,7 +626,7 @@ export default function AdminSlotPage() {
                     <button
                       type="button"
                       onClick={() => cambiaGiorno(1)}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-xl font-black text-[#083B4C]"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-lg font-black text-[#083B4C] sm:h-11 sm:w-11 sm:text-xl"
                       aria-label="Giorno successivo"
                     >
                       →
@@ -634,7 +634,7 @@ export default function AdminSlotPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <button
                     type="button"
                     onClick={selezionaTuttiGiorno}
@@ -670,7 +670,7 @@ export default function AdminSlotPage() {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+                  <div className="grid min-w-0 grid-cols-1 gap-2 min-[380px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
                     {slotDelGiorno.map((s) => {
                       const selezionato = selezionati.includes(s.id);
                       const libero = Number(s.disponibile) === 1;

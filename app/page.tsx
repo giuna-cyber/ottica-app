@@ -345,11 +345,11 @@ export default function HomePage() {
                       iPhone / iPad
                     </h3>
                   </div>
-                  <div className="text-3xl"></div>
+                  <div className="rounded-xl bg-[#0C252B] px-3 py-2 text-xs font-black text-white">iOS</div>
                 </div>
 
                 <img
-                  src="/images/qr-apple.png"
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACjUlEQVR4nO2bQW7cMAxFHysDWWqAOUCOIt+gZ+0N7KP0AAGsZQAZvwtJ42mCNg3qMWKAWnhhvwWBP58iKY2Jz6z526dwcN5555133nnn/8RbWwPMl9VszAOQzSD3b+OB8Ti/M58kSQuQliCIBbNLEBAkSfqdf3Q8zu/M55tDAU3ZTFMs2AhUYx8bj/P78MO7N/lamL8LSz8NkY+Nx/l9+Xf6ziOmtIDmSyiHx+P8vnzXNwrIYEnrYGlaB9JyMQHcj0C+WvzO/xM/m5nZBSA/qT0IspG1ls/HxuP8Tnz17+ZQQUHz86sxP79aM/Zx8Ti/L09tfpIKmggiLSAtob+LpSJ1TV8tfuc/WE23WO6bYGIBokRagjRFqX51fU/Gcz+8qLOM0j8sNP9O3H4HXy1+5z9YW+6FWNAU1Q3bJ1ktZ7u+J+S7vgu0XAxN0CmqzSe37O36nozvvuwy1tKqrm1P9vrqrPytvmqb8J1rdbMz4P49J3/Lz61MrvXV1hptD/fvGfm7/nfrhdpjy9lyfU/K3/m3Nry1oAKgitxztufnM/Ldvwvca7lAm29s7nZ9T8j3+XMGI74MwDoAoTB/XwfIFz8/OjF/23/7hquF24bbj3/TErw/OjPfphoq2BglyP1cONXp5er3687JVx376W4oLRdHYenHVUa+Fohl0DHxOP8QPvUhZTvLz2aaWK0OsWZ78vuT5+b7/UlNBNkYJbNnidnMSHr1+xvn5N/erzMAwTpoHg2Rr8VmC7I0HRGP84/lJfVbz7XSiuWv/KPjcf7/+Lf3J5nHUDRbkNVOOC4IVvP66pR803eu+2volXR8MZGfZOShGPHlqHic35c3fczcLf9/t/POO++8887vwP8CkjL70D2MLcsAAAAASUVORK5CYII="
                   alt="QR code Apple per aprire Ottica App"
                   className="mx-auto mt-4 aspect-square w-full max-w-[230px] object-contain"
                 />
@@ -383,7 +383,7 @@ export default function HomePage() {
                 </div>
 
                 <img
-                  src="/images/qr-android.png"
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAAC/klEQVR4nO2cTW6kMBBG3zcg9RKkOUAfBW6QI+Vq+Cg5QEt4GcmoZmGbJpmRRqNkoBPKqwb8RKF2189XpmX88wg//p0BhxxyyCGHHHLoe0Iqo4UgiaAWjbGF0APEOmE8xDyHdoQwMzMGMzObG4POypgohwxzY5t504M/k0OfAcXVAbBIY5T0bK+C2GITkD3IUeY5dCAUL9U9xBboEhr/z50cekSofXdsxF4AqmeW1oifcCeHvgZUV0RnkL/4LuVzBgbEi9XDA8xz6CgoSJJ60BgvOZXUGFs0AhpZcqlxlHkO7e0jNg4g9MiIi+qFRPEgR5jn0O7Qb9XnMAOw1qEz2ERjNtXJXn2eA1okXROQv/1FNsUaJgZLaKSx99B+5jm0F1R/9p1lL5AlKe6fqmDFMLuPOANEVSgTNXTAfYHUqFGHa5YngSRdqiR1Dw5dgnA100hVsY8xz6EjMstUPENOL6u3gC5VR9El9xEngLYrwubGbKpLgMFKHlHnJc8jzgQ1Jl1fpeeZHCvy6WEu7kHSxTQeZZ5De0HFR9ClLDvUkuJNEKEGDI8a3x+qmmW8GHQ3AU0iPN3Q8CIYplflq2HtfT36Mzn0EWirR9jMJpnYjJx30riPOAG0Ro03MtWwkSca416R+or49tAaNdoEsU0aDBTUGMQ+t8AsPN0E3a22zh/8mRz6OCRdXwVd2UaXfUS4JvK54aVIV0W9/BLP5NDH9Ii5qXvpeLP9dtsZ9b7GGaB1RUBJJrJinbIUUZbKvc3hK+K7QzWz3HQzSo5ZPIOtVUfnesQZoLX3uUaI+U3Hc606GGavPs8A5fKhik9NMuJ62M0Q+hsQfyZgke1tnkO7Q+931RXPMK9XZ2rPyxWqU0DbzDK/zDfXK2s/tBx33vs8KVSrzymur/dUUVvjp97Joa8AhX4Rw4tE6EHqF1UP8gjmOfS/oT+803VrLfRNYjDIUnYQkJXtnc1zaHdo1SOAEjDu2+i2eoT5HqpzQLK/z3k//J/JHHLIIYcccsghgF9igY5XnkDYfAAAAABJRU5ErkJggg=="
                   alt="QR code Android per scaricare Ottica App APK"
                   className="mx-auto mt-4 aspect-square w-full max-w-[230px] object-contain"
                 />

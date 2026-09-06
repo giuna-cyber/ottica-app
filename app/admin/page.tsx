@@ -150,6 +150,20 @@ export default function AdminPage() {
               Configura costo e soglia per la spedizione gratuita.
             </p>
           </Link>
+
+
+          <Link
+            href="/admin/negozio"
+            className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <div className="text-3xl">🏪</div>
+            <h2 className="mt-4 text-xl font-black">
+              Dati centro ottico
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#6D8287]">
+              Configura anagrafica, contatti, WhatsApp e orari del centro ottico.
+            </p>
+          </Link>
         </div>
       </section>
     </main>

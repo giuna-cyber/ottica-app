@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import InstallAppPrompt from "./install-app-prompt";
 
 function IconaHome() {
@@ -68,7 +69,69 @@ function IconaTelefono() {
   );
 }
 
+
+function IconaWhatsApp() {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      className="h-6 w-6"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M16.02 3C8.85 3 3.03 8.77 3.03 15.88c0 2.27.6 4.48 1.73 6.42L3 29l6.9-1.8a13.03 13.03 0 0 0 6.12 1.55h.01c7.16 0 12.99-5.77 12.99-12.87C29.02 8.77 23.19 3 16.02 3Zm0 23.58h-.01a10.82 10.82 0 0 1-5.52-1.5l-.4-.24-4.09 1.07 1.09-3.95-.26-.41a10.63 10.63 0 0 1-1.66-5.67c0-5.9 4.86-10.7 10.85-10.7 5.98 0 10.85 4.8 10.85 10.7 0 5.9-4.87 10.7-10.85 10.7Zm5.95-8.01c-.33-.16-1.94-.95-2.24-1.06-.3-.11-.52-.16-.74.16-.22.32-.85 1.06-1.04 1.27-.19.22-.38.24-.71.08-.33-.16-1.39-.51-2.65-1.62-.98-.86-1.64-1.93-1.83-2.25-.19-.32-.02-.5.14-.66.15-.14.33-.38.49-.57.16-.19.22-.32.33-.54.11-.22.05-.41-.03-.57-.08-.16-.74-1.76-1.01-2.41-.27-.64-.54-.55-.74-.56h-.63c-.22 0-.57.08-.87.41-.3.32-1.15 1.11-1.15 2.71 0 1.6 1.18 3.14 1.34 3.36.16.22 2.32 3.51 5.62 4.92.79.34 1.4.54 1.88.69.79.25 1.5.21 2.07.13.63-.09 1.94-.78 2.21-1.54.27-.76.27-1.41.19-1.54-.08-.14-.3-.22-.63-.38Z" />
+    </svg>
+  );
+}
+
+function preparaNumeroWhatsApp(numero: string) {
+  let pulito = numero.replace(/\D/g, "");
+
+  if (pulito.startsWith("00")) {
+    pulito = pulito.slice(2);
+  }
+
+  if (pulito.length === 10 && pulito.startsWith("3")) {
+    pulito = `39${pulito}`;
+  }
+
+  return pulito;
+}
+
 export default function HomePage() {
+  const [whatsapp, setWhatsapp] = useState("");
+
+  useEffect(() => {
+    async function caricaWhatsapp() {
+      try {
+        const risposta = await fetch("/api/negozio", {
+          cache: "no-store",
+        });
+
+        const dati = await risposta.json();
+
+        if (
+          risposta.ok &&
+          dati.ok &&
+          dati.negozio?.whatsapp
+        ) {
+          setWhatsapp(String(dati.negozio.whatsapp));
+        }
+      } catch {
+        setWhatsapp("");
+      }
+    }
+
+    caricaWhatsapp();
+  }, []);
+
+  const whatsappUrl = whatsapp
+    ? `https://wa.me/${preparaNumeroWhatsApp(
+        whatsapp
+      )}?text=${encodeURIComponent(
+        "Ciao, vorrei avere informazioni."
+      )}`
+    : "";
+
   return (
     <main className="min-h-screen bg-[#F4F7F6] text-[#102A2E] pb-24">
       <InstallAppPrompt />
@@ -237,11 +300,11 @@ export default function HomePage() {
 
               <p className="mt-4 max-w-2xl text-sm leading-7 text-white/72 sm:text-base">
                 Scansiona il QR code con la fotocamera del telefono e apri Ottica App.
-                Da Chrome o Safari puoi aggiungerla alla schermata Home e usarla come una vera app.
+                Da Chrome o Safari e installala sul tuo cellulare.
               </p>
 
               <a
-                href="https://ottica-app-theta.vercel.app/"
+                href="https://appottica.xcodelab.it"
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-sm font-black text-[#0C252B] shadow-xl transition hover:brightness-95 active:scale-[0.98]"
@@ -251,7 +314,7 @@ export default function HomePage() {
               </a>
 
               <p className="mt-3 break-all text-[11px] font-bold text-white/45">
-                ottica-app-theta.vercel.app
+                appottica.xcodelab.it
               </p>
             </div>
 
@@ -273,6 +336,18 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {whatsappUrl && (
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Chatta con noi su WhatsApp"
+          className="fixed bottom-[92px] right-4 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_12px_28px_rgba(37,211,102,0.35)] ring-4 ring-white transition active:scale-95 sm:bottom-6 sm:right-6"
+        >
+          <IconaWhatsApp />
+        </a>
+      )}
 
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#DCE6E6] bg-white/95 px-2 pb-[max(env(safe-area-inset-bottom),8px)] pt-2 shadow-[0_-8px_30px_rgba(16,42,46,0.08)] backdrop-blur-xl">
         <div className="mx-auto grid max-w-md grid-cols-5">

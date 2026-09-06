@@ -34,14 +34,20 @@ export async function POST(request: Request) {
   try {
     const corpo = await request.json();
 
+    const form = new URLSearchParams();
+
+    for (const [chiave, valore] of Object.entries(corpo ?? {})) {
+      form.set(chiave, String(valore ?? ""));
+    }
+
     const risposta = await fetch(API, {
       method: "POST",
       cache: "no-store",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       },
-      body: JSON.stringify(corpo),
+      body: form.toString(),
     });
 
     const testo = await risposta.text();

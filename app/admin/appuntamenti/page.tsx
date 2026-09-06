@@ -50,6 +50,52 @@ function classeStato(stato: string) {
   return "border-amber-200 bg-amber-50 text-amber-700";
 }
 
+function preparaNumeroWhatsApp(telefono: string) {
+  let numero = telefono.replace(/\D/g, "");
+
+  if (numero.startsWith("00")) {
+    numero = numero.slice(2);
+  }
+
+  // Numeri mobili italiani inseriti senza prefisso internazionale.
+  if (numero.length === 10 && numero.startsWith("3")) {
+    numero = `39${numero}`;
+  }
+
+  return numero;
+}
+
+function urlWhatsApp(appuntamento: Appuntamento) {
+  const numero = preparaNumeroWhatsApp(appuntamento.telefono);
+
+  const messaggio = [
+    `Ciao ${appuntamento.nome_cliente},`,
+    "",
+    "ti contattiamo da Ottica App in merito al tuo appuntamento:",
+    `${appuntamento.tipo_appuntamento}`,
+    `${formattaData(appuntamento.data_appuntamento)} alle ${formattaOra(
+      appuntamento.ora_inizio
+    )}.`,
+    "",
+    "Grazie.",
+  ].join("\n");
+
+  return `https://wa.me/${numero}?text=${encodeURIComponent(messaggio)}`;
+}
+
+function IconaWhatsApp() {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      className="h-4 w-4"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M16.02 3C8.85 3 3.03 8.77 3.03 15.88c0 2.27.6 4.48 1.73 6.42L3 29l6.9-1.8a13.03 13.03 0 0 0 6.12 1.55h.01c7.16 0 12.99-5.77 12.99-12.87C29.02 8.77 23.19 3 16.02 3Zm0 23.58h-.01a10.82 10.82 0 0 1-5.52-1.5l-.4-.24-4.09 1.07 1.09-3.95-.26-.41a10.63 10.63 0 0 1-1.66-5.67c0-5.9 4.86-10.7 10.85-10.7 5.98 0 10.85 4.8 10.85 10.7 0 5.9-4.87 10.7-10.85 10.7Zm5.95-8.01c-.33-.16-1.94-.95-2.24-1.06-.3-.11-.52-.16-.74.16-.22.32-.85 1.06-1.04 1.27-.19.22-.38.24-.71.08-.33-.16-1.39-.51-2.65-1.62-.98-.86-1.64-1.93-1.83-2.25-.19-.32-.02-.5.14-.66.15-.14.33-.38.49-.57.16-.19.22-.32.33-.54.11-.22.05-.41-.03-.57-.08-.16-.74-1.76-1.01-2.41-.27-.64-.54-.55-.74-.56h-.63c-.22 0-.57.08-.87.41-.3.32-1.15 1.11-1.15 2.71 0 1.6 1.18 3.14 1.34 3.36.16.22 2.32 3.51 5.62 4.92.79.34 1.4.54 1.88.69.79.25 1.5.21 2.07.13.63-.09 1.94-.78 2.21-1.54.27-.76.27-1.41.19-1.54-.08-.14-.3-.22-.63-.38Z" />
+    </svg>
+  );
+}
+
 export default function AdminAppuntamentiPage() {
   const router = useRouter();
 
@@ -263,16 +309,23 @@ export default function AdminAppuntamentiPage() {
                     </p>
 
                     <div className="mt-3 grid gap-1 text-sm text-[#5E7479]">
-                      <p><strong>Data:</strong> {formattaData(appuntamento.data_appuntamento)}</p>
                       <p>
-                        <strong>Orario:</strong> {formattaOra(appuntamento.ora_inizio)}
+                        <strong>Data:</strong>{" "}
+                        {formattaData(appuntamento.data_appuntamento)}
+                      </p>
+                      <p>
+                        <strong>Orario:</strong>{" "}
+                        {formattaOra(appuntamento.ora_inizio)}
                         {appuntamento.ora_fine
                           ? ` - ${formattaOra(appuntamento.ora_fine)}`
                           : ""}
                       </p>
                       <p>
                         <strong>Telefono:</strong>{" "}
-                        <a href={`tel:${appuntamento.telefono}`} className="font-black text-[#1D6E7A]">
+                        <a
+                          href={`tel:${appuntamento.telefono}`}
+                          className="font-black text-[#1D6E7A]"
+                        >
                           {appuntamento.telefono}
                         </a>
                       </p>
@@ -280,7 +333,10 @@ export default function AdminAppuntamentiPage() {
                       {appuntamento.email && (
                         <p>
                           <strong>Email:</strong>{" "}
-                          <a href={`mailto:${appuntamento.email}`} className="font-black text-[#1D6E7A]">
+                          <a
+                            href={`mailto:${appuntamento.email}`}
+                            className="font-black text-[#1D6E7A]"
+                          >
                             {appuntamento.email}
                           </a>
                         </p>
@@ -295,10 +351,22 @@ export default function AdminAppuntamentiPage() {
                   </div>
 
                   <div className="grid min-w-[190px] gap-2">
+                    <a
+                      href={urlWhatsApp(appuntamento)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-xs font-black text-white shadow-sm transition hover:brightness-95"
+                    >
+                      <IconaWhatsApp />
+                      Invia messaggio
+                    </a>
+
                     <button
                       type="button"
                       disabled={inAggiornamento === appuntamento.id}
-                      onClick={() => cambiaStato(appuntamento.id, "Confermato")}
+                      onClick={() =>
+                        cambiaStato(appuntamento.id, "Confermato")
+                      }
                       className="rounded-xl bg-emerald-600 px-4 py-3 text-xs font-black text-white disabled:opacity-50"
                     >
                       Conferma
@@ -307,7 +375,9 @@ export default function AdminAppuntamentiPage() {
                     <button
                       type="button"
                       disabled={inAggiornamento === appuntamento.id}
-                      onClick={() => cambiaStato(appuntamento.id, "Da confermare")}
+                      onClick={() =>
+                        cambiaStato(appuntamento.id, "Da confermare")
+                      }
                       className="rounded-xl bg-amber-500 px-4 py-3 text-xs font-black text-white disabled:opacity-50"
                     >
                       Da confermare
@@ -316,7 +386,9 @@ export default function AdminAppuntamentiPage() {
                     <button
                       type="button"
                       disabled={inAggiornamento === appuntamento.id}
-                      onClick={() => cambiaStato(appuntamento.id, "Annullato")}
+                      onClick={() =>
+                        cambiaStato(appuntamento.id, "Annullato")
+                      }
                       className="rounded-xl bg-red-600 px-4 py-3 text-xs font-black text-white disabled:opacity-50"
                     >
                       Annulla

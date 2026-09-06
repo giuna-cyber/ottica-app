@@ -124,13 +124,44 @@ export default function HomePage() {
     caricaWhatsapp();
   }, []);
 
-  const whatsappUrl = whatsapp
-    ? `https://api.whatsapp.com/send?phone=${preparaNumeroWhatsApp(
-        whatsapp
-      )}&text=${encodeURIComponent(
-        "Ciao, vorrei avere informazioni."
-      )}`
-    : "";
+  function apriWhatsApp() {
+    const numero = preparaNumeroWhatsApp(whatsapp);
+
+    if (!numero) return;
+
+    const messaggio = encodeURIComponent(
+      "Ciao, vorrei avere informazioni."
+    );
+
+    const appUrl = `whatsapp://send?phone=${numero}&text=${messaggio}`;
+    const webUrl = `https://wa.me/${numero}?text=${messaggio}`;
+
+    let fallbackAvviato = false;
+
+    const fallback = window.setTimeout(() => {
+      fallbackAvviato = true;
+      window.location.href = webUrl;
+    }, 900);
+
+    const annullaFallback = () => {
+      if (!fallbackAvviato) {
+        window.clearTimeout(fallback);
+      }
+    };
+
+    window.addEventListener("pagehide", annullaFallback, { once: true });
+    document.addEventListener(
+      "visibilitychange",
+      () => {
+        if (document.visibilityState === "hidden") {
+          annullaFallback();
+        }
+      },
+      { once: true }
+    );
+
+    window.location.href = appUrl;
+  }
 
   return (
     <main className="min-h-screen bg-[#F4F7F6] text-[#102A2E] pb-24">
@@ -337,14 +368,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {whatsappUrl && (
-        <a
-          href={whatsappUrl}
+      {whatsapp && (
+        <button
+          type="button"
+          onClick={apriWhatsApp}
           aria-label="Chatta con noi su WhatsApp"
           className="fixed bottom-[92px] right-4 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_12px_28px_rgba(37,211,102,0.35)] ring-4 ring-white transition active:scale-95 sm:bottom-6 sm:right-6"
         >
           <IconaWhatsApp />
-        </a>
+        </button>
       )}
 
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#DCE6E6] bg-white/95 px-2 pb-[max(env(safe-area-inset-bottom),8px)] pt-2 shadow-[0_-8px_30px_rgba(16,42,46,0.08)] backdrop-blur-xl">

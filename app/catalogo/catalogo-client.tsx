@@ -264,7 +264,7 @@ export default function CatalogoClient({
             Nessun prodotto trovato.
           </div>
         ) : (
-          <div className="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
             {filtrati.map((articolo) => {
               const promo =
                 articolo.in_promozione &&
@@ -273,24 +273,11 @@ export default function CatalogoClient({
               return (
                 <article
                   key={articolo.id}
-                  className="group relative overflow-hidden"
-                  style={{
-                    borderRadius: 28,
-                    border: "1.5px solid #566F75",
-                    background: "#FFFFFF",
-                    boxShadow:
-                      "0 16px 38px rgba(12,37,43,.11), 0 2px 6px rgba(12,37,43,.05)",
-                    display: "flex",
-                    flexDirection: "column",
-                    minHeight: 560,
-                    transition:
-                      "transform .25s ease, box-shadow .25s ease",
-                  }}
+                  className="group relative flex h-full flex-col overflow-hidden rounded-[20px] border-[1.5px] border-[#566F75] bg-white shadow-[0_10px_24px_rgba(12,37,43,.09)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(12,37,43,.14)] sm:rounded-[26px]"
                 >
                   <div
-                    className="pointer-events-none absolute inset-x-0 top-0 z-20"
+                    className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[3px]"
                     style={{
-                      height: 4,
                       background:
                         "linear-gradient(90deg,#083B4C 0%,#1D6E7A 55%,#7ECBD3 100%)",
                     }}
@@ -301,56 +288,23 @@ export default function CatalogoClient({
                     className="relative block"
                   >
                     <div
-                      className="relative overflow-hidden"
+                      className="relative aspect-square overflow-hidden border-b-[1.5px] border-[#566F75]"
                       style={{
-                        height: 330,
                         background:
-                          "radial-gradient(circle at 78% 15%, rgba(169,214,222,.20), transparent 25%), linear-gradient(180deg,#FFFFFF 0%,#F7FAFA 100%)",
-                        borderBottom: "1.5px solid #566F75",
+                          "radial-gradient(circle at 78% 15%, rgba(169,214,222,.16), transparent 27%), linear-gradient(180deg,#FFFFFF 0%,#F8FBFB 100%)",
                       }}
                     >
-                      <div
-                        className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full"
-                        style={{
-                          border: "1px solid rgba(29,110,122,.10)",
-                        }}
-                      />
-                      <div
-                        className="pointer-events-none absolute -left-20 bottom-[-70px] h-44 w-44 rounded-full"
-                        style={{
-                          border: "1px solid rgba(29,110,122,.08)",
-                        }}
-                      />
-
                       {articolo.in_promozione &&
                         articolo.sconto_percentuale !== null && (
                           <div
-                            className="absolute left-4 top-4 z-20"
-                            style={{
-                              background: "#9A0F1C",
-                              color: "#FFFFFF",
-                              border: "1px solid #6E0710",
-                              borderRadius: 14,
-                              padding: "8px 12px",
-                              boxShadow:
-                                "0 7px 16px rgba(154,15,28,.22)",
-                              fontSize: 11,
-                              fontWeight: 950,
-                              letterSpacing: ".04em",
-                            }}
+                            className="absolute left-2 top-2 z-20 rounded-lg border border-[#6E0710] bg-[#9A0F1C] px-2 py-1 text-[8px] font-black tracking-[0.02em] text-white shadow-sm sm:left-3 sm:top-3 sm:rounded-xl sm:px-2.5 sm:py-1.5 sm:text-[10px]"
                           >
                             PROMO -{Number(articolo.sconto_percentuale)}%
                           </div>
                         )}
 
                       <div
-                        className="absolute right-4 top-4 z-10 rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em]"
-                        style={{
-                          background: "rgba(255,255,255,.88)",
-                          color: "#46666D",
-                          border: "1px solid #D7E5E6",
-                          backdropFilter: "blur(4px)",
-                        }}
+                        className="absolute right-2 top-2 z-10 max-w-[48%] truncate rounded-full border border-[#D7E5E6] bg-white/90 px-2 py-1 text-[7px] font-black uppercase tracking-[0.08em] text-[#46666D] backdrop-blur-sm sm:right-3 sm:top-3 sm:px-2.5 sm:text-[9px]"
                       >
                         {articolo.categoria || "Ottica App"}
                       </div>
@@ -359,14 +313,10 @@ export default function CatalogoClient({
                         <img
                           src={articolo.immagine_url}
                           alt={articolo.nome}
-                          className="h-full w-full object-contain"
-                          style={{
-                            padding: "42px 28px 24px",
-                            transition: "transform .28s ease",
-                          }}
+                          className="h-full w-full object-contain p-3 transition duration-300 group-hover:scale-[1.03] sm:p-5"
                         />
                       ) : (
-                        <div className="flex h-full items-center justify-center text-6xl">
+                        <div className="flex h-full items-center justify-center text-4xl sm:text-6xl">
                           👓
                         </div>
                       )}
@@ -374,47 +324,33 @@ export default function CatalogoClient({
                   </Link>
 
                   <div
-                    className="flex flex-1 flex-col p-5"
+                    className="flex flex-1 flex-col p-3 sm:p-5"
                     style={{
                       background:
-                        "linear-gradient(180deg,#FFFFFF 0%,#F5FAFA 100%)",
+                        "linear-gradient(180deg,#FFFFFF 0%,#F6FAFA 100%)",
                     }}
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#3F737B]">
-                          {articolo.marca || "OTTICA APP"}
-                        </p>
+                    <p className="truncate text-[8px] font-black uppercase tracking-[0.12em] text-[#3F737B] sm:text-[10px] sm:tracking-[0.18em]">
+                      {articolo.marca || "OTTICA APP"}
+                    </p>
 
-                        <Link href={`/catalogo/${articolo.id}`}>
-                          <h2 className="mt-1 text-[1.35rem] font-black leading-tight tracking-[-0.02em] text-[#102A2E]">
-                            {articolo.nome}
-                          </h2>
-                        </Link>
+                    <Link href={`/catalogo/${articolo.id}`}>
+                      <h2 className="mt-1 line-clamp-2 min-h-[34px] text-[13px] font-black leading-[1.25] tracking-[-0.02em] text-[#102A2E] sm:min-h-0 sm:text-[1.15rem]">
+                        {articolo.nome}
+                      </h2>
+                    </Link>
 
-                        {articolo.modello && (
-                          <p className="mt-1 text-sm font-medium text-[#6D8287]">
-                            {articolo.modello}
-                          </p>
-                        )}
-                      </div>
+                    {articolo.modello && (
+                      <p className="mt-1 truncate text-[10px] font-medium text-[#6D8287] sm:text-sm">
+                        {articolo.modello}
+                      </p>
+                    )}
 
-                      <span
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#0C4A59]"
-                        style={{
-                          background: "#ECF5F6",
-                          border: "1px solid #C9DADC",
-                        }}
-                      >
-                        <IconaOcchiali />
-                      </span>
-                    </div>
-
-                    <div className="mt-4">
+                    <div className="mt-3 sm:mt-4">
                       {promo ? (
-                        <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
+                        <div className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:items-end sm:gap-x-2">
                           <span
-                            className="text-sm font-black line-through"
+                            className="text-[9px] font-black line-through sm:text-xs"
                             style={{
                               color: "#B4232F",
                               textDecorationColor: "#B4232F",
@@ -424,50 +360,35 @@ export default function CatalogoClient({
                             {euro(Number(articolo.prezzo))}
                           </span>
 
-                          <span className="text-3xl font-black leading-none text-[#C80F1F]">
+                          <span className="text-[18px] font-black leading-none text-[#C80F1F] sm:text-2xl">
                             {euro(Number(articolo.prezzo_promozionale))}
                           </span>
                         </div>
                       ) : (
-                        <p className="text-3xl font-black leading-none text-[#083B4C]">
+                        <p className="text-[18px] font-black leading-none text-[#083B4C] sm:text-2xl">
                           {euro(Number(articolo.prezzo))}
                         </p>
                       )}
                     </div>
 
-                    <div
-                      className="mt-5 grid grid-cols-2 gap-2 text-[11px]"
-                      style={{ color: "#60777C" }}
-                    >
+                    <div className="mt-4 hidden grid-cols-2 gap-2 text-[10px] text-[#60777C] sm:grid">
                       {articolo.forma && (
-                        <div
-                          className="rounded-xl px-3 py-2"
-                          style={{
-                            background: "#EEF6F6",
-                            border: "1px solid #D7E5E6",
-                          }}
-                        >
-                          <span className="block text-[9px] font-black uppercase tracking-[0.12em] text-[#789095]">
+                        <div className="rounded-xl border border-[#D7E5E6] bg-[#EEF6F6] px-3 py-2">
+                          <span className="block text-[8px] font-black uppercase tracking-[0.12em] text-[#789095]">
                             Forma
                           </span>
-                          <span className="mt-0.5 block font-bold">
+                          <span className="mt-0.5 block truncate font-bold">
                             {articolo.forma}
                           </span>
                         </div>
                       )}
 
                       {articolo.materiale && (
-                        <div
-                          className="rounded-xl px-3 py-2"
-                          style={{
-                            background: "#EEF6F6",
-                            border: "1px solid #D7E5E6",
-                          }}
-                        >
-                          <span className="block text-[9px] font-black uppercase tracking-[0.12em] text-[#789095]">
+                        <div className="rounded-xl border border-[#D7E5E6] bg-[#EEF6F6] px-3 py-2">
+                          <span className="block text-[8px] font-black uppercase tracking-[0.12em] text-[#789095]">
                             Materiale
                           </span>
-                          <span className="mt-0.5 block font-bold">
+                          <span className="mt-0.5 block truncate font-bold">
                             {articolo.materiale}
                           </span>
                         </div>
@@ -476,13 +397,11 @@ export default function CatalogoClient({
 
                     <Link
                       href={`/catalogo/${articolo.id}`}
-                      className="mt-auto flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-sm font-black text-white"
+                      className="mt-auto flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-xl px-2.5 py-2.5 text-[10px] font-black text-white shadow-[0_7px_16px_rgba(8,59,76,.18)] transition hover:brightness-110 sm:min-h-[48px] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm"
                       style={{
-                        marginTop: 22,
+                        marginTop: 16,
                         background:
                           "linear-gradient(135deg,#041E27 0%,#083B4C 56%,#1D6E7A 100%)",
-                        boxShadow:
-                          "0 9px 20px rgba(8,59,76,.22)",
                         textDecoration: "none",
                       }}
                     >

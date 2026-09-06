@@ -4,14 +4,14 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
 type Negozio = {
-  nome_centro: string;
+  nome_negozio: string;
   ragione_sociale: string;
   indirizzo: string;
   cap: string;
   citta: string;
   provincia: string;
   telefono: string;
-  telefono_whatsapp: string;
+  whatsapp: string;
   email: string;
   sito_web: string;
   partita_iva: string;
@@ -21,14 +21,14 @@ type Negozio = {
 };
 
 const vuoto: Negozio = {
-  nome_centro: "",
+  nome_negozio: "",
   ragione_sociale: "",
   indirizzo: "",
   cap: "",
   citta: "",
   provincia: "",
   telefono: "",
-  telefono_whatsapp: "",
+  whatsapp: "",
   email: "",
   sito_web: "",
   partita_iva: "",
@@ -173,8 +173,8 @@ export default function AdminNegozioPage() {
             <div className="grid gap-5 sm:grid-cols-2">
               <Campo
                 label="Nome centro ottico *"
-                value={dati.nome_centro}
-                onChange={(v) => aggiorna("nome_centro", v)}
+                value={dati.nome_negozio}
+                onChange={(v) => aggiorna("nome_negozio", v)}
               />
 
               <Campo
@@ -219,8 +219,8 @@ export default function AdminNegozioPage() {
               <Campo
                 label="Cellulare / WhatsApp *"
                 type="tel"
-                value={dati.telefono_whatsapp}
-                onChange={(v) => aggiorna("telefono_whatsapp", v)}
+                value={dati.whatsapp}
+                onChange={(v) => aggiorna("whatsapp", v)}
                 placeholder="+39 333 1234567"
               />
 
@@ -292,8 +292,8 @@ export default function AdminNegozioPage() {
               type="submit"
               disabled={
                 salvataggio ||
-                !dati.nome_centro.trim() ||
-                !dati.telefono_whatsapp.trim()
+                !dati.nome_negozio.trim() ||
+                !dati.whatsapp.trim()
               }
               className="mt-7 w-full rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white disabled:opacity-40"
             >

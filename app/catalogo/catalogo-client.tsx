@@ -1,9 +1,11 @@
+const IconaOcchiali = IconaCatalogoOttica;
 "use client";
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Articolo } from "./types";
 import BottomNav from "@/app/components/bottom-nav";
+import { IconaCatalogoOttica } from "@/app/icone-ottica";
 
 type Props = {
   articoli?: Articolo[];

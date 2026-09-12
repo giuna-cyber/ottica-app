@@ -84,25 +84,25 @@ export default function CatalogoClient({
   }, [elenco, ricerca, categoria, genere]);
 
   return (
-    <main className="min-h-screen bg-[#F6F4EF] pb-28 text-[#20383B]">
-      <header className="border-b border-[#D9E2DF] bg-[#FBFAF7]">
+    <main className="min-h-screen bg-[var(--app-background)] pb-28 text-[var(--app-text)]">
+      <header className="border-b border-[var(--app-border)] bg-[var(--app-surface)]">
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#89A39D]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[var(--app-primary)]">
                 Collezione
               </p>
-              <h1 className="mt-2 font-serif text-4xl font-medium tracking-[-0.04em] text-[#20383B] sm:text-5xl">
+              <h1 className="mt-2 font-serif text-4xl font-medium tracking-[-0.04em] text-[var(--app-text)] sm:text-5xl">
                 Catalogo
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-[#7E8F8B] sm:text-base">
+              <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--app-muted)] sm:text-base">
                 Montature selezionate, colori e modelli disponibili nel centro ottico.
               </p>
             </div>
 
             <Link
               href="/"
-              className="w-fit rounded-full border border-[#D2DEDA] bg-white px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#6F918B]"
+              className="w-fit rounded-full border border-[#D2DEDA] bg-[var(--app-surface)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--app-primary-hover)]"
             >
               ← Home
             </Link>
@@ -111,18 +111,18 @@ export default function CatalogoClient({
       </header>
 
       <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-        <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_12px_30px_rgba(80,108,105,.06)] sm:p-5">
+        <div className="rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-4 shadow-[0_12px_30px_rgba(80,108,105,.06)] sm:p-5">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
                 Esplora la collezione
               </p>
-              <p className="mt-1 text-sm font-medium text-[#738682]">
+              <p className="mt-1 text-sm font-medium text-[var(--app-text-soft)]">
                 {filtrati.length} {filtrati.length === 1 ? "prodotto" : "prodotti"} trovati
               </p>
             </div>
 
-            <span className="rounded-full border border-[#D4DFDB] bg-[#EDF3F0] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6F918B]">
+            <span className="rounded-full border border-[var(--app-border-strong)] bg-[var(--app-surface-soft)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--app-primary-hover)]">
               Catalogo aggiornato
             </span>
           </div>
@@ -133,13 +133,13 @@ export default function CatalogoClient({
               value={ricerca}
               onChange={(e) => setRicerca(e.target.value)}
               placeholder="Cerca prodotto..."
-              className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-sm text-[#20383B] outline-none transition placeholder:text-[#9AA9A5] focus:border-[#8FB8B2]"
+              className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-sm text-[var(--app-text)] outline-none transition placeholder:text-[#9AA9A5] focus:border-[var(--app-primary)]"
             />
 
             <select
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
-              className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-sm text-[#20383B] outline-none focus:border-[#8FB8B2]"
+              className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-sm text-[var(--app-text)] outline-none focus:border-[var(--app-primary)]"
             >
               {categorie.map((c) => (
                 <option key={c} value={c}>
@@ -151,7 +151,7 @@ export default function CatalogoClient({
             <select
               value={genere}
               onChange={(e) => setGenere(e.target.value)}
-              className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-sm text-[#20383B] outline-none focus:border-[#8FB8B2]"
+              className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-sm text-[var(--app-text)] outline-none focus:border-[var(--app-primary)]"
             >
               {generi.map((g) => (
                 <option key={g} value={g}>
@@ -163,7 +163,7 @@ export default function CatalogoClient({
         </div>
 
         {filtrati.length === 0 ? (
-          <div className="mt-6 rounded-[20px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center text-sm font-medium text-[#7E8F8B]">
+          <div className="mt-6 rounded-[20px] border border-[var(--app-border)] bg-[var(--app-surface)] p-8 text-center text-sm font-medium text-[var(--app-muted)]">
             Nessun prodotto trovato.
           </div>
         ) : (
@@ -176,25 +176,25 @@ export default function CatalogoClient({
               return (
                 <article
                   key={articolo.id}
-                  className="group relative flex min-h-full w-full flex-col overflow-hidden rounded-[18px] border border-[#D4DFDB] bg-[#FBFAF7] shadow-[0_10px_24px_rgba(80,108,105,.06)] transition duration-300 hover:-translate-y-0.5 hover:border-[#BFCFCA] hover:shadow-[0_14px_30px_rgba(80,108,105,.10)] sm:rounded-[22px]"
+                  className="group relative flex min-h-full w-full flex-col overflow-hidden rounded-[18px] border border-[var(--app-border-strong)] bg-[var(--app-surface)] shadow-[0_10px_24px_rgba(80,108,105,.06)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--app-border-strong)] hover:shadow-[0_14px_30px_rgba(80,108,105,.10)] sm:rounded-[22px]"
                 >
 
                   <Link
                     href={`/catalogo/${articolo.id}`}
                     className="relative block"
                   >
-                    <div className="relative aspect-square overflow-hidden border-b border-[#DDE5E2] bg-[linear-gradient(180deg,#FFFFFF_0%,#F5F2EC_100%)]">
+                    <div className="relative aspect-square overflow-hidden border-b border-[var(--app-border)] bg-[linear-gradient(180deg,var(--app-surface)_0%,var(--app-background)_100%)]">
                       {articolo.in_promozione &&
                         articolo.sconto_percentuale !== null && (
                           <div
-                            className="absolute left-2 top-2 z-20 rounded-full border border-[#E8C8C4] bg-[#F4DCD7] px-2 py-1 text-[8px] font-semibold tracking-[0.02em] text-[#8C554F] sm:left-3 sm:top-3 sm:px-2.5 sm:py-1.5 sm:text-[10px]"
+                            className="absolute left-2 top-2 z-20 rounded-full border border-[color-mix(in_srgb,var(--app-danger)_35%,white)] bg-[color-mix(in_srgb,var(--app-danger)_16%,white)] px-2 py-1 text-[8px] font-semibold tracking-[0.02em] text-[var(--app-danger)] sm:left-3 sm:top-3 sm:px-2.5 sm:py-1.5 sm:text-[10px]"
                           >
                             PROMO -{Number(articolo.sconto_percentuale)}%
                           </div>
                         )}
 
                       <div
-                        className="absolute right-2 top-2 z-10 max-w-[48%] truncate rounded-full border border-[#D9E2DF] bg-white/90 px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.08em] text-[#728B85] backdrop-blur-sm sm:right-3 sm:top-3 sm:px-2.5 sm:text-[9px]"
+                        className="absolute right-2 top-2 z-10 max-w-[48%] truncate rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/90 px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.08em] text-[var(--app-text-soft)] backdrop-blur-sm sm:right-3 sm:top-3 sm:px-2.5 sm:text-[9px]"
                       >
                         {articolo.categoria || "Ottica App"}
                       </div>
@@ -206,25 +206,25 @@ export default function CatalogoClient({
                           className="h-full w-full object-contain p-3 transition duration-300 group-hover:scale-[1.03] sm:p-5"
                         />
                       ) : (
-                        <div className="flex h-full items-center justify-center text-[#8FB8B2]">
+                        <div className="flex h-full items-center justify-center text-[var(--app-primary)]">
                           <IconaOcchiali />
                         </div>
                       )}
                     </div>
                   </Link>
 
-                  <div className="flex flex-1 flex-col bg-[#FBFAF7] p-3 sm:p-5">
-                    <p className="truncate text-[8px] font-semibold uppercase tracking-[0.14em] text-[#7A918A] sm:text-[10px] sm:tracking-[0.18em]">
+                  <div className="flex flex-1 flex-col bg-[var(--app-surface)] p-3 sm:p-5">
+                    <p className="truncate text-[8px] font-semibold uppercase tracking-[0.14em] text-[var(--app-text-soft)] sm:text-[10px] sm:tracking-[0.18em]">
                       {articolo.marca || "OTTICA APP"}
                     </p>
 
                     <Link href={`/catalogo/${articolo.id}`}>
-                      <h2 className="mt-1 line-clamp-2 h-[34px] font-serif text-[14px] font-medium leading-[1.2] tracking-[-0.015em] text-[#20383B] sm:h-[46px] sm:text-[1.2rem]">
+                      <h2 className="mt-1 line-clamp-2 h-[34px] font-serif text-[14px] font-medium leading-[1.2] tracking-[-0.015em] text-[var(--app-text)] sm:h-[46px] sm:text-[1.2rem]">
                         {articolo.nome}
                       </h2>
                     </Link>
 
-                    <p className="mt-1 h-[14px] truncate text-[10px] font-medium leading-[14px] text-[#879793] sm:h-[20px] sm:text-sm sm:leading-5">
+                    <p className="mt-1 h-[14px] truncate text-[10px] font-medium leading-[14px] text-[var(--app-muted)] sm:h-[20px] sm:text-sm sm:leading-5">
                       {articolo.modello || " "}
                     </p>
 
@@ -234,29 +234,29 @@ export default function CatalogoClient({
                           <span
                             className="text-[9px] font-semibold line-through sm:text-xs"
                             style={{
-                              color: "#A87972",
-                              textDecorationColor: "#A87972",
+                              color: "color-mix(in srgb, var(--app-danger) 78%, var(--app-muted))",
+                              textDecorationColor: "var(--app-danger)",
                               textDecorationThickness: "1.5px",
                             }}
                           >
                             {euro(Number(articolo.prezzo))}
                           </span>
 
-                          <span className="text-[18px] font-semibold leading-none text-[#A85D55] sm:text-2xl">
+                          <span className="text-[18px] font-semibold leading-none text-[var(--app-danger)] sm:text-2xl">
                             {euro(Number(articolo.prezzo_promozionale))}
                           </span>
                         </div>
                       ) : (
-                        <p className="text-[18px] font-semibold leading-none text-[#506C69] sm:text-2xl">
+                        <p className="text-[18px] font-semibold leading-none text-[var(--app-text-soft)] sm:text-2xl">
                           {euro(Number(articolo.prezzo))}
                         </p>
                       )}
                     </div>
 
-                    <div className="mt-4 hidden grid-cols-2 gap-2 text-[10px] text-[#738682] sm:grid">
+                    <div className="mt-4 hidden grid-cols-2 gap-2 text-[10px] text-[var(--app-text-soft)] sm:grid">
                       {articolo.forma && (
-                        <div className="rounded-xl border border-[#DDE5E2] bg-[#F2F5F2] px-3 py-2">
-                          <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[#8B9C98]">
+                        <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2">
+                          <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
                             Forma
                           </span>
                           <span className="mt-0.5 block truncate font-medium">
@@ -266,8 +266,8 @@ export default function CatalogoClient({
                       )}
 
                       {articolo.materiale && (
-                        <div className="rounded-xl border border-[#DDE5E2] bg-[#F2F5F2] px-3 py-2">
-                          <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[#8B9C98]">
+                        <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2">
+                          <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
                             Materiale
                           </span>
                           <span className="mt-0.5 block truncate font-medium">
@@ -279,7 +279,7 @@ export default function CatalogoClient({
 
                     <Link
                       href={`/catalogo/${articolo.id}`}
-                      className="mt-auto flex h-[42px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[#7FA39A] px-2.5 text-[10px] font-semibold text-white shadow-[0_7px_16px_rgba(80,108,105,.10)] transition hover:bg-[#6F918B] sm:h-[48px] sm:rounded-xl sm:px-4 sm:text-sm"
+                      className="mt-auto flex h-[42px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[var(--app-primary)] px-2.5 text-[10px] font-semibold text-white shadow-[0_7px_16px_rgba(80,108,105,.10)] transition hover:bg-[var(--app-primary-hover)] sm:h-[48px] sm:rounded-xl sm:px-4 sm:text-sm"
                       style={{
                         textDecoration: "none",
                       }}

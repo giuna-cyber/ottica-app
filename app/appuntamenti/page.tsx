@@ -342,15 +342,15 @@ export default function AppuntamentiPage() {
 
   return (
     <main
-      className="min-h-screen overflow-hidden bg-[#F6F4EF] pb-24 text-[#20383B]"
+      className="min-h-screen overflow-hidden bg-[var(--app-background)] pb-24 text-[var(--app-text)]"
       style={{
         background: "#F6F4EF",
       }}
     >
-      <header className="sticky top-0 z-50 border-b border-[#D9E2DF] bg-[#FBFAF7]/95 text-[#20383B] backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-[var(--app-border)] bg-[var(--app-surface)]/95 text-[var(--app-text)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#D4DFDB] bg-white text-[#6F918B] shadow-sm">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] text-[var(--app-primary-hover)] shadow-sm">
               <IconaOcchiali />
             </div>
 
@@ -359,7 +359,7 @@ export default function AppuntamentiPage() {
                 Centro ottico
               </p>
 
-              <h1 className="text-lg font-semibold tracking-tight text-[#20383B]">
+              <h1 className="text-lg font-semibold tracking-tight text-[var(--app-text)]">
                 OTTICA APP
               </h1>
             </div>
@@ -367,7 +367,7 @@ export default function AppuntamentiPage() {
 
           <Link
             href="/login"
-            className="rounded-full border border-[#D4DFDB] bg-white px-3 py-2 text-xs font-semibold text-[#738682]"
+            className="rounded-full border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-2 text-xs font-semibold text-[var(--app-text-soft)]"
           >
             Admin
           </Link>
@@ -375,7 +375,7 @@ export default function AppuntamentiPage() {
       </header>
 
       <section
-        className="relative overflow-hidden border-b border-[#D9E2DF] text-[#20383B]"
+        className="relative overflow-hidden border-b border-[var(--app-border)] text-[var(--app-text)]"
         style={{
           background:
             "linear-gradient(135deg, #EEF3F0 0%, #FBFAF7 52%, #F5F2EC 100%)",
@@ -463,11 +463,11 @@ export default function AppuntamentiPage() {
 
         <div className="relative mx-auto max-w-6xl px-4 pb-10 pt-10 sm:px-6 sm:pb-14 sm:pt-14">
           <div className="max-w-3xl">
-            <span className="inline-flex rounded-full border border-[#D4DFDB] bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#7FA39A] backdrop-blur">
+            <span className="inline-flex rounded-full border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#7FA39A] backdrop-blur">
               Prenotazioni online
             </span>
 
-            <h2 className="mt-4 max-w-3xl font-serif text-4xl font-medium leading-[0.98] tracking-[-0.045em] text-[#20383B] sm:text-6xl">
+            <h2 className="mt-4 max-w-3xl font-serif text-4xl font-medium leading-[0.98] tracking-[-0.045em] text-[var(--app-text)] sm:text-6xl">
               Prenota la tua
               <span className="block text-[#7FA39A]">
                 visita in pochi passi.
@@ -483,7 +483,7 @@ export default function AppuntamentiPage() {
               {["Servizio", "Data", "Orario", "Conferma"].map((voce, indice) => (
                 <span
                   key={voce}
-                  className="rounded-full border border-[#D4DFDB] bg-white px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#738682] shadow-sm"
+                  className="rounded-full border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--app-text-soft)] shadow-sm"
                 >
                   {indice + 1}. {voce}
                 </span>
@@ -505,30 +505,30 @@ export default function AppuntamentiPage() {
         className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10"
       >
         <div className="pointer-events-none absolute -left-52 top-40 h-96 w-96 rounded-full bg-[#DDE8E3]/45 blur-3xl" />
-        <div className="pointer-events-none absolute -right-56 top-[520px] h-[420px] w-[420px] rounded-full border border-[#DCE5E1]/60 bg-white/15" />
+        <div className="pointer-events-none absolute -right-56 top-[520px] h-[420px] w-[420px] rounded-full border border-[#DCE5E1]/60 bg-[var(--app-surface)]/15" />
         {errore && (
-          <div className="mb-5 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] px-4 py-4 text-sm font-semibold text-[#9A615A]">
+          <div className="mb-5 rounded-2xl border border-[#E9D1CD] bg-[color-mix(in_srgb,var(--app-danger)_12%,white)] px-4 py-4 text-sm font-semibold text-[#9A615A]">
             Errore: {errore}
           </div>
         )}
 
         {messaggio && (
-          <div className="mb-5 rounded-2xl border border-[#CFE0D8] bg-[#EDF5F0] px-4 py-4 text-sm font-semibold text-[#55766D]">
+          <div className="mb-5 rounded-2xl border border-[color-mix(in_srgb,var(--app-success)_30%,white)] bg-[#EDF5F0] px-4 py-4 text-sm font-semibold text-[#55766D]">
             {messaggio}
           </div>
         )}
 
         <section className="relative z-10">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
             1. Servizio
           </p>
 
-          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[#20383B]">
+          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[var(--app-text)]">
             Cosa vuoi prenotare?
           </h3>
 
           {caricamentoTipi ? (
-            <p className="mt-4 text-sm font-medium text-[#7E8F8B]">
+            <p className="mt-4 text-sm font-medium text-[var(--app-muted)]">
               Caricamento servizi...
             </p>
           ) : (
@@ -547,7 +547,7 @@ export default function AppuntamentiPage() {
                     className={`group relative overflow-hidden rounded-[22px] border p-5 text-left transition duration-300 hover:-translate-y-1 ${
                       attivo
                         ? "border-[#8FB8B2]"
-                        : "border-[#D9E2DF] hover:border-[#BFD0CB]"
+                        : "border-[var(--app-border)] hover:border-[#BFD0CB]"
                     }`}
                     style={{
                       background: attivo
@@ -561,7 +561,7 @@ export default function AppuntamentiPage() {
                     <div
                       className={`absolute inset-x-0 top-0 h-1 ${
                         attivo
-                          ? "bg-[#7FA39A]"
+                          ? "bg-[var(--app-primary)]"
                           : "bg-[#DCE6E2]"
                       }`}
                     />
@@ -570,8 +570,8 @@ export default function AppuntamentiPage() {
                       <div
                         className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
                           attivo
-                            ? "bg-[#7FA39A] text-white"
-                            : "bg-[#EDF3F0] text-[#6F918B]"
+                            ? "bg-[var(--app-primary)] text-white"
+                            : "bg-[var(--app-surface-soft)] text-[var(--app-primary-hover)]"
                         }`}
                       >
                         <IconaCalendario />
@@ -581,19 +581,19 @@ export default function AppuntamentiPage() {
                         className={`rounded-full px-3 py-1 text-[10px] font-semibold ${
                           attivo
                             ? "bg-[#506C69] text-white"
-                            : "bg-[#EEF3F1] text-[#738682]"
+                            : "bg-[#EEF3F1] text-[var(--app-text-soft)]"
                         }`}
                       >
                         {tipo.durata_minuti} min
                       </span>
                     </div>
 
-                    <h4 className="mt-4 font-serif text-lg font-medium tracking-[-0.015em] text-[#20383B]">
+                    <h4 className="mt-4 font-serif text-lg font-medium tracking-[-0.015em] text-[var(--app-text)]">
                       {tipo.nome}
                     </h4>
 
                     {tipo.descrizione && (
-                      <p className="mt-2 min-h-[48px] text-sm leading-6 text-[#7E8F8B]">
+                      <p className="mt-2 min-h-[48px] text-sm leading-6 text-[var(--app-muted)]">
                         {tipo.descrizione}
                       </p>
                     )}
@@ -602,8 +602,8 @@ export default function AppuntamentiPage() {
                       <span
                         className={`text-[11px] font-semibold uppercase tracking-[0.14em] ${
                           attivo
-                            ? "text-[#6F918B]"
-                            : "text-[#86928F]"
+                            ? "text-[var(--app-primary-hover)]"
+                            : "text-[var(--app-nav-inactive)]"
                         }`}
                       >
                         {attivo ? "Selezionato" : "Seleziona"}
@@ -612,8 +612,8 @@ export default function AppuntamentiPage() {
                       <span
                         className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
                           attivo
-                            ? "bg-[#7FA39A] text-white"
-                            : "bg-[#EDF3F0] text-[#6F918B]"
+                            ? "bg-[var(--app-primary)] text-white"
+                            : "bg-[var(--app-surface-soft)] text-[var(--app-primary-hover)]"
                         }`}
                       >
                         {attivo ? "✓" : "→"}
@@ -626,27 +626,27 @@ export default function AppuntamentiPage() {
           )}
         </section>
 
-        <section className="relative z-10 mt-10 rounded-[24px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)] sm:p-6">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+        <section className="relative z-10 mt-10 rounded-[24px] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)] sm:p-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
             2. Giorno
           </p>
 
-          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[#20383B]">
+          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[var(--app-text)]">
             Scegli la data.
           </h3>
 
           {caricamentoSlot ? (
-            <p className="mt-4 text-sm font-medium text-[#7E8F8B]">
+            <p className="mt-4 text-sm font-medium text-[var(--app-muted)]">
               Caricamento disponibilità...
             </p>
           ) : !tipoId ? (
-            <div className="mt-4 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-5 text-sm font-medium text-[#7E8F8B]">
+            <div className="mt-4 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-5 text-sm font-medium text-[var(--app-muted)]">
               Seleziona prima il servizio che vuoi prenotare.
             </div>
           ) : dateDisponibili.length > 0 ? (
-            <div className="mt-5 max-w-xl rounded-[20px] border border-[#D9E2DF] bg-[#F3F5F2] p-5">
+            <div className="mt-5 max-w-xl rounded-[20px] border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-5">
               <label className="block">
-                <span className="mb-2 block text-sm font-semibold text-[#20383B]">
+                <span className="mb-2 block text-sm font-semibold text-[var(--app-text)]">
                   Data disponibile
                 </span>
 
@@ -656,7 +656,7 @@ export default function AppuntamentiPage() {
                     setDataSelezionata(evento.target.value);
                     setSlotId(null);
                   }}
-                  className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3.5 text-base font-semibold text-[#506C69] outline-none transition focus:border-[#8FB8B2]"
+                  className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3.5 text-base font-semibold text-[var(--app-text-soft)] outline-none transition focus:border-[#8FB8B2]"
                 >
                   {dateDisponibili.map((data) => (
                     <option key={data} value={data}>
@@ -667,19 +667,19 @@ export default function AppuntamentiPage() {
               </label>
             </div>
           ) : (
-            <div className="mt-4 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-5 text-sm font-medium text-[#7E8F8B]">
+            <div className="mt-4 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-5 text-sm font-medium text-[var(--app-muted)]">
               Nessuna data disponibile per questo
               servizio.
             </div>
           )}
         </section>
 
-        <section className="relative z-10 mt-6 rounded-[24px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)] sm:p-6">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+        <section className="relative z-10 mt-6 rounded-[24px] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)] sm:p-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
             3. Orario
           </p>
 
-          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[#20383B]">
+          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[var(--app-text)]">
             Seleziona l’orario.
           </h3>
 
@@ -711,8 +711,8 @@ export default function AppuntamentiPage() {
                       occupato
                         ? "cursor-not-allowed border-[#E9D1CD] bg-[#F6E8E5] text-[#A6655D]"
                         : selezionato
-                        ? "border-[#7FA39A] bg-[#7FA39A] text-white"
-                        : "border-[#DCE8E9] bg-white text-[#506C69] hover:border-[#8FB8B2]"
+                        ? "border-[#7FA39A] bg-[var(--app-primary)] text-white"
+                        : "border-[#DCE8E9] bg-[var(--app-surface)] text-[var(--app-text-soft)] hover:border-[#8FB8B2]"
                     }`}
                   >
                     <span className="block text-base">
@@ -727,7 +727,7 @@ export default function AppuntamentiPage() {
               })}
             </div>
           ) : (
-            <p className="mt-4 text-sm font-medium text-[#7E8F8B]">
+            <p className="mt-4 text-sm font-medium text-[var(--app-muted)]">
               {!tipoId
                 ? "Seleziona prima un servizio."
                 : dateDisponibili.length === 0
@@ -737,12 +737,12 @@ export default function AppuntamentiPage() {
           )}
         </section>
 
-        <section className="relative z-10 mt-8 rounded-[24px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)] sm:p-7">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+        <section className="relative z-10 mt-8 rounded-[24px] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)] sm:p-7">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
             4. I tuoi dati
           </p>
 
-          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[#20383B]">
+          <h3 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em] text-[var(--app-text)]">
             Completa la prenotazione.
           </h3>
 
@@ -758,7 +758,7 @@ export default function AppuntamentiPage() {
                 onChange={(evento) =>
                   setNome(evento.target.value)
                 }
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
@@ -775,7 +775,7 @@ export default function AppuntamentiPage() {
                     evento.target.value
                   )
                 }
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
@@ -790,7 +790,7 @@ export default function AppuntamentiPage() {
                 onChange={(evento) =>
                   setEmail(evento.target.value)
                 }
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
@@ -805,13 +805,13 @@ export default function AppuntamentiPage() {
                 onChange={(evento) =>
                   setNote(evento.target.value)
                 }
-                className="w-full resize-none rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full resize-none rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#89A39D]">
+          <div className="mt-6 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--app-primary)]">
               Riepilogo
             </p>
 
@@ -854,7 +854,7 @@ export default function AppuntamentiPage() {
               !tipoId ||
               !slotId
             }
-            className="relative z-20 mt-6 flex min-h-[56px] w-full items-center justify-center rounded-xl px-5 py-4 text-sm font-semibold shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:cursor-not-allowed disabled:opacity-50"
+            className="relative z-20 mt-6 flex min-h-[56px] w-full items-center justify-center rounded-xl px-5 py-4 text-sm font-semibold shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[var(--app-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
             style={{
               backgroundColor: "#7FA39A",
               color: "#FFFFFF",

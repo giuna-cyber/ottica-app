@@ -106,11 +106,11 @@ export default function PromozioniPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#F6F4EF] pb-24 text-[#20383B]">
-      <header className="sticky top-0 z-50 border-b border-[#D9E2DF] bg-[#FBFAF7]/95 backdrop-blur-xl">
+    <main className="min-h-screen bg-[var(--app-background)] pb-24 text-[var(--app-text)]">
+      <header className="sticky top-0 z-50 border-b border-[var(--app-border)] bg-[var(--app-surface)]/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#D4DFDB] bg-white text-[#6F918B] shadow-sm">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] text-[var(--app-primary-hover)] shadow-sm">
               <IconaOcchiali />
             </div>
 
@@ -118,7 +118,7 @@ export default function PromozioniPage() {
               <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#9AABA6]">
                 Centro ottico
               </p>
-              <h1 className="text-lg font-semibold tracking-tight text-[#20383B]">
+              <h1 className="text-lg font-semibold tracking-tight text-[var(--app-text)]">
                 OTTICA APP
               </h1>
             </div>
@@ -126,24 +126,24 @@ export default function PromozioniPage() {
 
           <Link
             href="/login"
-            className="rounded-full border border-[#D4DFDB] bg-white px-3 py-2 text-xs font-semibold text-[#738682]"
+            className="rounded-full border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-2 text-xs font-semibold text-[var(--app-text-soft)]"
           >
             Admin
           </Link>
         </div>
       </header>
 
-      <section className="relative overflow-hidden border-b border-[#D9E2DF] bg-[linear-gradient(135deg,#EEF3F0_0%,#FBFAF7_52%,#F5F2EC_100%)]">
-        <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full border border-[#D9E2DF] bg-white/30" />
+      <section className="relative overflow-hidden border-b border-[var(--app-border)] bg-[linear-gradient(135deg,#EEF3F0_0%,#FBFAF7_52%,#F5F2EC_100%)]">
+        <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/30" />
         <div className="pointer-events-none absolute -left-24 bottom-[-120px] h-64 w-64 rounded-full bg-[#DDE8E3]/45 blur-2xl" />
 
         <div className="relative mx-auto max-w-6xl px-4 pb-12 pt-10 sm:px-6 sm:pb-14 sm:pt-14">
           <div className="max-w-3xl">
-            <span className="inline-flex rounded-full border border-[#D4DFDB] bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#7FA39A]">
+            <span className="inline-flex rounded-full border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#7FA39A]">
               Promozioni
             </span>
 
-            <h2 className="mt-4 max-w-3xl font-serif text-4xl font-medium leading-[0.98] tracking-[-0.045em] text-[#20383B] sm:text-6xl">
+            <h2 className="mt-4 max-w-3xl font-serif text-4xl font-medium leading-[0.98] tracking-[-0.045em] text-[var(--app-text)] sm:text-6xl">
               Offerte pensate
               <span className="block text-[#7FA39A]">
                 per il tuo stile.
@@ -157,7 +157,7 @@ export default function PromozioniPage() {
 
             <a
               href="#offerte"
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#8FB8B2] bg-white px-5 py-3 text-sm font-semibold text-[#6F918B] transition hover:bg-[#EDF3F0]"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#8FB8B2] bg-[var(--app-surface)] px-5 py-3 text-sm font-semibold text-[var(--app-primary-hover)] transition hover:bg-[var(--app-surface-soft)]"
             >
               Scopri le promozioni <span>→</span>
             </a>
@@ -167,36 +167,36 @@ export default function PromozioniPage() {
 
       <section id="offerte" className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <div className="mb-6">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
             Le nostre promozioni
           </p>
-          <h2 className="mt-1 font-serif text-3xl font-medium tracking-[-0.03em] text-[#20383B]">
+          <h2 className="mt-1 font-serif text-3xl font-medium tracking-[-0.03em] text-[var(--app-text)]">
             Offerte in evidenza
           </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#7E8F8B]">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--app-muted)]">
             Brand selezionati e prezzi speciali per il tuo prossimo occhiale.
           </p>
         </div>
 
         {errore && (
-          <div className="mb-5 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] px-4 py-4 text-sm font-semibold text-[#9A615A]">
+          <div className="mb-5 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] px-4 py-4 text-sm font-semibold text-[var(--app-danger)]">
             {errore}
           </div>
         )}
 
         {caricamento ? (
-          <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center text-sm font-medium text-[#7E8F8B]">
+          <div className="rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-8 text-center text-sm font-medium text-[var(--app-muted)]">
             Caricamento promozioni...
           </div>
         ) : promozioni.length === 0 ? (
-          <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F6ECE8] text-[#A87972]">
+          <div className="rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-8 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F6ECE8] text-[var(--app-danger)]">
               <IconaPromo />
             </div>
             <h3 className="mt-3 font-serif text-xl font-medium">
               Nessuna promozione attiva
             </h3>
-            <p className="mt-2 text-sm text-[#7E8F8B]">
+            <p className="mt-2 text-sm text-[var(--app-muted)]">
               Torna presto per scoprire le prossime offerte.
             </p>
           </div>
@@ -218,11 +218,11 @@ export default function PromozioniPage() {
               return (
                 <article
                   key={promo.id}
-                  className="flex h-full flex-col overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] shadow-[0_12px_30px_rgba(80,108,105,.06)]"
+                  className="flex h-full flex-col overflow-hidden rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-[0_12px_30px_rgba(80,108,105,.06)]"
                 >
-                  <div className="relative h-52 border-b border-[#E1E7E4] bg-white">
+                  <div className="relative h-52 border-b border-[#E1E7E4] bg-[var(--app-surface)]">
                     {promo.sconto_percentuale !== null && (
-                      <div className="absolute left-3 top-3 z-10 rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-2 text-center text-[#9A615A] shadow-sm">
+                      <div className="absolute left-3 top-3 z-10 rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-2 text-center text-[var(--app-danger)] shadow-sm">
                         <div className="text-[9px] font-semibold uppercase tracking-[0.14em]">
                           Promo
                         </div>
@@ -243,7 +243,7 @@ export default function PromozioniPage() {
                         className="h-full w-full object-contain px-5 pb-4 pt-12"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-[#8FB8B2]">
+                      <div className="flex h-full items-center justify-center text-[var(--app-primary)]">
                         <IconaOcchiali />
                       </div>
                     )}
@@ -255,13 +255,13 @@ export default function PromozioniPage() {
                     </h3>
 
                     {promo.articolo_nome && (
-                      <p className="mt-1 text-sm font-semibold text-[#6F918B]">
+                      <p className="mt-1 text-sm font-semibold text-[var(--app-primary-hover)]">
                         {promo.articolo_nome}
                       </p>
                     )}
 
                     {promo.descrizione && (
-                      <p className="mt-3 text-sm leading-6 text-[#7E8F8B]">
+                      <p className="mt-3 text-sm leading-6 text-[var(--app-muted)]">
                         {promo.descrizione}
                       </p>
                     )}
@@ -275,7 +275,7 @@ export default function PromozioniPage() {
                             </p>
                           )}
 
-                          <p className="mt-1 text-2xl font-semibold text-[#506C69]">
+                          <p className="mt-1 text-2xl font-semibold text-[var(--app-text-soft)]">
                             {euro(
                               prezzoScontato !== null
                                 ? prezzoScontato
@@ -284,7 +284,7 @@ export default function PromozioniPage() {
                           </p>
                         </div>
 
-                        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D9E2DF] bg-white text-[#7FA39A]">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--app-border)] bg-[var(--app-surface)] text-[#7FA39A]">
                           <IconaCuore />
                         </span>
                       </div>
@@ -293,7 +293,7 @@ export default function PromozioniPage() {
                     {promo.articolo_id && (
                       <Link
                         href={`/catalogo/${promo.articolo_id}`}
-                        className="mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#7FA39A] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#6F918B]"
+                        className="mt-4 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--app-primary)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--app-primary-hover)]"
                       >
                         Approfitta ora <span>→</span>
                       </Link>
@@ -305,7 +305,7 @@ export default function PromozioniPage() {
           </div>
         )}
 
-        <div className="mt-8 grid overflow-hidden rounded-[20px] border border-[#D9E2DF] bg-[#FBFAF7] shadow-[0_8px_22px_rgba(80,108,105,.04)] sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid overflow-hidden rounded-[20px] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-[0_8px_22px_rgba(80,108,105,.04)] sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["Spedizione gratuita", "Per ordini superiori a € 50"],
             ["Garanzia ufficiale", "Su tutti i prodotti"],
@@ -318,15 +318,15 @@ export default function PromozioniPage() {
                 indice > 0 ? "border-t border-[#E1E7E4] sm:border-t-0 sm:border-l" : ""
               }`}
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EDF3F0] text-[#6F918B]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--app-surface-soft)] text-[var(--app-primary-hover)]">
                 <span className="text-sm font-semibold">{indice + 1}</span>
               </div>
 
               <div>
-                <p className="text-sm font-semibold text-[#20383B]">
+                <p className="text-sm font-semibold text-[var(--app-text)]">
                   {titolo}
                 </p>
-                <p className="mt-1 text-xs text-[#7E8F8B]">
+                <p className="mt-1 text-xs text-[var(--app-muted)]">
                   {testo}
                 </p>
               </div>

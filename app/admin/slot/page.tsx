@@ -264,8 +264,8 @@ export default function AdminSlotPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#F5F9F9] pb-12 text-[#102A2E]">
-      <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
+    <main className="min-h-screen overflow-x-hidden bg-[#F6F4EF] pb-12 text-[#20383B]">
+      <header className="bg-[linear-gradient(135deg,#506C69,#7FA39A)] text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-start gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#CBEDEF]">
@@ -287,62 +287,62 @@ export default function AdminSlotPage() {
 
       <section className="mx-auto w-full max-w-7xl px-2.5 py-5 sm:px-6 sm:py-6">
         {errore && (
-          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-black text-red-700">
+          <div className="mb-4 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] p-4 text-sm font-semibold text-[#9A615A]">
             {errore}
           </div>
         )}
 
         {messaggio && (
-          <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-black text-emerald-700">
+          <div className="mb-4 rounded-2xl border border-[#CFE0D8] bg-[#EDF5F0] p-4 text-sm font-semibold text-[#55766D]">
             {messaggio}
           </div>
         )}
 
         <div className="grid w-full min-w-0 grid-cols-1 gap-5 xl:grid-cols-[390px_minmax(0,1fr)] xl:gap-6">
           <aside className="min-w-0 space-y-6">
-            <div className="min-w-0 overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5">
+            <div className="min-w-0 overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_10px_24px_rgba(80,108,105,.05)] sm:p-5">
               <div className="flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#89A39D]">
                     Configurazione
                   </p>
-                  <h2 className="mt-1 break-words text-xl font-black leading-tight sm:text-2xl">
+                  <h2 className="mt-1 break-words font-serif text-xl font-medium leading-tight sm:text-2xl">
                     Tipi di appuntamento
                   </h2>
                 </div>
-                <span className="rounded-full bg-[#EAF4F5] px-3 py-1 text-xs font-black text-[#1D6E7A]">
+                <span className="rounded-full bg-[#EDF3F0] px-3 py-1 text-xs font-black text-[#7FA39A]">
                   {tipi.length}
                 </span>
               </div>
 
               <div className="mt-5 grid min-w-0 gap-3">
                 <label className="min-w-0">
-                  <span className="mb-1.5 block text-xs font-black text-[#506B71]">
+                  <span className="mb-1.5 block text-xs font-semibold text-[#738682]">
                     Nome servizio
                   </span>
                   <input
                     value={nuovoNome}
                     onChange={(e) => setNuovoNome(e.target.value)}
                     placeholder="Es. Controllo visivo"
-                    className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                    className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   />
                 </label>
 
                 <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_120px]">
                   <label className="min-w-0">
-                    <span className="mb-1.5 block text-xs font-black text-[#506B71]">
+                    <span className="mb-1.5 block text-xs font-semibold text-[#738682]">
                       Descrizione
                     </span>
                     <input
                       value={nuovaDescrizione}
                       onChange={(e) => setNuovaDescrizione(e.target.value)}
                       placeholder="Descrizione del servizio"
-                      className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                      className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                     />
                   </label>
 
                   <label className="min-w-0">
-                    <span className="mb-1.5 block text-xs font-black text-[#506B71]">
+                    <span className="mb-1.5 block text-xs font-semibold text-[#738682]">
                       Durata (min)
                     </span>
                     <input
@@ -351,7 +351,7 @@ export default function AdminSlotPage() {
                       step="5"
                       value={nuovaDurata}
                       onChange={(e) => setNuovaDurata(e.target.value)}
-                      className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-3 py-3"
+                      className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                       aria-label="Durata minuti"
                     />
                   </label>
@@ -368,7 +368,7 @@ export default function AdminSlotPage() {
                       durata_minuti: Number(nuovaDurata),
                     })
                   }
-                  className="rounded-2xl bg-[#083B4C] px-4 py-3 text-sm font-black text-white disabled:opacity-40"
+                  className="rounded-xl bg-[#7FA39A] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#6F918B] disabled:opacity-40"
                 >
                   + Aggiungi tipo
                 </button>
@@ -378,24 +378,24 @@ export default function AdminSlotPage() {
                 {tipi.map((t) => (
                   <div
                     key={t.id}
-                    className="min-w-0 overflow-hidden rounded-2xl border border-[#DCE8E9] bg-[#F8FBFB] p-4"
+                    className="min-w-0 overflow-hidden rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4"
                   >
                     {modificaId === t.id ? (
                       <div className="grid gap-3">
                         <label className="min-w-0">
-                          <span className="mb-1 block text-[11px] font-black text-[#506B71]">
+                          <span className="mb-1 block text-[11px] font-semibold text-[#738682]">
                             Nome servizio
                           </span>
                           <input
                             value={modificaNome}
                             onChange={(e) => setModificaNome(e.target.value)}
-                            className="min-w-0 w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
+                            className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                           />
                         </label>
 
                         <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_110px]">
                           <label className="min-w-0">
-                            <span className="mb-1 block text-[11px] font-black text-[#506B71]">
+                            <span className="mb-1 block text-[11px] font-semibold text-[#738682]">
                               Descrizione
                             </span>
                             <input
@@ -403,12 +403,12 @@ export default function AdminSlotPage() {
                               onChange={(e) =>
                                 setModificaDescrizione(e.target.value)
                               }
-                              className="min-w-0 w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
+                              className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                             />
                           </label>
 
                           <label className="min-w-0">
-                            <span className="mb-1 block text-[11px] font-black text-[#506B71]">
+                            <span className="mb-1 block text-[11px] font-semibold text-[#738682]">
                               Durata (min)
                             </span>
                             <input
@@ -419,7 +419,7 @@ export default function AdminSlotPage() {
                               onChange={(e) =>
                                 setModificaDurata(e.target.value)
                               }
-                              className="min-w-0 w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5"
+                              className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                             />
                           </label>
                         </div>
@@ -436,7 +436,7 @@ export default function AdminSlotPage() {
                                 durata_minuti: Number(modificaDurata),
                               })
                             }
-                            className="rounded-xl bg-[#083B4C] px-3 py-2 text-xs font-black text-white"
+                            className="rounded-xl bg-[#7FA39A] px-3 py-2 text-xs font-semibold text-white"
                           >
                             Salva
                           </button>
@@ -444,7 +444,7 @@ export default function AdminSlotPage() {
                           <button
                             type="button"
                             onClick={() => setModificaId(null)}
-                            className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2 text-xs font-black"
+                            className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-xs font-black"
                           >
                             Annulla
                           </button>
@@ -454,22 +454,22 @@ export default function AdminSlotPage() {
                       <>
                         <div className="flex min-w-0 flex-col items-start gap-3 sm:flex-row sm:justify-between">
                           <div className="min-w-0">
-                            <p className="break-words font-black">{t.nome}</p>
-                            <p className="mt-1 text-xs font-bold text-[#1D6E7A]">
+                            <p className="break-words font-semibold">{t.nome}</p>
+                            <p className="mt-1 text-xs font-medium text-[#6F918B]">
                               {t.durata_minuti} minuti
                             </p>
                             {t.descrizione && (
-                              <p className="mt-1 break-words text-xs text-[#6D8287]">
+                              <p className="mt-1 break-words text-xs text-[#7E8F8B]">
                                 {t.descrizione}
                               </p>
                             )}
                           </div>
 
                           <span
-                            className={`rounded-full px-2.5 py-1 text-[10px] font-black ${
+                            className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold ${
                               Number(t.attivo) === 1
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-neutral-200 text-neutral-600"
+                                ? "border-[#CFE0D8] bg-[#EDF5F0] text-[#55766D]"
+                                : "border-[#D8DEDC] bg-[#EEF1EF] text-[#7D8A86]"
                             }`}
                           >
                             {Number(t.attivo) === 1 ? "Attivo" : "Disattivo"}
@@ -480,7 +480,7 @@ export default function AdminSlotPage() {
                           <button
                             type="button"
                             onClick={() => apriModifica(t)}
-                            className="w-full rounded-xl border border-[#1D6E7A] px-3 py-2 text-[11px] font-black text-[#1D6E7A]"
+                            className="w-full rounded-xl border border-[#8FB8B2] bg-white px-3 py-2 text-[11px] font-semibold text-[#6F918B]"
                           >
                             Modifica
                           </button>
@@ -494,7 +494,7 @@ export default function AdminSlotPage() {
                                 attivo: Number(t.attivo) === 1 ? 0 : 1,
                               })
                             }
-                            className="w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-2 text-[11px] font-black"
+                            className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[11px] font-semibold text-[#738682]"
                           >
                             {Number(t.attivo) === 1
                               ? "Disattiva"
@@ -509,7 +509,7 @@ export default function AdminSlotPage() {
                                 id: t.id,
                               })
                             }
-                            className="w-full rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[11px] font-black text-red-700"
+                            className="w-full rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-2 text-[11px] font-semibold text-[#9A615A]"
                           >
                             Elimina
                           </button>
@@ -521,11 +521,11 @@ export default function AdminSlotPage() {
               </div>
             </div>
 
-            <div className="min-w-0 overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
+            <div className="min-w-0 overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_10px_24px_rgba(80,108,105,.05)] sm:p-5">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#89A39D]">
                 Nuova disponibilità
               </p>
-              <h2 className="mt-1 break-words text-xl font-black leading-tight sm:text-2xl">
+              <h2 className="mt-1 break-words font-serif text-xl font-medium leading-tight sm:text-2xl">
                 Genera orari
               </h2>
 
@@ -537,7 +537,7 @@ export default function AdminSlotPage() {
                   <select
                     value={tipoId ?? ""}
                     onChange={(e) => setTipoId(Number(e.target.value))}
-                    className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   >
                     {tipiAttivi.map((t) => (
                       <option key={t.id} value={t.id}>
@@ -555,7 +555,7 @@ export default function AdminSlotPage() {
                     type="date"
                     value={data}
                     onChange={(e) => setData(e.target.value)}
-                    className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   />
                 </label>
 
@@ -568,7 +568,7 @@ export default function AdminSlotPage() {
                       type="time"
                       value={oraInizio}
                       onChange={(e) => setOraInizio(e.target.value)}
-                      className="w-full rounded-xl border border-[#C9DADC] px-3 py-3"
+                      className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                     />
                   </label>
 
@@ -580,7 +580,7 @@ export default function AdminSlotPage() {
                       type="time"
                       value={oraFine}
                       onChange={(e) => setOraFine(e.target.value)}
-                      className="w-full rounded-xl border border-[#C9DADC] px-3 py-3"
+                      className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                     />
                   </label>
                 </div>
@@ -599,7 +599,7 @@ export default function AdminSlotPage() {
                         tipoSelezionato?.durata_minuti ?? 0,
                     })
                   }
-                  className="rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white disabled:opacity-40"
+                  className="rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:opacity-40"
                 >
                   Genera ogni{" "}
                   {tipoSelezionato?.durata_minuti ?? "-"} min
@@ -609,14 +609,14 @@ export default function AdminSlotPage() {
           </aside>
 
           <div className="min-w-0">
-            <div className="min-w-0 rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5">
+            <div className="min-w-0 rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_10px_24px_rgba(80,108,105,.05)] sm:p-5">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#89A39D]">
                       Calendario
                     </p>
-                    <h2 className="mt-1 break-words text-xl font-black leading-tight sm:text-2xl">
+                    <h2 className="mt-1 break-words font-serif text-xl font-medium leading-tight sm:text-2xl">
                       Slot creati
                     </h2>
                   </div>
@@ -624,39 +624,39 @@ export default function AdminSlotPage() {
                   <button
                     type="button"
                     onClick={caricaSlot}
-                    className="self-start rounded-xl bg-[#083B4C] px-4 py-2.5 text-xs font-black text-white"
+                    className="self-start rounded-xl bg-[#7FA39A] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#6F918B]"
                   >
                     Aggiorna
                   </button>
                 </div>
 
-                <div className="rounded-2xl border border-[#C9DADC] bg-[#F8FBFB] p-3 sm:p-4">
+                <div className="rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-3 sm:p-4">
                   <div className="grid min-w-0 grid-cols-[40px_minmax(0,1fr)_40px] items-center gap-2 sm:grid-cols-[44px_minmax(0,1fr)_44px]">
                     <button
                       type="button"
                       onClick={() => cambiaGiorno(-1)}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-lg font-black text-[#083B4C] sm:h-11 sm:w-11 sm:text-xl"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D4DFDB] bg-white text-lg font-semibold text-[#6F918B] sm:h-11 sm:w-11 sm:text-xl"
                       aria-label="Giorno precedente"
                     >
                       ←
                     </button>
 
                     <div className="min-w-0 text-center">
-                      <p className="truncate text-base font-black capitalize sm:text-lg">
+                      <p className="truncate font-serif text-base font-medium capitalize sm:text-lg">
                         {giornoVisualizzato ? dataIt(giornoVisualizzato) : "-"}
                       </p>
                       <input
                         type="date"
                         value={giornoVisualizzato}
                         onChange={(e) => setGiornoVisualizzato(e.target.value)}
-                        className="mt-2 w-full max-w-[220px] rounded-xl border border-[#C9DADC] bg-white px-3 py-2 text-center text-sm font-bold"
+                        className="mt-2 w-full max-w-[220px] rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-center text-sm font-medium"
                       />
                     </div>
 
                     <button
                       type="button"
                       onClick={() => cambiaGiorno(1)}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#C9DADC] bg-white text-lg font-black text-[#083B4C] sm:h-11 sm:w-11 sm:text-xl"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#D4DFDB] bg-white text-lg font-semibold text-[#6F918B] sm:h-11 sm:w-11 sm:text-xl"
                       aria-label="Giorno successivo"
                     >
                       →
@@ -669,7 +669,7 @@ export default function AdminSlotPage() {
                     type="button"
                     onClick={selezionaTuttiGiorno}
                     disabled={slotDelGiorno.length === 0}
-                    className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2.5 text-xs font-black disabled:opacity-40"
+                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-xs font-black disabled:opacity-40"
                   >
                     Seleziona tutti del giorno
                   </button>
@@ -683,19 +683,24 @@ export default function AdminSlotPage() {
                         ids: selezionati,
                       })
                     }
-                    className="rounded-xl bg-red-600 px-3 py-2.5 text-xs font-black text-white disabled:opacity-35"
+                    className="rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-2.5 text-xs font-semibold text-[#9A615A] disabled:opacity-35"
                   >
                     Elimina selezionati ({selezionati.length})
                   </button>
                 </div>
 
                 {slotDelGiorno.length === 0 ? (
-                  <div className="rounded-2xl bg-[#F5F9F9] p-8 text-center">
-                    <div className="text-3xl">📅</div>
-                    <p className="mt-3 text-sm font-black text-[#506B71]">
+                  <div className="rounded-2xl bg-[#F6F4EF] p-8 text-center">
+                    <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-[#EDF3F0] text-[#6F918B]">
+                      <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.7">
+                        <rect x="3.5" y="5" width="17" height="15.5" rx="2.8" />
+                        <path d="M8 3v4M16 3v4M3.5 9.5h17" />
+                      </svg>
+                    </div>
+                    <p className="mt-3 text-sm font-semibold text-[#738682]">
                       Nessuno slot per questo giorno
                     </p>
-                    <p className="mt-1 text-xs text-[#789095]">
+                    <p className="mt-1 text-xs text-[#8B9C98]">
                       Usa le frecce oppure scegli una data dal calendario.
                     </p>
                   </div>
@@ -712,37 +717,37 @@ export default function AdminSlotPage() {
                           onClick={() => seleziona(s.id)}
                           className={`relative min-w-0 overflow-hidden rounded-2xl border p-3 text-left transition ${
                             selezionato
-                              ? "border-[#083B4C] bg-[#DCEFF1] ring-2 ring-[#083B4C]/15"
+                              ? "border-[#8FB8B2] bg-[#E7F0ED] ring-2 ring-[#8FB8B2]/15"
                               : libero
-                              ? "border-emerald-200 bg-white"
-                              : "border-red-200 bg-red-50"
+                              ? "border-[#CFE0D8] bg-white"
+                              : "border-[#E9D1CD] bg-[#F8ECE9]"
                           }`}
                         >
                           <span
                             className={`absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded border text-[10px] font-black ${
                               selezionato
-                                ? "border-[#083B4C] bg-[#083B4C] text-white"
-                                : "border-[#AFC5C8] bg-white text-transparent"
+                                ? "border-[#7FA39A] bg-[#7FA39A] text-white"
+                                : "border-[#C7D5D1] bg-white text-transparent"
                             }`}
                           >
                             ✓
                           </span>
 
-                          <p className="pr-7 text-lg font-black leading-none">
+                          <p className="pr-7 text-lg font-semibold leading-none">
                             {s.ora_inizio.slice(0, 5)}
                           </p>
 
-                          <p className="mt-1 text-[10px] font-bold text-[#789095]">
+                          <p className="mt-1 text-[10px] font-medium text-[#8B9C98]">
                             fino {s.ora_fine.slice(0, 5)}
                           </p>
 
-                          <p className="mt-3 line-clamp-2 break-words text-[10px] font-black leading-4 text-[#1D6E7A]">
+                          <p className="mt-3 line-clamp-2 break-words text-[10px] font-semibold leading-4 text-[#6F918B]">
                             {s.tipo_appuntamento}
                           </p>
 
                           <p
                             className={`mt-2 text-[9px] font-black ${
-                              libero ? "text-emerald-700" : "text-red-700"
+                              libero ? "text-[#55766D]" : "text-[#9A615A]"
                             }`}
                           >
                             {libero ? "LIBERO" : "NON DISPONIBILE"}

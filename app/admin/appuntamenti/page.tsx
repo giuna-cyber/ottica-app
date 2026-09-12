@@ -40,14 +40,14 @@ function formattaOra(ora: string | null) {
 
 function classeStato(stato: string) {
   if (stato === "Confermato") {
-    return "border-emerald-200 bg-emerald-50 text-emerald-700";
+    return "border-[#CFE0D8] bg-[#EDF5F0] text-[#55766D]";
   }
 
   if (stato === "Annullato") {
-    return "border-red-200 bg-red-50 text-red-700";
+    return "border-[#E9D1CD] bg-[#F8ECE9] text-[#9A615A]";
   }
 
-  return "border-amber-200 bg-amber-50 text-amber-700";
+  return "border-[#E5D9B8] bg-[#F8F1DF] text-[#8A6E35]";
 }
 
 function preparaNumeroWhatsApp(telefono: string) {
@@ -198,8 +198,8 @@ export default function AdminAppuntamentiPage() {
   }, [appuntamenti, filtro, ricerca]);
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#F5F9F9] pb-10 text-[#102A2E]">
-      <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
+    <main className="min-h-screen overflow-x-hidden bg-[#F6F4EF] pb-10 text-[#20383B]">
+      <header className="bg-[linear-gradient(135deg,#506C69,#7FA39A)] text-white">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -226,25 +226,25 @@ export default function AdminAppuntamentiPage() {
 
       <section className="mx-auto w-full max-w-6xl px-3 py-6 sm:px-6">
         {errore && (
-          <div className="mb-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm font-black text-red-700">
+          <div className="mb-5 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] px-4 py-4 text-sm font-semibold text-[#9A615A]">
             {errore}
           </div>
         )}
 
-        <div className="mb-5 min-w-0 rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm">
+        <div className="mb-5 min-w-0 rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_10px_24px_rgba(80,108,105,.05)]">
           <div className="grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
             <input
               type="search"
               value={ricerca}
               onChange={(evento) => setRicerca(evento.target.value)}
               placeholder="Cerca cliente, telefono, email, servizio..."
-              className="min-w-0 w-full rounded-xl border border-[#C9DADC] px-4 py-3 text-sm outline-none focus:border-[#1D6E7A]"
+              className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-sm text-[#20383B] outline-none transition placeholder:text-[#9AA9A5] focus:border-[#8FB8B2]"
             />
 
             <button
               type="button"
               onClick={caricaAppuntamenti}
-              className="rounded-xl bg-[#083B4C] px-5 py-3 text-sm font-black text-white"
+              className="rounded-xl bg-[#7FA39A] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6F918B]"
             >
               Aggiorna
             </button>
@@ -257,10 +257,10 @@ export default function AdminAppuntamentiPage() {
                   key={voce}
                   type="button"
                   onClick={() => setFiltro(voce)}
-                  className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-black ${
+                  className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-semibold transition ${
                     filtro === voce
-                      ? "border-[#083B4C] bg-[#083B4C] text-white"
-                      : "border-[#C9DADC] bg-white text-[#2D626C]"
+                      ? "border-[#7FA39A] bg-[#7FA39A] text-white"
+                      : "border-[#D4DFDB] bg-white text-[#738682] hover:border-[#BFCFCA]"
                   }`}
                 >
                   {voce}
@@ -271,14 +271,19 @@ export default function AdminAppuntamentiPage() {
         </div>
 
         {caricamento ? (
-          <div className="rounded-3xl border border-[#DCE8E9] bg-white p-8 text-center font-black text-[#6D8287]">
+          <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center font-medium text-[#7E8F8B]">
             Caricamento appuntamenti...
           </div>
         ) : elencoFiltrato.length === 0 ? (
-          <div className="rounded-3xl border border-[#DCE8E9] bg-white p-8 text-center">
-            <div className="text-4xl">📅</div>
-            <h2 className="mt-3 text-xl font-black">Nessun appuntamento</h2>
-            <p className="mt-2 text-sm text-[#6D8287]">
+          <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EDF3F0] text-[#6F918B]">
+              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7">
+                <rect x="3.5" y="5" width="17" height="15.5" rx="2.8" />
+                <path d="M8 3v4M16 3v4M3.5 9.5h17" />
+              </svg>
+            </div>
+            <h2 className="mt-3 font-serif text-xl font-medium">Nessun appuntamento</h2>
+            <p className="mt-2 text-sm text-[#7E8F8B]">
               Non ci sono prenotazioni corrispondenti ai filtri selezionati.
             </p>
           </div>
@@ -287,16 +292,16 @@ export default function AdminAppuntamentiPage() {
             {elencoFiltrato.map((appuntamento) => (
               <article
                 key={appuntamento.id}
-                className="min-w-0 overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white p-4 shadow-sm sm:p-5"
+                className="min-w-0 overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_10px_24px_rgba(80,108,105,.05)] sm:p-5"
               >
                 <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0 flex-1">
                     <div className="flex min-w-0 flex-wrap items-center gap-2">
-                      <h2 className="min-w-0 break-words text-xl font-black">
+                      <h2 className="min-w-0 break-words font-serif text-xl font-medium text-[#20383B]">
                         {appuntamento.nome_cliente}
                       </h2>
                       <span
-                        className={`rounded-full border px-3 py-1 text-[10px] font-black ${classeStato(
+                        className={`rounded-full border px-3 py-1 text-[10px] font-semibold ${classeStato(
                           appuntamento.stato
                         )}`}
                       >
@@ -304,11 +309,11 @@ export default function AdminAppuntamentiPage() {
                       </span>
                     </div>
 
-                    <p className="mt-2 text-sm font-black text-[#1D6E7A]">
+                    <p className="mt-2 text-sm font-semibold text-[#6F918B]">
                       {appuntamento.tipo_appuntamento}
                     </p>
 
-                    <div className="mt-3 grid gap-1 text-sm text-[#5E7479]">
+                    <div className="mt-3 grid gap-1 text-sm text-[#738682]">
                       <p>
                         <strong>Data:</strong>{" "}
                         {formattaData(appuntamento.data_appuntamento)}
@@ -324,7 +329,7 @@ export default function AdminAppuntamentiPage() {
                         <strong>Telefono:</strong>{" "}
                         <a
                           href={`tel:${appuntamento.telefono}`}
-                          className="break-all font-black text-[#1D6E7A]"
+                          className="break-all font-semibold text-[#6F918B]"
                         >
                           {appuntamento.telefono}
                         </a>
@@ -335,7 +340,7 @@ export default function AdminAppuntamentiPage() {
                           <strong>Email:</strong>{" "}
                           <a
                             href={`mailto:${appuntamento.email}`}
-                            className="break-all font-black text-[#1D6E7A]"
+                            className="break-all font-semibold text-[#6F918B]"
                           >
                             {appuntamento.email}
                           </a>
@@ -343,7 +348,7 @@ export default function AdminAppuntamentiPage() {
                       )}
 
                       {appuntamento.note && (
-                        <p className="mt-2 rounded-xl bg-[#F5F9F9] p-3">
+                        <p className="mt-2 rounded-xl border border-[#E1E7E4] bg-[#F3F5F2] p-3">
                           <strong>Note:</strong> {appuntamento.note}
                         </p>
                       )}
@@ -355,7 +360,7 @@ export default function AdminAppuntamentiPage() {
                       href={urlWhatsApp(appuntamento)}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex min-w-0 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-3 py-3 text-center text-[11px] font-black text-white shadow-sm transition hover:brightness-95 sm:text-xs"
+                      className="flex min-w-0 items-center justify-center gap-2 rounded-xl border border-[#B9DEC5] bg-[#E9F6ED] px-3 py-3 text-center text-[11px] font-semibold text-[#4E7D5B] transition hover:bg-[#DDF1E3] sm:text-xs"
                     >
                       <IconaWhatsApp />
                       Invia messaggio
@@ -367,7 +372,7 @@ export default function AdminAppuntamentiPage() {
                       onClick={() =>
                         cambiaStato(appuntamento.id, "Confermato")
                       }
-                      className="min-w-0 rounded-xl bg-emerald-600 px-3 py-3 text-[11px] font-black text-white disabled:opacity-50 sm:text-xs"
+                      className="min-w-0 rounded-xl bg-[#6F918B] px-3 py-3 text-[11px] font-semibold text-white disabled:opacity-50 sm:text-xs"
                     >
                       Conferma
                     </button>
@@ -378,7 +383,7 @@ export default function AdminAppuntamentiPage() {
                       onClick={() =>
                         cambiaStato(appuntamento.id, "Da confermare")
                       }
-                      className="min-w-0 rounded-xl bg-amber-500 px-3 py-3 text-[11px] font-black text-white disabled:opacity-50 sm:text-xs"
+                      className="min-w-0 rounded-xl border border-[#E1D6B8] bg-[#F6EEDB] px-3 py-3 text-[11px] font-semibold text-[#8A6E35] disabled:opacity-50 sm:text-xs"
                     >
                       Da confermare
                     </button>
@@ -389,7 +394,7 @@ export default function AdminAppuntamentiPage() {
                       onClick={() =>
                         cambiaStato(appuntamento.id, "Annullato")
                       }
-                      className="min-w-0 rounded-xl bg-red-600 px-3 py-3 text-[11px] font-black text-white disabled:opacity-50 sm:text-xs"
+                      className="min-w-0 rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-3 text-[11px] font-semibold text-[#9A615A] disabled:opacity-50 sm:text-xs"
                     >
                       Annulla
                     </button>

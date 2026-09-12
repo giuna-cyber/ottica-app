@@ -76,30 +76,30 @@ export default function InstallAppPrompt() {
   if (standalone || !visibile) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-[74px] z-[100] px-3 sm:bottom-5">
-      <div className="mx-auto max-w-md overflow-hidden rounded-[24px] border border-white/15 bg-[#071E26]/96 p-4 text-white shadow-[0_18px_45px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+    <div className="fixed inset-x-0 bottom-[82px] z-[100] px-3 sm:bottom-6">
+      <div className="mx-auto max-w-md overflow-hidden rounded-[24px] border border-[#D9E2DF] bg-[#FBFAF7]/97 p-4 text-[#20383B] shadow-[0_18px_45px_rgba(80,108,105,.16)] backdrop-blur-xl">
         <div className="flex items-start gap-3">
           <img
             src="/icons/icon-192.png"
             alt="Ottica App"
-            className="h-14 w-14 shrink-0 rounded-2xl"
+            className="h-14 w-14 shrink-0 rounded-2xl border border-[#D9E2DF] bg-white shadow-sm"
           />
 
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#8ED7DF]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7FA39A]">
               Ottica App
             </p>
 
-            <h2 className="mt-1 text-lg font-black leading-tight">
+            <h2 className="mt-1 font-serif text-lg font-medium leading-tight tracking-[-0.02em]">
               Installa l&apos;app sul telefono
             </h2>
 
             {ios ? (
-              <p className="mt-2 text-xs leading-5 text-white/70">
+              <p className="mt-2 text-xs leading-5 text-[#738682]">
                 Tocca <b>Condividi</b> e poi <b>Aggiungi alla schermata Home</b>.
               </p>
             ) : (
-              <p className="mt-2 text-xs leading-5 text-white/70">
+              <p className="mt-2 text-xs leading-5 text-[#738682]">
                 Un solo tocco per aggiungerla alla schermata Home.
               </p>
             )}
@@ -108,7 +108,7 @@ export default function InstallAppPrompt() {
           <button
             type="button"
             onClick={() => setVisibile(false)}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-lg font-bold text-white/70"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#D9E2DF] bg-white text-lg font-semibold text-[#7E8F8B] transition hover:bg-[#EDF3F0]"
             aria-label="Chiudi"
           >
             ×
@@ -119,7 +119,7 @@ export default function InstallAppPrompt() {
           <button
             type="button"
             onClick={installa}
-            className="mt-4 flex min-h-[52px] w-full items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-black text-[#082E38] shadow-lg transition active:scale-[0.99]"
+            className="mt-4 flex min-h-[52px] w-full items-center justify-center rounded-xl bg-[#7FA39A] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] active:scale-[0.99]"
           >
             INSTALLA OTTICA APP
           </button>

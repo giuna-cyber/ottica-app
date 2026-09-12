@@ -60,36 +60,46 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(135deg,#083B4C_0%,#1D6E7A_60%,#A9D6DE_100%)] px-4 py-10 text-[#102A2E]">
+    <main className="min-h-screen bg-[linear-gradient(135deg,#EEF3F0_0%,#FBFAF7_52%,#F5F2EC_100%)] px-4 py-10 text-[#20383B]">
       <div className="mx-auto flex min-h-[80vh] max-w-md items-center">
-        <div className="w-full rounded-[28px] bg-white p-6 shadow-2xl sm:p-8">
+        <div className="w-full rounded-[28px] border border-[#D9E2DF] bg-[#FBFAF7] p-6 shadow-[0_18px_50px_rgba(80,108,105,.08)] sm:p-8">
           <div className="text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#083B4C] text-3xl text-white">
-              👓
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[#D4DFDB] bg-white text-[#6F918B] shadow-sm">
+              <svg
+                viewBox="0 0 32 24"
+                className="h-9 w-11"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              >
+                <ellipse cx="9" cy="13" rx="6" ry="5.5" />
+                <ellipse cx="23" cy="13" rx="6" ry="5.5" />
+                <path d="M15 12c1-1.6 2-1.6 3 0M3 11 1.5 5M29 11 30.5 5" />
+              </svg>
             </div>
 
-            <p className="mt-5 text-[10px] font-black uppercase tracking-[0.24em] text-[#5D858C]">
+            <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#89A39D]">
               Area riservata
             </p>
 
-            <h1 className="mt-2 text-3xl font-black tracking-[-0.04em]">
+            <h1 className="mt-2 font-serif text-3xl font-medium tracking-[-0.04em]">
               Accesso Admin
             </h1>
 
-            <p className="mt-2 text-sm leading-6 text-[#6D8287]">
+            <p className="mt-2 text-sm leading-6 text-[#7E8F8B]">
               Accedi per gestire appuntamenti, disponibilità e promozioni.
             </p>
           </div>
 
           {errore && (
-            <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-black text-red-700">
+            <div className="mt-5 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] px-4 py-3 text-sm font-semibold text-[#9A615A]">
               {errore}
             </div>
           )}
 
           <form onSubmit={eseguiLogin} className="mt-6 space-y-4">
             <label className="block">
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Username
               </span>
 
@@ -100,12 +110,12 @@ export default function LoginPage() {
                   setUsername(evento.target.value)
                 }
                 autoComplete="username"
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3 outline-none focus:border-[#1D6E7A]"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Password
               </span>
 
@@ -116,14 +126,14 @@ export default function LoginPage() {
                   setPassword(evento.target.value)
                 }
                 autoComplete="current-password"
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3 outline-none focus:border-[#1D6E7A]"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <button
               type="submit"
               disabled={caricamento}
-              className="w-full rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white shadow-lg disabled:opacity-50"
+              className="w-full rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:opacity-50"
             >
               {caricamento
                 ? "Accesso in corso..."
@@ -133,7 +143,7 @@ export default function LoginPage() {
 
           <Link
             href="/"
-            className="mt-5 block text-center text-sm font-black text-[#1D6E7A]"
+            className="mt-5 block text-center text-sm font-semibold text-[#6F918B]"
           >
             Torna alla Home
           </Link>

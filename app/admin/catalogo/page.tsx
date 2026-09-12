@@ -395,47 +395,50 @@ export default function AdminCatalogoPage() {
   }, [prodotti, ricerca]);
 
   return (
-    <main className="min-h-screen bg-[#F5F9F9] pb-10 text-[#102A2E]">
-      <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6">
+    <main className="min-h-screen bg-[#F6F4EF] pb-10 text-[#20383B]">
+      <header className="border-b border-[#D9E2DF] bg-[#FBFAF7]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-7 sm:flex-row sm:items-end sm:justify-between sm:px-6 sm:py-9">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#CBEDEF]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#89A39D]">
               Area amministrativa
             </p>
-            <h1 className="mt-1 text-3xl font-black">
+            <h1 className="mt-2 font-serif text-4xl font-medium tracking-[-0.04em] text-[#20383B] sm:text-5xl">
               Gestione Catalogo
             </h1>
+            <p className="mt-2 text-sm text-[#7E8F8B]">
+              Prodotti, immagini, varianti e disponibilità.
+            </p>
           </div>
 
           <Link
             href="/admin"
-            className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-black"
+            className="w-fit rounded-full border border-[#D4DFDB] bg-white px-4 py-2 text-[11px] font-semibold text-[#738682] transition hover:bg-[#F3F5F2]"
           >
-            Dashboard
+            ← Dashboard
           </Link>
         </div>
       </header>
 
       <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {errore && (
-          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-black text-red-700">
+          <div className="mb-4 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] p-4 text-sm font-semibold text-[#9A615A]">
             {errore}
           </div>
         )}
 
         {messaggio && (
-          <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-black text-emerald-700">
+          <div className="mb-4 rounded-2xl border border-[#CFE0D8] bg-[#EDF5F0] p-4 text-sm font-semibold text-[#55766D]">
             {messaggio}
           </div>
         )}
 
-        <div className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm sm:p-6">
+        <div className="rounded-[24px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)] sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5D858C]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
                 Prodotto
               </p>
-              <h2 className="mt-1 text-2xl font-black">
+              <h2 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em]">
                 {id > 0
                   ? "Modifica prodotto"
                   : "Nuovo prodotto"}
@@ -446,7 +449,7 @@ export default function AdminCatalogoPage() {
               <button
                 type="button"
                 onClick={nuovoProdotto}
-                className="rounded-xl border border-[#1D6E7A] px-4 py-2 text-xs font-black text-[#1D6E7A]"
+                className="rounded-full border border-[#8FB8B2] bg-white px-4 py-2 text-xs font-semibold text-[#6F918B] transition hover:bg-[#EDF3F0]"
               >
                 Nuovo prodotto
               </button>
@@ -455,40 +458,40 @@ export default function AdminCatalogoPage() {
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Nome *
               </span>
               <input
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Marca
               </span>
               <input
                 value={marca}
                 onChange={(e) => setMarca(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Modello
               </span>
               <input
                 value={modello}
                 onChange={(e) => setModello(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Codice articolo
               </span>
               <input
@@ -496,12 +499,12 @@ export default function AdminCatalogoPage() {
                 onChange={(e) =>
                   setCodiceArticolo(e.target.value)
                 }
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Categoria
               </span>
               <select
@@ -509,7 +512,7 @@ export default function AdminCatalogoPage() {
                 onChange={(e) =>
                   setCategoria(e.target.value)
                 }
-                className="w-full rounded-xl border border-[#C9DADC] bg-white px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               >
                 <option value="Vista">Vista</option>
                 <option value="Sole">Sole</option>
@@ -518,13 +521,13 @@ export default function AdminCatalogoPage() {
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Genere
               </span>
               <select
                 value={genere}
                 onChange={(e) => setGenere(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] bg-white px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               >
                 <option value="">Non specificato</option>
                 <option value="Uomo">Uomo</option>
@@ -535,7 +538,7 @@ export default function AdminCatalogoPage() {
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Prezzo €
               </span>
               <input
@@ -544,12 +547,12 @@ export default function AdminCatalogoPage() {
                 step="0.01"
                 value={prezzo}
                 onChange={(e) => setPrezzo(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Materiale
               </span>
               <input
@@ -557,23 +560,23 @@ export default function AdminCatalogoPage() {
                 onChange={(e) =>
                   setMateriale(e.target.value)
                 }
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Forma
               </span>
               <input
                 value={forma}
                 onChange={(e) => setForma(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Tipo lente
               </span>
               <input
@@ -581,12 +584,12 @@ export default function AdminCatalogoPage() {
                 onChange={(e) =>
                   setTipoLente(e.target.value)
                 }
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Colore lente
               </span>
               <input
@@ -594,17 +597,17 @@ export default function AdminCatalogoPage() {
                 onChange={(e) =>
                   setColoreLente(e.target.value)
                 }
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <div className="sm:col-span-2 lg:col-span-3">
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Immagine prodotto
               </span>
 
-              <div className="grid gap-4 rounded-2xl border border-[#DCE8E9] bg-[#F8FBFB] p-4 sm:grid-cols-[180px_1fr]">
-                <div className="aspect-square overflow-hidden rounded-2xl border border-[#C9DADC] bg-white">
+              <div className="grid gap-4 rounded-[20px] border border-[#D9E2DF] bg-[#F3F5F2] p-4 sm:grid-cols-[180px_1fr]">
+                <div className="aspect-square overflow-hidden rounded-2xl border border-[#D4DFDB] bg-white">
                   {immagineUrl ? (
                     <img
                       src={immagineUrl}
@@ -612,15 +615,19 @@ export default function AdminCatalogoPage() {
                       className="h-full w-full object-contain p-3"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-5xl">
-                      👓
+                    <div className="flex h-full w-full items-center justify-center text-[#8FB8B2]">
+                      <svg viewBox="0 0 32 24" className="h-10 w-12" fill="none" stroke="currentColor" strokeWidth="1.7">
+                        <ellipse cx="9" cy="13" rx="6" ry="5.5" />
+                        <ellipse cx="23" cy="13" rx="6" ry="5.5" />
+                        <path d="M15 12c1-1.6 2-1.6 3 0M3 11 1.5 5M29 11 30.5 5" />
+                      </svg>
                     </div>
                   )}
                 </div>
 
                 <div className="flex flex-col justify-center gap-3">
                   <label className="block">
-                    <span className="mb-2 block text-xs font-black text-[#5D858C]">
+                    <span className="mb-2 block text-xs font-semibold text-[#89A39D]">
                       Carica dal computer
                     </span>
 
@@ -637,16 +644,16 @@ export default function AdminCatalogoPage() {
 
                         e.target.value = "";
                       }}
-                      className="block w-full rounded-xl border border-[#C9DADC] bg-white px-3 py-3 text-sm"
+                      className="block w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-3 text-sm"
                     />
                   </label>
 
-                  <p className="text-xs leading-5 text-[#789095]">
+                  <p className="text-xs leading-5 text-[#8B9C98]">
                     JPG, PNG o WEBP. Dimensione massima 5 MB.
                   </p>
 
                   {uploadInCorso && (
-                    <p className="text-sm font-black text-[#1D6E7A]">
+                    <p className="text-sm font-black text-[#7FA39A]">
                       Caricamento immagine...
                     </p>
                   )}
@@ -655,7 +662,7 @@ export default function AdminCatalogoPage() {
                     <button
                       type="button"
                       onClick={() => setImmagineUrl("")}
-                      className="w-fit rounded-xl border border-red-200 bg-white px-4 py-2 text-xs font-black text-red-600"
+                      className="w-fit rounded-xl border border-[#E7C9C5] bg-white px-4 py-2 text-xs font-semibold text-[#9A615A]"
                     >
                       Rimuovi immagine dal prodotto
                     </button>
@@ -664,7 +671,7 @@ export default function AdminCatalogoPage() {
               </div>
             </div>
 
-            <label className="flex items-center gap-3 rounded-xl border border-[#DCE8E9] bg-[#F7FAFA] p-4">
+            <label className="flex items-center gap-3 rounded-xl border border-[#D9E2DF] bg-[#F3F5F2] p-4">
               <input
                 type="checkbox"
                 checked={disponibile}
@@ -672,13 +679,13 @@ export default function AdminCatalogoPage() {
                   setDisponibile(e.target.checked)
                 }
               />
-              <span className="font-black">
+              <span className="font-semibold">
                 Visibile nel catalogo
               </span>
             </label>
 
             <label className="sm:col-span-2 lg:col-span-3">
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Descrizione
               </span>
               <textarea
@@ -687,18 +694,18 @@ export default function AdminCatalogoPage() {
                 onChange={(e) =>
                   setDescrizione(e.target.value)
                 }
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
           </div>
 
-          <div className="mt-7 border-t border-[#E4EEEE] pt-6">
+          <div className="mt-7 border-t border-[#E1E7E4] pt-6">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5D858C]">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
                   Magazzino
                 </p>
-                <h3 className="mt-1 text-xl font-black">
+                <h3 className="mt-1 font-serif text-xl font-medium">
                   Varianti
                 </h3>
               </div>
@@ -706,7 +713,7 @@ export default function AdminCatalogoPage() {
               <button
                 type="button"
                 onClick={aggiungiVariante}
-                className="rounded-xl bg-[#083B4C] px-4 py-2 text-xs font-black text-white"
+                className="rounded-xl bg-[#7FA39A] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#6F918B]"
               >
                 + Variante
               </button>
@@ -716,7 +723,7 @@ export default function AdminCatalogoPage() {
               {varianti.map((v, indice) => (
                 <div
                   key={indice}
-                  className="grid gap-3 rounded-2xl border border-[#DCE8E9] bg-[#F8FBFB] p-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_120px_auto]"
+                  className="grid gap-3 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_120px_auto]"
                 >
                   <input
                     value={v.taglia}
@@ -728,7 +735,7 @@ export default function AdminCatalogoPage() {
                       )
                     }
                     placeholder="Taglia"
-                    className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2"
+                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   />
 
                   <input
@@ -741,7 +748,7 @@ export default function AdminCatalogoPage() {
                       )
                     }
                     placeholder="Misura"
-                    className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2"
+                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   />
 
                   <input
@@ -754,7 +761,7 @@ export default function AdminCatalogoPage() {
                       )
                     }
                     placeholder="Colore"
-                    className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2"
+                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   />
 
                   <input
@@ -769,7 +776,7 @@ export default function AdminCatalogoPage() {
                       )
                     }
                     placeholder="Q.tà"
-                    className="rounded-xl border border-[#C9DADC] bg-white px-3 py-2"
+                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   />
 
                   <button
@@ -777,7 +784,7 @@ export default function AdminCatalogoPage() {
                     onClick={() =>
                       eliminaVariante(indice)
                     }
-                    className="rounded-xl bg-red-600 px-3 py-2 text-xs font-black text-white"
+                    className="rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-2 text-xs font-semibold text-[#9A615A]"
                   >
                     Elimina
                   </button>
@@ -790,7 +797,7 @@ export default function AdminCatalogoPage() {
             type="button"
             onClick={salvaProdotto}
             disabled={salvataggio || uploadInCorso}
-            className="mt-6 w-full rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white shadow-lg disabled:opacity-50"
+            className="mt-6 w-full rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:opacity-50"
           >
             {salvataggio
               ? "Salvataggio..."
@@ -800,13 +807,13 @@ export default function AdminCatalogoPage() {
           </button>
         </div>
 
-        <div className="mt-6 rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
+        <div className="mt-6 rounded-[24px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)]">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#5D858C]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
                 Catalogo
               </p>
-              <h2 className="mt-1 text-2xl font-black">
+              <h2 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em]">
                 Prodotti esistenti
               </h2>
             </div>
@@ -818,23 +825,23 @@ export default function AdminCatalogoPage() {
                 setRicerca(e.target.value)
               }
               placeholder="Cerca prodotto..."
-              className="rounded-xl border border-[#C9DADC] px-4 py-3 text-sm"
+              className="rounded-xl border border-[#D4DFDB] px-4 py-3 text-sm"
             />
           </div>
         </div>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {caricamento ? (
-            <div className="rounded-3xl border border-[#DCE8E9] bg-white p-8 text-center font-black text-[#6D8287] sm:col-span-2 lg:col-span-3">
+            <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center font-medium text-[#7E8F8B] sm:col-span-2 lg:col-span-3">
               Caricamento catalogo...
             </div>
           ) : (
             prodottiFiltrati.map((p) => (
               <article
                 key={p.id}
-                className="overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white shadow-sm"
+                className="overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] shadow-[0_10px_24px_rgba(80,108,105,.05)]"
               >
-                <div className="aspect-square bg-[#F7FAFA]">
+                <div className="aspect-square bg-[#F3F5F2]">
                   {p.immagine_url ? (
                     <img
                       src={p.immagine_url}
@@ -842,8 +849,12 @@ export default function AdminCatalogoPage() {
                       className="h-full w-full object-contain p-4"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center text-6xl">
-                      👓
+                    <div className="flex h-full items-center justify-center text-[#8FB8B2]">
+                      <svg viewBox="0 0 32 24" className="h-12 w-14" fill="none" stroke="currentColor" strokeWidth="1.7">
+                        <ellipse cx="9" cy="13" rx="6" ry="5.5" />
+                        <ellipse cx="23" cy="13" rx="6" ry="5.5" />
+                        <path d="M15 12c1-1.6 2-1.6 3 0M3 11 1.5 5M29 11 30.5 5" />
+                      </svg>
                     </div>
                   )}
                 </div>
@@ -851,19 +862,19 @@ export default function AdminCatalogoPage() {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#5D858C]">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[#89A39D]">
                         {p.marca || "Senza marca"}
                       </p>
-                      <h3 className="mt-1 text-lg font-black">
+                      <h3 className="mt-1 font-serif text-lg font-medium">
                         {p.nome}
                       </h3>
                     </div>
 
                     <span
-                      className={`rounded-full px-2.5 py-1 text-[10px] font-black ${
+                      className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${
                         p.disponibile === 1
-                          ? "bg-emerald-50 text-emerald-700"
-                          : "bg-red-50 text-red-700"
+                          ? "border border-[#CFE0D8] bg-[#EDF5F0] text-[#55766D]"
+                          : "border border-[#E9D1CD] bg-[#F8ECE9] text-[#9A615A]"
                       }`}
                     >
                       {p.disponibile === 1
@@ -872,7 +883,7 @@ export default function AdminCatalogoPage() {
                     </span>
                   </div>
 
-                  <p className="mt-3 text-xl font-black text-[#083B4C]">
+                  <p className="mt-3 text-xl font-semibold text-[#506C69]">
                     €{" "}
                     {Number(p.prezzo)
                       .toFixed(2)
@@ -885,7 +896,7 @@ export default function AdminCatalogoPage() {
                       onClick={() =>
                         modificaProdotto(p)
                       }
-                      className="rounded-xl border border-[#1D6E7A] px-3 py-2 text-xs font-black text-[#1D6E7A]"
+                      className="rounded-xl border border-[#8FB8B2] bg-white px-3 py-2 text-xs font-semibold text-[#6F918B]"
                     >
                       Modifica
                     </button>
@@ -895,7 +906,7 @@ export default function AdminCatalogoPage() {
                       onClick={() =>
                         cambiaDisponibilita(p)
                       }
-                      className="rounded-xl bg-amber-500 px-3 py-2 text-xs font-black text-white"
+                      className="rounded-xl border border-[#E1D6B8] bg-[#F6EEDB] px-3 py-2 text-xs font-semibold text-[#8A6E35]"
                     >
                       {p.disponibile === 1
                         ? "Nascondi"
@@ -907,7 +918,7 @@ export default function AdminCatalogoPage() {
                       onClick={() =>
                         eliminaProdotto(p)
                       }
-                      className="rounded-xl bg-red-600 px-3 py-2 text-xs font-black text-white"
+                      className="rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-2 text-xs font-semibold text-[#9A615A]"
                     >
                       Elimina
                     </button>

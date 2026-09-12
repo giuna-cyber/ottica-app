@@ -1,12 +1,13 @@
-const IconaOcchiali = IconaCatalogoOttica;
-const IconaCalendario = IconaPrenotaOttica;
 "use client";
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import BottomNav from "@/app/components/bottom-nav";
 import { IconaCatalogoOttica, IconaPrenotaOttica } from "@/app/icone-ottica";
+
+const IconaOcchiali = IconaCatalogoOttica;
+const IconaCalendario = IconaPrenotaOttica;
 
 type Cliente = {
   id: number;
@@ -151,7 +152,6 @@ function IconaBorsa() {
 
 export default function ProfiloPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [modalita, setModalita] = useState<"login" | "registrazione">("login");
   const [cliente, setCliente] = useState<Cliente | null>(null);
@@ -179,14 +179,15 @@ export default function ProfiloPage() {
   useEffect(() => {
     if (cliente) return;
 
-    const richiesta = searchParams.get("modalita");
+    const parametri = new URLSearchParams(window.location.search);
+    const richiesta = parametri.get("modalita");
 
     if (richiesta === "registrazione") {
       setModalita("registrazione");
     } else if (richiesta === "login") {
       setModalita("login");
     }
-  }, [searchParams, cliente]);
+  }, [cliente]);
 
   useEffect(() => {
     const salvato = sessionStorage.getItem("ottica_cliente");

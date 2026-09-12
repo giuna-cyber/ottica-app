@@ -90,6 +90,16 @@ function IconaPalette() {
   );
 }
 
+
+function IconaStatistiche() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7">
+      <path d="M4 19.5V13h4v6.5M10 19.5V8h4v11.5M16 19.5V4.5h4v15" />
+      <path d="M3 19.5h18" />
+    </svg>
+  );
+}
+
 function IconaFreccia() {
   return (
     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -154,6 +164,13 @@ export default function AdminPage() {
       descrizione: "Aggiungi e modifica i prodotti.",
       icona: <IconaOcchiali />,
       tono: "bg-[#EDF3F0] text-[#6F918B]",
+    },
+    {
+      href: "/admin/statistiche",
+      titolo: "Statistiche vendite",
+      descrizione: "Report di ordini, incassi, prodotti e clienti generati dall’app.",
+      icona: <IconaStatistiche />,
+      tono: "bg-[#E9F1ED] text-[#66877F]",
     },
     {
       href: "/admin/ordini-shop",

@@ -1,11 +1,12 @@
-const IconaOcchiali = IconaCatalogoOttica;
-const IconaPromo = IconaPromoOttica;
 "use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import BottomNav from "@/app/components/bottom-nav";
 import { IconaCatalogoOttica, IconaPromoOttica } from "@/app/icone-ottica";
+
+const IconaOcchiali = IconaCatalogoOttica;
+const IconaPromo = IconaPromoOttica;
 
 type Promozione = {
   id: number;

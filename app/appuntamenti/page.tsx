@@ -1,5 +1,3 @@
-const IconaOcchiali = IconaCatalogoOttica;
-const IconaCalendario = IconaPrenotaOttica;
 "use client";
 
 import Link from "next/link";
@@ -11,6 +9,9 @@ import {
 } from "react";
 import BottomNav from "@/app/components/bottom-nav";
 import { IconaCatalogoOttica, IconaPrenotaOttica } from "@/app/icone-ottica";
+
+const IconaOcchiali = IconaCatalogoOttica;
+const IconaCalendario = IconaPrenotaOttica;
 
 type TipoAppuntamento = {
   id: number;

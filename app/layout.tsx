@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ServiceWorkerRegister from "./service-worker-register";
+import ThemeProvider from "./branding/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,13 +16,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ottica App",
-  description:
-    "Catalogo, promozioni, prenotazioni e servizi del centro ottico.",
+  description: "La tua ottica sempre con te",
   manifest: "/manifest.webmanifest",
-  applicationName: "Ottica App",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "Ottica App",
   },
   icons: {
@@ -48,21 +47,26 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0C252B",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: "#F6F4EF",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html
-      lang="it"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <ServiceWorkerRegister />
-        {children}
+    <html lang="it">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-[var(--app-background)] text-[var(--app-text)] antialiased`}
+      >
+        <ThemeProvider>
+          <ServiceWorkerRegister />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

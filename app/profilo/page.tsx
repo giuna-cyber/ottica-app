@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import BottomNav from "@/app/components/bottom-nav";
 
 type Cliente = {
   id: number;
@@ -68,14 +69,14 @@ function ora(oraValue: string | null) {
 
 function classeStato(stato: string) {
   if (stato === "Confermato") {
-    return "bg-emerald-50 text-emerald-700";
+    return "border border-[#CFE0D8] bg-[#EDF5F0] text-[#55766D]";
   }
 
   if (stato === "Annullato") {
-    return "bg-red-50 text-red-700";
+    return "border border-[#E9D1CD] bg-[#F8ECE9] text-[#9A615A]";
   }
 
-  return "bg-amber-50 text-amber-700";
+  return "border border-[#E5D9B8] bg-[#F8F1DF] text-[#8A6E35]";
 }
 
 function euro(valore: number) {
@@ -100,34 +101,54 @@ function dataOraIt(valore: string) {
 
 function classeStatoOrdine(stato: string) {
   if (stato === "Completato") {
-    return "bg-emerald-50 text-emerald-700";
+    return "border border-[#CFE0D8] bg-[#EDF5F0] text-[#55766D]";
   }
 
   if (stato === "Annullato") {
-    return "bg-red-50 text-red-700";
+    return "border border-[#E9D1CD] bg-[#F8ECE9] text-[#9A615A]";
   }
 
   if (stato === "Spedito" || stato === "Pronto per il ritiro") {
-    return "bg-sky-50 text-sky-700";
+    return "border border-[#D2E0E1] bg-[#EEF5F5] text-[#64868B]";
   }
 
-  return "bg-amber-50 text-amber-700";
+  return "border border-[#E5D9B8] bg-[#F8F1DF] text-[#8A6E35]";
 }
 
 function classeStatoPagamento(stato: string) {
   if (stato === "Pagato") {
-    return "bg-emerald-50 text-emerald-700";
+    return "border border-[#CFE0D8] bg-[#EDF5F0] text-[#55766D]";
   }
 
   if (stato === "Rimborsato") {
-    return "bg-amber-50 text-amber-700";
+    return "border border-[#E5D9B8] bg-[#F8F1DF] text-[#8A6E35]";
   }
 
-  return "bg-red-50 text-red-700";
+  return "border border-[#E9D1CD] bg-[#F8ECE9] text-[#9A615A]";
+}
+
+
+function IconaLucchetto() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.7">
+      <rect x="5" y="10" width="14" height="10" rx="2.5" />
+      <path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10" />
+    </svg>
+  );
+}
+
+function IconaBorsa() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7">
+      <path d="M5 8h14l-1 12H6L5 8Z" />
+      <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+    </svg>
+  );
 }
 
 export default function ProfiloPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [modalita, setModalita] = useState<"login" | "registrazione">("login");
   const [cliente, setCliente] = useState<Cliente | null>(null);
@@ -150,6 +171,19 @@ export default function ProfiloPage() {
   const [errore, setErrore] = useState("");
   const [messaggio, setMessaggio] = useState("");
   const [caricamento, setCaricamento] = useState(false);
+
+
+  useEffect(() => {
+    if (cliente) return;
+
+    const richiesta = searchParams.get("modalita");
+
+    if (richiesta === "registrazione") {
+      setModalita("registrazione");
+    } else if (richiesta === "login") {
+      setModalita("login");
+    }
+  }, [searchParams, cliente]);
 
   useEffect(() => {
     const salvato = sessionStorage.getItem("ottica_cliente");
@@ -455,13 +489,13 @@ export default function ProfiloPage() {
 
   if (!cliente) {
     return (
-      <main className="min-h-screen bg-[#F5F9F9] pb-24 text-[#102A2E]">
-        <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
+      <main className="min-h-screen bg-[#F6F4EF] pb-24 text-[#20383B]">
+        <header className="border-b border-[#D9E2DF] bg-[linear-gradient(135deg,#EEF3F0_0%,#FBFAF7_52%,#F5F2EC_100%)] text-[#20383B]">
           <div className="mx-auto max-w-xl px-4 py-8">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#D8F4F7]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#89A39D]">
               Area cliente
             </p>
-            <h1 className="mt-2 text-4xl font-black tracking-[-0.05em]">
+            <h1 className="mt-2 font-serif text-4xl font-medium tracking-[-0.05em]">
               Il tuo profilo
             </h1>
           </div>
@@ -469,26 +503,26 @@ export default function ProfiloPage() {
 
         <section className="mx-auto max-w-xl px-4 py-6">
           {errore && (
-            <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-black text-red-700">
+            <div className="mb-4 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] p-4 text-sm font-semibold text-[#9A615A]">
               {errore}
             </div>
           )}
 
           {messaggio && (
-            <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-black text-emerald-700">
+            <div className="mb-4 rounded-2xl border border-[#CFE0D8] bg-[#EDF5F0] p-4 text-sm font-semibold text-[#55766D]">
               {messaggio}
             </div>
           )}
 
-          <div className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
-            <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[#F1F6F6] p-1">
+          <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)]">
+            <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[#EDF3F0] p-1">
               <button
                 type="button"
                 onClick={() => setModalita("login")}
-                className={`rounded-xl px-4 py-3 text-sm font-black ${
+                className={`rounded-xl px-4 py-3 text-sm font-semibold ${
                   modalita === "login"
-                    ? "bg-[#083B4C] text-white"
-                    : "text-[#5D858C]"
+                    ? "bg-[#7FA39A] text-white"
+                    : "text-[#89A39D]"
                 }`}
               >
                 Accedi
@@ -497,10 +531,10 @@ export default function ProfiloPage() {
               <button
                 type="button"
                 onClick={() => setModalita("registrazione")}
-                className={`rounded-xl px-4 py-3 text-sm font-black ${
+                className={`rounded-xl px-4 py-3 text-sm font-semibold ${
                   modalita === "registrazione"
-                    ? "bg-[#083B4C] text-white"
-                    : "text-[#5D858C]"
+                    ? "bg-[#7FA39A] text-white"
+                    : "text-[#89A39D]"
                 }`}
               >
                 Registrati
@@ -518,55 +552,55 @@ export default function ProfiloPage() {
               {modalita === "registrazione" && (
                 <>
                   <label>
-                    <span className="mb-2 block text-sm font-black">
+                    <span className="mb-2 block text-sm font-semibold">
                       Nome *
                     </span>
                     <input
                       value={nome}
                       onChange={(e) => setNome(e.target.value)}
-                      className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                      className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                     />
                   </label>
 
                   <label>
-                    <span className="mb-2 block text-sm font-black">
+                    <span className="mb-2 block text-sm font-semibold">
                       Cognome
                     </span>
                     <input
                       value={cognome}
                       onChange={(e) => setCognome(e.target.value)}
-                      className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                      className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                     />
                   </label>
 
                   <label>
-                    <span className="mb-2 block text-sm font-black">
+                    <span className="mb-2 block text-sm font-semibold">
                       Telefono *
                     </span>
                     <input
                       type="tel"
                       value={telefono}
                       onChange={(e) => setTelefono(e.target.value)}
-                      className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                      className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                     />
                   </label>
                 </>
               )}
 
               <label>
-                <span className="mb-2 block text-sm font-black">
+                <span className="mb-2 block text-sm font-semibold">
                   Email *
                 </span>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                  className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                 />
               </label>
 
               <label>
-                <span className="mb-2 block text-sm font-black">
+                <span className="mb-2 block text-sm font-semibold">
                   Password *
                 </span>
 
@@ -575,13 +609,13 @@ export default function ProfiloPage() {
                     type={mostraPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl border border-[#C9DADC] px-4 py-3 pr-12"
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 pr-12 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                   />
 
                   <button
                     type="button"
                     onClick={() => setMostraPassword((v) => !v)}
-                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-[#5D858C]"
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-[#89A39D]"
                     aria-label={
                       mostraPassword
                         ? "Nascondi password"
@@ -625,7 +659,7 @@ export default function ProfiloPage() {
                   <div className="mt-2 text-right">
                     <Link
                       href="/recupera-password"
-                      className="text-xs font-black text-[#1D6E7A] underline underline-offset-2"
+                      className="text-xs font-semibold text-[#6F918B] underline underline-offset-2"
                     >
                       Password dimenticata?
                     </Link>
@@ -636,7 +670,7 @@ export default function ProfiloPage() {
               <button
                 type="submit"
                 disabled={caricamento}
-                className="rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white disabled:opacity-50"
+                className="rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:opacity-50"
               >
                 {caricamento
                   ? "Attendere..."
@@ -648,38 +682,20 @@ export default function ProfiloPage() {
           </div>
         </section>
 
-        <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#DCE6E6] bg-white/95 px-2 py-3 text-center">
-          <div className="mx-auto grid max-w-md grid-cols-5">
-            <Link href="/" className="text-[10px] font-bold text-[#789095]">
-              Home
-            </Link>
-            <Link href="/catalogo" className="text-[10px] font-bold text-[#789095]">
-              Catalogo
-            </Link>
-            <Link href="/appuntamenti" className="text-[10px] font-bold text-[#789095]">
-              Prenota
-            </Link>
-            <Link href="/promozioni" className="text-[10px] font-bold text-[#789095]">
-              Promo
-            </Link>
-            <Link href="/profilo" className="text-[10px] font-black text-[#0C252B]">
-              Profilo
-            </Link>
-          </div>
-        </nav>
+        <BottomNav active="profilo" />
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#F5F9F9] pb-24 text-[#102A2E]">
-      <header className="bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] text-white">
+    <main className="min-h-screen bg-[#F6F4EF] pb-24 text-[#20383B]">
+      <header className="border-b border-[#D9E2DF] bg-[linear-gradient(135deg,#EEF3F0_0%,#FBFAF7_52%,#F5F2EC_100%)] text-[#20383B]">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-8">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#D8F4F7]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#89A39D]">
               Area cliente
             </p>
-            <h1 className="mt-2 text-4xl font-black tracking-[-0.05em]">
+            <h1 className="mt-2 font-serif text-4xl font-medium tracking-[-0.05em]">
               Ciao {cliente.nome}
             </h1>
           </div>
@@ -687,7 +703,7 @@ export default function ProfiloPage() {
           <button
             type="button"
             onClick={logout}
-            className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-black"
+            className="rounded-full border border-[#D4DFDB] bg-white px-4 py-2 text-xs font-semibold text-[#738682]"
           >
             Esci
           </button>
@@ -696,66 +712,66 @@ export default function ProfiloPage() {
 
       <section className="mx-auto max-w-4xl px-4 py-6">
         {errore && (
-          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-black text-red-700">
+          <div className="mb-4 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] p-4 text-sm font-semibold text-[#9A615A]">
             {errore}
           </div>
         )}
 
         {messaggio && (
-          <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-black text-emerald-700">
+          <div className="mb-4 rounded-2xl border border-[#CFE0D8] bg-[#EDF5F0] p-4 text-sm font-semibold text-[#55766D]">
             {messaggio}
           </div>
         )}
 
-        <div className="rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
-          <h2 className="text-2xl font-black">
+        <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)]">
+          <h2 className="font-serif text-2xl font-medium tracking-[-0.025em]">
             I tuoi dati
           </h2>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Nome
               </span>
               <input
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Cognome
               </span>
               <input
                 value={cognome}
                 onChange={(e) => setCognome(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Telefono
               </span>
               <input
                 type="tel"
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
 
             <label>
-              <span className="mb-2 block text-sm font-black">
+              <span className="mb-2 block text-sm font-semibold">
                 Email
               </span>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-[#C9DADC] px-4 py-3"
+                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
           </div>
@@ -764,25 +780,25 @@ export default function ProfiloPage() {
             type="button"
             onClick={salvaProfilo}
             disabled={caricamento}
-            className="mt-5 w-full rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white disabled:opacity-50"
+            className="mt-5 w-full rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:opacity-50"
           >
             Salva modifiche
           </button>
         </div>
 
-        <div className="mt-6 rounded-3xl border border-[#DCE8E9] bg-white p-5 shadow-sm">
+        <div className="mt-6 rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.05)]">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#5D858C]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#89A39D]">
                 Sicurezza account
               </p>
-              <h2 className="mt-1 text-2xl font-black">
+              <h2 className="mt-1 font-serif text-2xl font-medium tracking-[-0.025em]">
                 Cambia password
               </h2>
             </div>
 
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#EEF6F6] text-[#083B4C]">
-              🔒
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#EDF3F0] text-[#6F918B]">
+              <IconaLucchetto />
             </div>
           </div>
 
@@ -811,7 +827,7 @@ export default function ProfiloPage() {
               },
             ].map((campo) => (
               <label key={campo.label}>
-                <span className="mb-2 block text-sm font-black">
+                <span className="mb-2 block text-sm font-semibold">
                   {campo.label}
                 </span>
 
@@ -820,7 +836,7 @@ export default function ProfiloPage() {
                     type={campo.mostra ? "text" : "password"}
                     value={campo.value}
                     onChange={(e) => campo.setter(e.target.value)}
-                    className="w-full rounded-xl border border-[#C9DADC] px-4 py-3 pr-12"
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 pr-12 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                     autoComplete={
                       campo.label === "Password attuale"
                         ? "current-password"
@@ -831,21 +847,33 @@ export default function ProfiloPage() {
                   <button
                     type="button"
                     onClick={() => campo.setMostra((v) => !v)}
-                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-[#5D858C]"
+                    className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-[#89A39D]"
                     aria-label={
                       campo.mostra
                         ? `Nascondi ${campo.label.toLowerCase()}`
                         : `Mostra ${campo.label.toLowerCase()}`
                     }
                   >
-                    {campo.mostra ? "🙈" : "👁️"}
+                    {campo.mostra ? (
+                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+                        <path d="M3 3l18 18" />
+                        <path d="M10.6 10.7a2 2 0 0 0 2.7 2.7" />
+                        <path d="M9.9 4.2A10.5 10.5 0 0 1 12 4c5.5 0 9 5.5 9 5.5a16.5 16.5 0 0 1-3.2 3.8" />
+                        <path d="M6.2 6.2C4.2 7.6 3 9.5 3 9.5S6.5 15 12 15c1.2 0 2.3-.3 3.3-.7" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+                        <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
+                        <circle cx="12" cy="12" r="2.5" />
+                      </svg>
+                    )}
                   </button>
                 </div>
               </label>
             ))}
           </div>
 
-          <p className="mt-3 text-xs leading-5 text-[#789095]">
+          <p className="mt-3 text-xs leading-5 text-[#8B9C98]">
             La nuova password deve contenere almeno 8 caratteri.
           </p>
 
@@ -853,21 +881,23 @@ export default function ProfiloPage() {
             type="button"
             onClick={cambiaPassword}
             disabled={caricamento}
-            className="mt-5 w-full rounded-2xl bg-[linear-gradient(135deg,#083B4C,#1D6E7A)] px-5 py-4 text-sm font-black text-white disabled:opacity-50"
+            className="mt-5 w-full rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:opacity-50"
           >
             {caricamento ? "Attendere..." : "Aggiorna password"}
           </button>
         </div>
 
         <div className="mt-6">
-          <h2 className="text-2xl font-black">
+          <h2 className="font-serif text-2xl font-medium tracking-[-0.025em]">
             I tuoi appuntamenti
           </h2>
 
           <div className="mt-4 grid gap-3">
             {appuntamenti.length === 0 ? (
-              <div className="rounded-3xl border border-[#DCE8E9] bg-white p-8 text-center">
-                <div className="text-4xl">📅</div>
+              <div className="rounded-3xl border border-[#D9E2DF] bg-white p-8 text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EDF3F0] text-[#6F918B]">
+                  <IconaCalendario />
+                </div>
                 <p className="mt-3 font-black">
                   Nessun appuntamento
                 </p>
@@ -876,15 +906,15 @@ export default function ProfiloPage() {
               appuntamenti.map((a) => (
                 <article
                   key={a.id}
-                  className="rounded-2xl border border-[#DCE8E9] bg-white p-4 shadow-sm"
+                  className="rounded-2xl border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_8px_20px_rgba(80,108,105,.04)]"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <p className="font-black">
+                      <p className="font-semibold">
                         {a.tipo_appuntamento}
                       </p>
 
-                      <p className="mt-1 text-sm text-[#60777C]">
+                      <p className="mt-1 text-sm text-[#738682]">
                         {dataIt(a.data_appuntamento)}
                         {" · "}
                         {ora(a.ora_inizio)}
@@ -909,18 +939,20 @@ export default function ProfiloPage() {
         </div>
 
         <div className="mt-8">
-          <h2 className="text-2xl font-black">
+          <h2 className="font-serif text-2xl font-medium tracking-[-0.025em]">
             I miei ordini
           </h2>
 
           <div className="mt-4 grid gap-4">
             {ordini.length === 0 ? (
-              <div className="rounded-3xl border border-[#DCE8E9] bg-white p-8 text-center">
-                <div className="text-4xl">🛍️</div>
+              <div className="rounded-3xl border border-[#D9E2DF] bg-white p-8 text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EDF3F0] text-[#6F918B]">
+                  <IconaBorsa />
+                </div>
                 <p className="mt-3 font-black">
                   Nessun ordine
                 </p>
-                <p className="mt-1 text-sm text-[#60777C]">
+                <p className="mt-1 text-sm text-[#738682]">
                   I tuoi acquisti compariranno qui.
                 </p>
               </div>
@@ -928,18 +960,18 @@ export default function ProfiloPage() {
               ordini.map((ordine) => (
                 <article
                   key={ordine.id}
-                  className="overflow-hidden rounded-3xl border border-[#DCE8E9] bg-white shadow-sm"
+                  className="overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] shadow-[0_10px_24px_rgba(80,108,105,.05)]"
                 >
                   <div className="p-4">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#789095]">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8B9C98]">
                           Ordine
                         </p>
                         <p className="mt-1 font-black">
                           {ordine.numero_ordine}
                         </p>
-                        <p className="mt-1 text-xs text-[#60777C]">
+                        <p className="mt-1 text-xs text-[#738682]">
                           {dataOraIt(ordine.creato_il)}
                         </p>
                       </div>
@@ -953,7 +985,7 @@ export default function ProfiloPage() {
                           {ordine.stato_ordine}
                         </span>
 
-                        <p className="mt-2 text-xl font-black text-[#083B4C]">
+                        <p className="mt-2 text-xl font-semibold text-[#506C69]">
                           {euro(Number(ordine.totale))}
                         </p>
                       </div>
@@ -963,7 +995,7 @@ export default function ProfiloPage() {
                       {(ordine.righe ?? []).map((riga) => (
                         <div
                           key={riga.id}
-                          className="grid grid-cols-[76px_1fr] gap-3 rounded-2xl border border-[#E4EEEE] bg-[#F8FBFB] p-3"
+                          className="grid grid-cols-[76px_1fr] gap-3 rounded-2xl border border-[#E1E7E4] bg-[#F3F5F2] p-3"
                         >
                           <div className="aspect-square overflow-hidden rounded-xl bg-white">
                             {riga.immagine_url ? (
@@ -973,25 +1005,25 @@ export default function ProfiloPage() {
                                 className="h-full w-full object-contain p-2"
                               />
                             ) : (
-                              <div className="flex h-full items-center justify-center text-3xl">
-                                👓
+                              <div className="flex h-full items-center justify-center text-[#8FB8B2]">
+                                <IconaOcchiali />
                               </div>
                             )}
                           </div>
 
                           <div>
-                            <p className="font-black">
+                            <p className="font-semibold">
                               {riga.nome_articolo}
                             </p>
 
-                            <p className="mt-1 text-xs text-[#60777C]">
+                            <p className="mt-1 text-xs text-[#738682]">
                               {[riga.marca, riga.modello]
                                 .filter(Boolean)
                                 .join(" · ")}
                             </p>
 
                             {riga.descrizione_variante && (
-                              <p className="mt-1 text-xs font-bold text-[#4E7F86]">
+                              <p className="mt-1 text-xs font-medium text-[#6F918B]">
                                 {riga.descrizione_variante}
                               </p>
                             )}
@@ -1002,7 +1034,7 @@ export default function ProfiloPage() {
                             </p>
 
                             {Number(riga.sconto_percentuale) > 0 && (
-                              <p className="mt-1 text-xs font-black text-red-600">
+                              <p className="mt-1 text-xs font-semibold text-[#A85D55]">
                                 Promo -{Number(riga.sconto_percentuale)}%
                               </p>
                             )}
@@ -1012,8 +1044,8 @@ export default function ProfiloPage() {
                     </div>
 
                     <div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
-                      <div className="rounded-xl bg-[#F5F9F9] p-3">
-                        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#789095]">
+                      <div className="rounded-xl bg-[#F6F4EF] p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8B9C98]">
                           Consegna
                         </p>
                         <p className="mt-1 font-black">
@@ -1021,8 +1053,8 @@ export default function ProfiloPage() {
                         </p>
                       </div>
 
-                      <div className="rounded-xl bg-[#F5F9F9] p-3">
-                        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#789095]">
+                      <div className="rounded-xl bg-[#F6F4EF] p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8B9C98]">
                           Pagamento
                         </p>
                         <span
@@ -1034,11 +1066,11 @@ export default function ProfiloPage() {
                         </span>
                       </div>
 
-                      <div className="rounded-xl bg-[#F5F9F9] p-3">
-                        <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#789095]">
+                      <div className="rounded-xl bg-[#F6F4EF] p-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8B9C98]">
                           Totale
                         </p>
-                        <p className="mt-1 font-black text-[#083B4C]">
+                        <p className="mt-1 font-semibold text-[#506C69]">
                           {euro(Number(ordine.totale))}
                         </p>
                       </div>
@@ -1051,25 +1083,7 @@ export default function ProfiloPage() {
         </div>
       </section>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#DCE6E6] bg-white/95 px-2 py-3 text-center">
-        <div className="mx-auto grid max-w-md grid-cols-5">
-          <Link href="/" className="text-[10px] font-bold text-[#789095]">
-            Home
-          </Link>
-          <Link href="/catalogo" className="text-[10px] font-bold text-[#789095]">
-            Catalogo
-          </Link>
-          <Link href="/appuntamenti" className="text-[10px] font-bold text-[#789095]">
-            Prenota
-          </Link>
-          <Link href="/promozioni" className="text-[10px] font-bold text-[#789095]">
-            Promo
-          </Link>
-          <Link href="/profilo" className="text-[10px] font-black text-[#0C252B]">
-            Profilo
-          </Link>
-        </div>
-      </nav>
+      <BottomNav active="profilo" />
     </main>
   );
 }

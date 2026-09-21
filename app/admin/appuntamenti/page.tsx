@@ -28,6 +28,14 @@ type RispostaElenco = {
   errore?: string;
 };
 
+function oggiISO() {
+  const oggi = new Date();
+  const anno = oggi.getFullYear();
+  const mese = String(oggi.getMonth() + 1).padStart(2, "0");
+  const giorno = String(oggi.getDate()).padStart(2, "0");
+  return `${anno}-${mese}-${giorno}`;
+}
+
 function formattaData(data: string) {
   const parti = data.split("-");
   if (parti.length !== 3) return data;
@@ -40,14 +48,14 @@ function formattaOra(ora: string | null) {
 
 function classeStato(stato: string) {
   if (stato === "Confermato") {
-    return "border-[#CFE0D8] bg-[#EDF5F0] text-[#55766D]";
+    return "border-[color-mix(in_srgb,var(--app-success)_35%,white)] bg-[color-mix(in_srgb,var(--app-success)_12%,white)] text-[var(--app-success)]";
   }
 
   if (stato === "Annullato") {
-    return "border-[#E9D1CD] bg-[#F8ECE9] text-[#9A615A]";
+    return "border-[color-mix(in_srgb,var(--app-danger)_35%,white)] bg-[color-mix(in_srgb,var(--app-danger)_12%,white)] text-[var(--app-danger)]";
   }
 
-  return "border-[#E5D9B8] bg-[#F8F1DF] text-[#8A6E35]";
+  return "border-[color-mix(in_srgb,var(--app-warning)_35%,white)] bg-[color-mix(in_srgb,var(--app-warning)_12%,white)] text-[var(--app-warning)]";
 }
 
 function preparaNumeroWhatsApp(telefono: string) {
@@ -57,7 +65,6 @@ function preparaNumeroWhatsApp(telefono: string) {
     numero = numero.slice(2);
   }
 
-  // Numeri mobili italiani inseriti senza prefisso internazionale.
   if (numero.length === 10 && numero.startsWith("3")) {
     numero = `39${numero}`;
   }
@@ -65,13 +72,16 @@ function preparaNumeroWhatsApp(telefono: string) {
   return numero;
 }
 
-function urlWhatsApp(appuntamento: Appuntamento) {
-  const numero = preparaNumeroWhatsApp(appuntamento.telefono);
+function creaUrlWhatsApp(telefono: string, messaggio: string) {
+  const numero = preparaNumeroWhatsApp(telefono);
+  return `https://wa.me/${numero}?text=${encodeURIComponent(messaggio)}`;
+}
 
-  const messaggio = [
+function messaggioSingolo(appuntamento: Appuntamento) {
+  return [
     `Ciao ${appuntamento.nome_cliente},`,
     "",
-    "ti contattiamo da Ottica App in merito al tuo appuntamento:",
+    "ti contattiamo in merito al tuo appuntamento:",
     `${appuntamento.tipo_appuntamento}`,
     `${formattaData(appuntamento.data_appuntamento)} alle ${formattaOra(
       appuntamento.ora_inizio
@@ -79,15 +89,13 @@ function urlWhatsApp(appuntamento: Appuntamento) {
     "",
     "Grazie.",
   ].join("\n");
-
-  return `https://wa.me/${numero}?text=${encodeURIComponent(messaggio)}`;
 }
 
-function IconaWhatsApp() {
+function IconaWhatsApp({ className = "h-4 w-4" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 32 32"
-      className="h-4 w-4"
+      className={className}
       fill="currentColor"
       aria-hidden="true"
     >
@@ -104,7 +112,14 @@ export default function AdminAppuntamentiPage() {
   const [errore, setErrore] = useState("");
   const [filtro, setFiltro] = useState("Tutti");
   const [ricerca, setRicerca] = useState("");
+  const [dataFiltro, setDataFiltro] = useState(oggiISO());
   const [inAggiornamento, setInAggiornamento] = useState<number | null>(null);
+
+  const [selezionati, setSelezionati] = useState<number[]>([]);
+  const [messaggioMultiplo, setMessaggioMultiplo] = useState(
+    "Gentile cliente, ti informiamo che per un imprevisto dobbiamo modificare l'appuntamento previsto. Ti contatteremo per concordare una nuova disponibilità. Ci scusiamo per il disagio."
+  );
+  const [mostraInvioMultiplo, setMostraInvioMultiplo] = useState(false);
 
   useEffect(() => {
     const admin = sessionStorage.getItem("ottica_admin");
@@ -186,6 +201,10 @@ export default function AdminAppuntamentiPage() {
       const statoOk =
         filtro === "Tutti" || appuntamento.stato === filtro;
 
+      const dataOk =
+        dataFiltro === "" ||
+        appuntamento.data_appuntamento === dataFiltro;
+
       const ricercaOk =
         testo === "" ||
         appuntamento.nome_cliente.toLowerCase().includes(testo) ||
@@ -193,30 +212,127 @@ export default function AdminAppuntamentiPage() {
         (appuntamento.email ?? "").toLowerCase().includes(testo) ||
         appuntamento.tipo_appuntamento.toLowerCase().includes(testo);
 
-      return statoOk && ricercaOk;
+      return statoOk && dataOk && ricercaOk;
     });
-  }, [appuntamenti, filtro, ricerca]);
+  }, [appuntamenti, filtro, ricerca, dataFiltro]);
+
+  const appuntamentiSelezionati = useMemo(
+    () =>
+      appuntamenti.filter((appuntamento) =>
+        selezionati.includes(appuntamento.id)
+      ),
+    [appuntamenti, selezionati]
+  );
+
+  const tuttiVisibiliSelezionati =
+    elencoFiltrato.length > 0 &&
+    elencoFiltrato.every((appuntamento) =>
+      selezionati.includes(appuntamento.id)
+    );
+
+  function cambiaData(nuovaData: string) {
+    setDataFiltro(nuovaData);
+    setSelezionati([]);
+    setMostraInvioMultiplo(false);
+  }
+
+  function selezionaAppuntamento(id: number) {
+    setSelezionati((correnti) =>
+      correnti.includes(id)
+        ? correnti.filter((voce) => voce !== id)
+        : [...correnti, id]
+    );
+  }
+
+  function selezionaTuttiVisibili() {
+    const idsVisibili = elencoFiltrato.map((appuntamento) => appuntamento.id);
+
+    if (tuttiVisibiliSelezionati) {
+      setSelezionati((correnti) =>
+        correnti.filter((id) => !idsVisibili.includes(id))
+      );
+      return;
+    }
+
+    setSelezionati((correnti) =>
+      Array.from(new Set([...correnti, ...idsVisibili]))
+    );
+  }
+
+  function pulisciSelezione() {
+    setSelezionati([]);
+    setMostraInvioMultiplo(false);
+  }
+
+  function apriWhatsAppSingolo(appuntamento: Appuntamento) {
+    const url = creaUrlWhatsApp(
+      appuntamento.telefono,
+      messaggioSingolo(appuntamento)
+    );
+
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function apriWhatsAppSelezionato(appuntamento: Appuntamento) {
+    const testo = messaggioMultiplo.trim();
+
+    if (!testo) {
+      setErrore("Scrivi prima il messaggio da inviare.");
+      return;
+    }
+
+    const url = creaUrlWhatsApp(appuntamento.telefono, testo);
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function provaApriTutti() {
+    if (appuntamentiSelezionati.length === 0) {
+      setErrore("Seleziona almeno un appuntamento.");
+      return;
+    }
+
+    if (!messaggioMultiplo.trim()) {
+      setErrore("Scrivi prima il messaggio da inviare.");
+      return;
+    }
+
+    /*
+      WhatsApp non consente a una normale pagina web di inviare automaticamente
+      lo stesso messaggio a più numeri. Qui apriamo una chat per ogni destinatario.
+      Alcuni browser possono bloccare le aperture multiple: in quel caso si usano
+      i pulsanti individuali mostrati nel pannello.
+    */
+    appuntamentiSelezionati.forEach((appuntamento, indice) => {
+      window.setTimeout(() => {
+        const url = creaUrlWhatsApp(
+          appuntamento.telefono,
+          messaggioMultiplo.trim()
+        );
+        window.open(url, "_blank", "noopener,noreferrer");
+      }, indice * 250);
+    });
+  }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#F6F4EF] pb-10 text-[#20383B]">
-      <header className="bg-[linear-gradient(135deg,#506C69,#7FA39A)] text-white">
-        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-          <div className="flex items-center justify-between gap-4">
+    <main className="min-h-screen overflow-x-hidden bg-[var(--app-background)] pb-10 text-[var(--app-text)]">
+      <header className="border-b border-[var(--app-border)] bg-[var(--app-surface)]">
+        <div className="mx-auto max-w-6xl px-4 py-7 sm:px-6">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#CBEDEF]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
                 Area amministrativa
               </p>
-              <h1 className="mt-1 text-3xl font-black tracking-[-0.04em]">
+              <h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
                 Appuntamenti
               </h1>
-              <p className="mt-1 text-sm text-white/75">
-                Gestione prenotazioni clienti.
+              <p className="mt-2 text-sm text-[var(--app-muted)]">
+                Gestione prenotazioni e comunicazioni WhatsApp ai clienti.
               </p>
             </div>
 
             <Link
               href="/admin"
-              className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-black"
+              className="w-fit rounded-xl border border-[var(--app-border-strong)] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--app-text)] transition hover:bg-[var(--app-surface-soft)]"
             >
               Dashboard
             </Link>
@@ -224,184 +340,386 @@ export default function AdminAppuntamentiPage() {
         </div>
       </header>
 
-      <section className="mx-auto w-full max-w-6xl px-3 py-6 sm:px-6">
+      <section className="mx-auto w-full max-w-6xl px-4 py-7 sm:px-6 sm:py-9">
         {errore && (
-          <div className="mb-5 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] px-4 py-4 text-sm font-semibold text-[#9A615A]">
+          <div className="mb-5 rounded-xl border border-[color-mix(in_srgb,var(--app-danger)_30%,white)] bg-[color-mix(in_srgb,var(--app-danger)_10%,white)] px-4 py-4 text-sm font-semibold text-[var(--app-danger)]">
             {errore}
           </div>
         )}
 
-        <div className="mb-5 min-w-0 rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_10px_24px_rgba(80,108,105,.05)]">
-          <div className="grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
-            <input
-              type="search"
-              value={ricerca}
-              onChange={(evento) => setRicerca(evento.target.value)}
-              placeholder="Cerca cliente, telefono, email, servizio..."
-              className="min-w-0 w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-sm text-[#20383B] outline-none transition placeholder:text-[#9AA9A5] focus:border-[#8FB8B2]"
-            />
+        <div className="mb-5 rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-4">
+          <div className="grid gap-3 lg:grid-cols-[210px_minmax(0,1fr)_auto]">
+            <label className="text-xs font-semibold text-[var(--app-text-soft)]">
+              Giorno appuntamenti
+              <input
+                type="date"
+                value={dataFiltro}
+                onChange={(evento) => cambiaData(evento.target.value)}
+                className="mt-1 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-background)] px-3 py-3 text-sm text-[var(--app-text)] outline-none focus:border-[var(--app-primary)]"
+              />
+            </label>
+
+            <label className="text-xs font-semibold text-[var(--app-text-soft)]">
+              Cerca
+              <input
+                type="search"
+                value={ricerca}
+                onChange={(evento) => setRicerca(evento.target.value)}
+                placeholder="Cliente, telefono, email, servizio..."
+                className="mt-1 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-background)] px-4 py-3 text-sm text-[var(--app-text)] outline-none focus:border-[var(--app-primary)]"
+              />
+            </label>
 
             <button
               type="button"
               onClick={caricaAppuntamenti}
-              className="rounded-xl bg-[#7FA39A] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6F918B]"
+              className="self-end rounded-xl bg-[var(--app-primary)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--app-primary-hover)]"
             >
               Aggiorna
             </button>
           </div>
 
-          <div className="mt-3 flex max-w-full gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {["Tutti", "Da confermare", "Confermato", "Annullato"].map(
-              (voce) => (
-                <button
-                  key={voce}
-                  type="button"
-                  onClick={() => setFiltro(voce)}
-                  className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-semibold transition ${
-                    filtro === voce
-                      ? "border-[#7FA39A] bg-[#7FA39A] text-white"
-                      : "border-[#D4DFDB] bg-white text-[#738682] hover:border-[#BFCFCA]"
-                  }`}
-                >
-                  {voce}
-                </button>
-              )
-            )}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex max-w-full gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {["Tutti", "Da confermare", "Confermato", "Annullato"].map(
+                (voce) => (
+                  <button
+                    key={voce}
+                    type="button"
+                    onClick={() => {
+                      setFiltro(voce);
+                      setSelezionati([]);
+                    }}
+                    className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-semibold ${
+                      filtro === voce
+                        ? "border-[var(--app-primary)] bg-[var(--app-primary)] text-white"
+                        : "border-[var(--app-border)] bg-[var(--app-background)] text-[var(--app-text-soft)]"
+                    }`}
+                  >
+                    {voce}
+                  </button>
+                )
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => cambiaData("")}
+              className="text-xs font-semibold text-[var(--app-primary)]"
+            >
+              Mostra tutti i giorni
+            </button>
           </div>
         </div>
 
+        {!caricamento && elencoFiltrato.length > 0 && (
+          <div className="mb-5 rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold">
+                  {dataFiltro
+                    ? `Appuntamenti del ${formattaData(dataFiltro)}`
+                    : "Appuntamenti visualizzati"}
+                </p>
+                <p className="mt-1 text-xs text-[var(--app-muted)]">
+                  {selezionati.length} selezionati su {elencoFiltrato.length} visualizzati.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={selezionaTuttiVisibili}
+                  className="rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-background)] px-4 py-2.5 text-xs font-semibold text-[var(--app-text-soft)]"
+                >
+                  {tuttiVisibiliSelezionati
+                    ? "Deseleziona tutti"
+                    : "Seleziona tutti"}
+                </button>
+
+                {selezionati.length > 0 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={pulisciSelezione}
+                      className="rounded-xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-semibold text-[var(--app-muted)]"
+                    >
+                      Azzera selezione
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setMostraInvioMultiplo(true)}
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-xs font-semibold text-white"
+                    >
+                      <IconaWhatsApp />
+                      Messaggio a {selezionati.length}
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {mostraInvioMultiplo && selezionati.length > 0 && (
+          <section className="mb-6 rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[0_16px_34px_rgba(32,56,59,.06)]">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#25A85A]">
+                  WhatsApp
+                </p>
+                <h2 className="mt-1 font-serif text-2xl font-medium">
+                  Messaggio comune
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-[var(--app-muted)]">
+                  Lo stesso testo verrà preparato per tutti gli appuntamenti selezionati.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setMostraInvioMultiplo(false)}
+                className="text-xs font-semibold text-[var(--app-muted)]"
+              >
+                Chiudi
+              </button>
+            </div>
+
+            <textarea
+              value={messaggioMultiplo}
+              onChange={(evento) => setMessaggioMultiplo(evento.target.value)}
+              rows={5}
+              className="mt-4 w-full resize-y rounded-xl border border-[var(--app-border)] bg-[var(--app-background)] px-4 py-3 text-sm leading-6 text-[var(--app-text)] outline-none focus:border-[var(--app-primary)]"
+              placeholder="Scrivi il messaggio da inviare..."
+            />
+
+            <div className="mt-4 rounded-xl bg-[var(--app-surface-soft)] p-4">
+              <p className="text-xs font-semibold text-[var(--app-text-soft)]">
+                Destinatari selezionati
+              </p>
+
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {appuntamentiSelezionati.map((appuntamento) => (
+                  <div
+                    key={appuntamento.id}
+                    className="flex items-center justify-between gap-3 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-3"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold">
+                        {appuntamento.nome_cliente}
+                      </p>
+                      <p className="mt-1 text-xs text-[var(--app-muted)]">
+                        {formattaOra(appuntamento.ora_inizio)} · {appuntamento.telefono}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => apriWhatsAppSelezionato(appuntamento)}
+                      className="shrink-0 rounded-lg bg-[#25D366] p-2.5 text-white"
+                      title={`Apri WhatsApp per ${appuntamento.nome_cliente}`}
+                    >
+                      <IconaWhatsApp />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={provaApriTutti}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3 text-sm font-semibold text-white"
+              >
+                <IconaWhatsApp className="h-5 w-5" />
+                Apri WhatsApp per tutti
+              </button>
+
+              <p className="text-xs leading-5 text-[var(--app-muted)]">
+                WhatsApp richiede comunque la conferma dell&apos;invio in ogni chat.
+                Se il browser blocca le schede multiple, usa i pulsanti verdi accanto ai singoli destinatari.
+              </p>
+            </div>
+          </section>
+        )}
+
         {caricamento ? (
-          <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center font-medium text-[#7E8F8B]">
+          <div className="rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-8 text-center font-semibold text-[var(--app-muted)]">
             Caricamento appuntamenti...
           </div>
         ) : elencoFiltrato.length === 0 ? (
-          <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-8 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EDF3F0] text-[#6F918B]">
-              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.7">
-                <rect x="3.5" y="5" width="17" height="15.5" rx="2.8" />
-                <path d="M8 3v4M16 3v4M3.5 9.5h17" />
+          <div className="rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-8 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center text-[var(--app-primary)]">
+              <svg
+                viewBox="0 0 24 24"
+                className="h-9 w-9"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              >
+                <rect x="3.5" y="5" width="17" height="15.5" rx="2" />
+                <path d="M8 3v4M16 3v4M3.5 10h17" />
               </svg>
             </div>
-            <h2 className="mt-3 font-serif text-xl font-medium">Nessun appuntamento</h2>
-            <p className="mt-2 text-sm text-[#7E8F8B]">
+            <h2 className="mt-3 text-xl font-semibold">Nessun appuntamento</h2>
+            <p className="mt-2 text-sm text-[var(--app-muted)]">
               Non ci sono prenotazioni corrispondenti ai filtri selezionati.
             </p>
           </div>
         ) : (
           <div className="grid gap-4">
-            {elencoFiltrato.map((appuntamento) => (
-              <article
-                key={appuntamento.id}
-                className="min-w-0 overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-4 shadow-[0_10px_24px_rgba(80,108,105,.05)] sm:p-5"
-              >
-                <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex min-w-0 flex-wrap items-center gap-2">
-                      <h2 className="min-w-0 break-words font-serif text-xl font-medium text-[#20383B]">
-                        {appuntamento.nome_cliente}
-                      </h2>
-                      <span
-                        className={`rounded-full border px-3 py-1 text-[10px] font-semibold ${classeStato(
-                          appuntamento.stato
-                        )}`}
+            {elencoFiltrato.map((appuntamento) => {
+              const selezionato = selezionati.includes(appuntamento.id);
+
+              return (
+                <article
+                  key={appuntamento.id}
+                  className={`min-w-0 overflow-hidden rounded-[20px] border bg-[var(--app-surface)] p-4 transition sm:p-5 ${
+                    selezionato
+                      ? "border-[var(--app-primary)] ring-2 ring-[color-mix(in_srgb,var(--app-primary)_18%,transparent)]"
+                      : "border-[var(--app-border)]"
+                  }`}
+                >
+                  <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="flex min-w-0 flex-1 gap-3">
+                      <label
+                        className="mt-0.5 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[var(--app-border)] bg-[var(--app-background)]"
+                        title="Seleziona appuntamento"
                       >
-                        {appuntamento.stato}
-                      </span>
-                    </div>
+                        <input
+                          type="checkbox"
+                          checked={selezionato}
+                          onChange={() => selezionaAppuntamento(appuntamento.id)}
+                          className="h-4 w-4 cursor-pointer"
+                          style={{ accentColor: "var(--app-primary)" }}
+                          aria-label={`Seleziona ${appuntamento.nome_cliente}`}
+                        />
+                      </label>
 
-                    <p className="mt-2 text-sm font-semibold text-[#6F918B]">
-                      {appuntamento.tipo_appuntamento}
-                    </p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex min-w-0 flex-wrap items-center gap-2">
+                          <h2 className="min-w-0 break-words text-xl font-semibold tracking-[-0.02em]">
+                            {appuntamento.nome_cliente}
+                          </h2>
 
-                    <div className="mt-3 grid gap-1 text-sm text-[#738682]">
-                      <p>
-                        <strong>Data:</strong>{" "}
-                        {formattaData(appuntamento.data_appuntamento)}
-                      </p>
-                      <p>
-                        <strong>Orario:</strong>{" "}
-                        {formattaOra(appuntamento.ora_inizio)}
-                        {appuntamento.ora_fine
-                          ? ` - ${formattaOra(appuntamento.ora_fine)}`
-                          : ""}
-                      </p>
-                      <p>
-                        <strong>Telefono:</strong>{" "}
-                        <a
-                          href={`tel:${appuntamento.telefono}`}
-                          className="break-all font-semibold text-[#6F918B]"
-                        >
-                          {appuntamento.telefono}
-                        </a>
-                      </p>
-
-                      {appuntamento.email && (
-                        <p>
-                          <strong>Email:</strong>{" "}
-                          <a
-                            href={`mailto:${appuntamento.email}`}
-                            className="break-all font-semibold text-[#6F918B]"
+                          <span
+                            className={`rounded-full border px-3 py-1 text-[10px] font-semibold ${classeStato(
+                              appuntamento.stato
+                            )}`}
                           >
-                            {appuntamento.email}
-                          </a>
-                        </p>
-                      )}
+                            {appuntamento.stato}
+                          </span>
+                        </div>
 
-                      {appuntamento.note && (
-                        <p className="mt-2 rounded-xl border border-[#E1E7E4] bg-[#F3F5F2] p-3">
-                          <strong>Note:</strong> {appuntamento.note}
+                        <p className="mt-2 text-sm font-semibold text-[var(--app-primary)]">
+                          {appuntamento.tipo_appuntamento}
                         </p>
-                      )}
+
+                        <div className="mt-3 grid gap-1 text-sm text-[var(--app-muted)]">
+                          <p>
+                            <strong className="text-[var(--app-text-soft)]">
+                              Data:
+                            </strong>{" "}
+                            {formattaData(appuntamento.data_appuntamento)}
+                          </p>
+
+                          <p>
+                            <strong className="text-[var(--app-text-soft)]">
+                              Orario:
+                            </strong>{" "}
+                            {formattaOra(appuntamento.ora_inizio)}
+                            {appuntamento.ora_fine
+                              ? ` - ${formattaOra(appuntamento.ora_fine)}`
+                              : ""}
+                          </p>
+
+                          <p>
+                            <strong className="text-[var(--app-text-soft)]">
+                              Telefono:
+                            </strong>{" "}
+                            <a
+                              href={`tel:${appuntamento.telefono}`}
+                              className="font-semibold text-[var(--app-primary)]"
+                            >
+                              {appuntamento.telefono}
+                            </a>
+                          </p>
+
+                          {appuntamento.email && (
+                            <p>
+                              <strong className="text-[var(--app-text-soft)]">
+                                Email:
+                              </strong>{" "}
+                              <a
+                                href={`mailto:${appuntamento.email}`}
+                                className="font-semibold text-[var(--app-primary)]"
+                              >
+                                {appuntamento.email}
+                              </a>
+                            </p>
+                          )}
+
+                          {appuntamento.note && (
+                            <p className="mt-2 rounded-xl bg-[var(--app-surface-soft)] p-3">
+                              <strong className="text-[var(--app-text-soft)]">
+                                Note:
+                              </strong>{" "}
+                              {appuntamento.note}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid min-w-[190px] gap-2">
+                      <button
+                        type="button"
+                        onClick={() => apriWhatsAppSingolo(appuntamento)}
+                        className="flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-xs font-semibold text-white"
+                      >
+                        <IconaWhatsApp />
+                        Invia messaggio
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={inAggiornamento === appuntamento.id}
+                        onClick={() =>
+                          cambiaStato(appuntamento.id, "Confermato")
+                        }
+                        className="rounded-xl bg-[var(--app-success)] px-4 py-3 text-xs font-semibold text-white disabled:opacity-50"
+                      >
+                        Conferma
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={inAggiornamento === appuntamento.id}
+                        onClick={() =>
+                          cambiaStato(appuntamento.id, "Da confermare")
+                        }
+                        className="rounded-xl bg-[var(--app-warning)] px-4 py-3 text-xs font-semibold text-white disabled:opacity-50"
+                      >
+                        Da confermare
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={inAggiornamento === appuntamento.id}
+                        onClick={() =>
+                          cambiaStato(appuntamento.id, "Annullato")
+                        }
+                        className="rounded-xl bg-[var(--app-danger)] px-4 py-3 text-xs font-semibold text-white disabled:opacity-50"
+                      >
+                        Annulla
+                      </button>
                     </div>
                   </div>
-
-                  <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:grid-cols-4 lg:w-[190px] lg:grid-cols-1">
-                    <a
-                      href={urlWhatsApp(appuntamento)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex min-w-0 items-center justify-center gap-2 rounded-xl border border-[#B9DEC5] bg-[#E9F6ED] px-3 py-3 text-center text-[11px] font-semibold text-[#4E7D5B] transition hover:bg-[#DDF1E3] sm:text-xs"
-                    >
-                      <IconaWhatsApp />
-                      Invia messaggio
-                    </a>
-
-                    <button
-                      type="button"
-                      disabled={inAggiornamento === appuntamento.id}
-                      onClick={() =>
-                        cambiaStato(appuntamento.id, "Confermato")
-                      }
-                      className="min-w-0 rounded-xl bg-[#6F918B] px-3 py-3 text-[11px] font-semibold text-white disabled:opacity-50 sm:text-xs"
-                    >
-                      Conferma
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={inAggiornamento === appuntamento.id}
-                      onClick={() =>
-                        cambiaStato(appuntamento.id, "Da confermare")
-                      }
-                      className="min-w-0 rounded-xl border border-[#E1D6B8] bg-[#F6EEDB] px-3 py-3 text-[11px] font-semibold text-[#8A6E35] disabled:opacity-50 sm:text-xs"
-                    >
-                      Da confermare
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={inAggiornamento === appuntamento.id}
-                      onClick={() =>
-                        cambiaStato(appuntamento.id, "Annullato")
-                      }
-                      className="min-w-0 rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-3 text-[11px] font-semibold text-[#9A615A] disabled:opacity-50 sm:text-xs"
-                    >
-                      Annulla
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
       </section>

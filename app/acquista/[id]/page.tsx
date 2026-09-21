@@ -167,9 +167,41 @@ export default function AcquistaProdottoPage() {
     );
   }, [prodotto, varianteId]);
 
-  const maxQuantita = varianteSelezionata
-    ? Number(varianteSelezionata.quantita ?? 0)
-    : 99;
+  const haVarianti = (prodotto?.varianti ?? []).length > 0;
+
+  const disponibilitaVarianti = (prodotto?.varianti ?? []).some(
+    (v) => Number(v.quantita ?? 0) > 0
+  );
+
+  const prodottoConDisponibilita = prodotto as
+    | (Articolo & {
+        quantita?: number | string | null;
+        disponibile?: number | boolean | string | null;
+      })
+    | null;
+
+  const quantitaProdotto = Number(
+    prodottoConDisponibilita?.quantita ?? 0
+  );
+
+  const flagDisponibile = prodottoConDisponibilita?.disponibile;
+
+  const prodottoDisponibile = haVarianti
+    ? disponibilitaVarianti
+    : quantitaProdotto > 0 ||
+      flagDisponibile === true ||
+      flagDisponibile === 1 ||
+      flagDisponibile === "1";
+
+  const maxQuantita = haVarianti
+    ? varianteSelezionata
+      ? Number(varianteSelezionata.quantita ?? 0)
+      : 0
+    : quantitaProdotto > 0
+      ? quantitaProdotto
+      : prodottoDisponibile
+        ? 99
+        : 0;
 
   const inPromo =
     prodotto?.in_promozione === true &&
@@ -213,6 +245,11 @@ export default function AcquistaProdottoPage() {
 
     setErrore("");
     setOrdineCreato(null);
+
+    if (!prodottoDisponibile || maxQuantita <= 0) {
+      setErrore("Prodotto momentaneamente non disponibile.");
+      return;
+    }
 
     if (!nome.trim() || !cognome.trim()) {
       setErrore("Inserisci nome e cognome.");
@@ -477,6 +514,17 @@ export default function AcquistaProdottoPage() {
                 </p>
               )}
 
+              {!prodottoDisponibile && (
+                <div className="mt-5 rounded-2xl border border-[color-mix(in_srgb,var(--app-danger)_35%,white)] bg-[color-mix(in_srgb,var(--app-danger)_10%,white)] p-4 text-center">
+                  <p className="font-semibold text-[var(--app-danger)]">
+                    Prodotto momentaneamente non disponibile
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-[var(--app-muted)]">
+                    La quantità disponibile è attualmente pari a zero.
+                  </p>
+                </div>
+              )}
+
               {(prodotto.varianti ?? []).length > 0 && (
                 <label className="mt-5 block">
                   <span className="mb-2 block text-sm font-semibold">
@@ -485,6 +533,7 @@ export default function AcquistaProdottoPage() {
 
                   <select
                     value={varianteId}
+                    disabled={!prodottoDisponibile}
                     onChange={(e) => {
                       setVarianteId(e.target.value);
                       setQuantita(1);
@@ -520,6 +569,7 @@ export default function AcquistaProdottoPage() {
                 <input
                   type="number"
                   min="1"
+                  disabled={!prodottoDisponibile || maxQuantita <= 0}
                   max={Math.max(1, maxQuantita)}
                   value={quantita}
                   onChange={(e) => {
@@ -538,7 +588,8 @@ export default function AcquistaProdottoPage() {
 
               {varianteSelezionata && (
                 <p className="mt-2 text-xs text-[var(--app-muted)]">
-                  Selezione: {descrizioneVariante()}
+                  Selezione: {descrizioneVariante()} · Disponibili:{" "}
+                  {Number(varianteSelezionata.quantita ?? 0)}
                 </p>
               )}
 
@@ -813,14 +864,16 @@ export default function AcquistaProdottoPage() {
           <button
             type="button"
             onClick={confermaOrdine}
-            disabled={invio || maxQuantita <= 0}
+            disabled={invio || !prodottoDisponibile || maxQuantita <= 0}
             className="mt-6 w-full rounded-xl bg-[var(--app-primary)] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[var(--app-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {invio
-              ? "Registrazione ordine..."
-              : inPromo
-              ? "CONFERMA ACQUISTO CON PROMO"
-              : "PROCEDI AL PAGAMENTO"}
+            {!prodottoDisponibile || maxQuantita <= 0
+              ? "PRODOTTO MOMENTANEAMENTE NON DISPONIBILE"
+              : invio
+                ? "Registrazione ordine..."
+                : inPromo
+                  ? "CONFERMA ACQUISTO CON PROMO"
+                  : "PROCEDI AL PAGAMENTO"}
           </button>
 
           <p className="mt-3 text-center text-[11px] leading-5 text-[var(--app-muted)]">

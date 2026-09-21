@@ -49,8 +49,6 @@ export default function AcquistaProdottoPage() {
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
 
-  const [modalitaConsegna, setModalitaConsegna] =
-    useState<"Ritiro in negozio" | "Spedizione">("Ritiro in negozio");
 
   const [indirizzo, setIndirizzo] = useState("");
   const [civico, setCivico] = useState("");
@@ -187,7 +185,6 @@ export default function AcquistaProdottoPage() {
   const totaleProdotti = prezzoUnitario * quantita;
 
   const speseSpedizione =
-    modalitaConsegna === "Spedizione" &&
     totaleProdotti < sogliaSpedizioneGratuita
       ? costoSpedizione
       : 0;
@@ -232,17 +229,15 @@ export default function AcquistaProdottoPage() {
       return;
     }
 
-    if (modalitaConsegna === "Spedizione") {
-      if (
-        !indirizzo.trim() ||
-        !civico.trim() ||
-        !cap.trim() ||
-        !citta.trim() ||
-        !provincia.trim()
-      ) {
-        setErrore("Completa tutti i dati per la spedizione.");
-        return;
-      }
+    if (
+      !indirizzo.trim() ||
+      !civico.trim() ||
+      !cap.trim() ||
+      !citta.trim() ||
+      !provincia.trim()
+    ) {
+      setErrore("Completa tutti i dati per la spedizione.");
+      return;
     }
 
     setInvio(true);
@@ -261,7 +256,7 @@ export default function AcquistaProdottoPage() {
           cognome: cognome.trim(),
           email: email.trim(),
           telefono: telefono.trim(),
-          modalita_consegna: modalitaConsegna,
+          modalita_consegna: "Spedizione",
           indirizzo: indirizzo.trim(),
           civico: civico.trim(),
           cap: cap.trim(),
@@ -302,7 +297,7 @@ export default function AcquistaProdottoPage() {
 
   if (caricamento) {
     return (
-      <main className="min-h-screen bg-[#F6F4EF] px-4 py-16 text-center text-[#20383B]">
+      <main className="min-h-screen bg-[var(--app-background)] px-4 py-16 text-center text-[var(--app-text)]">
         <p className="font-semibold">Caricamento prodotto...</p>
       </main>
     );
@@ -310,13 +305,13 @@ export default function AcquistaProdottoPage() {
 
   if (!prodotto) {
     return (
-      <main className="min-h-screen bg-[#F6F4EF] px-4 py-16 text-center text-[#20383B]">
+      <main className="min-h-screen bg-[var(--app-background)] px-4 py-16 text-center text-[var(--app-text)]">
         <p className="text-lg font-semibold">
           {errore || "Prodotto non disponibile."}
         </p>
         <Link
           href="/catalogo"
-          className="mt-6 inline-flex rounded-xl bg-[#7FA39A] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#6F918B]"
+          className="mt-6 inline-flex rounded-xl bg-[var(--app-primary)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--app-primary-hover)]"
         >
           Torna al catalogo
         </Link>
@@ -326,8 +321,8 @@ export default function AcquistaProdottoPage() {
 
   if (ordineCreato?.ok) {
     return (
-      <main className="min-h-screen bg-[#F6F4EF] px-4 py-10 text-[#20383B]">
-        <div className="mx-auto max-w-xl rounded-[24px] border border-[#D9E2DF] bg-[#FBFAF7] p-6 text-center shadow-[0_14px_32px_rgba(80,108,105,.08)] sm:p-8">
+      <main className="min-h-screen bg-[var(--app-background)] px-4 py-10 text-[var(--app-text)]">
+        <div className="mx-auto max-w-xl rounded-[24px] border border-[var(--app-border)] bg-[var(--app-surface)] p-6 text-center shadow-[0_14px_32px_rgba(80,108,105,.08)] sm:p-8">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E7F1EC] text-3xl">
             ✓
           </div>
@@ -340,19 +335,19 @@ export default function AcquistaProdottoPage() {
             Grazie per il tuo acquisto
           </h1>
 
-          <p className="mt-4 text-sm leading-6 text-[#738682]">
+          <p className="mt-4 text-sm leading-6 text-[var(--app-muted)]">
             Il tuo ordine è stato registrato correttamente.
           </p>
 
-          <div className="mt-6 rounded-2xl bg-[#F6F4EF] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8B9C98]">
+          <div className="mt-6 rounded-2xl bg-[var(--app-background)] p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--app-muted)]">
               Numero ordine
             </p>
             <p className="mt-1 text-xl font-semibold">
               {ordineCreato.numero_ordine}
             </p>
 
-            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#8B9C98]">
+            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--app-muted)]">
               Spedizione
             </p>
             <p className="mt-1 font-semibold">
@@ -361,10 +356,10 @@ export default function AcquistaProdottoPage() {
                 : "Gratuita"}
             </p>
 
-            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#8B9C98]">
+            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--app-muted)]">
               Totale
             </p>
-            <p className="mt-1 font-serif text-3xl font-medium text-[#506C69]">
+            <p className="mt-1 font-serif text-3xl font-medium text-[var(--app-text-soft)]">
               {euro(Number(ordineCreato.totale ?? 0))}
             </p>
 
@@ -376,8 +371,9 @@ export default function AcquistaProdottoPage() {
             )}
           </div>
 
-          <p className="mt-5 text-sm leading-6 text-[#738682]">
-            Pagamento previsto: <strong>in negozio</strong>.
+          <p className="mt-5 text-sm leading-6 text-[var(--app-muted)]">
+            Ordine creato. Il pagamento online deve essere completato tramite
+            <strong className="text-[var(--app-text)]"> PayPal</strong>.
           </p>
 
           <button
@@ -386,7 +382,7 @@ export default function AcquistaProdottoPage() {
               router.push("/catalogo");
               router.refresh();
             }}
-            className="mt-6 flex w-full items-center justify-center rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white transition hover:bg-[#6F918B]"
+            className="mt-6 flex w-full items-center justify-center rounded-xl bg-[var(--app-primary)] px-5 py-4 text-sm font-semibold text-white transition hover:bg-[var(--app-primary-hover)]"
           >
             Torna al catalogo
           </button>
@@ -396,14 +392,14 @@ export default function AcquistaProdottoPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F6F4EF] pb-10 text-[#20383B]">
-      <header className="border-b border-[#D9E2DF] bg-[#FBFAF7]">
+    <main className="min-h-screen bg-[var(--app-background)] pb-10 text-[var(--app-text)]">
+      <header className="border-b border-[var(--app-border)] bg-[var(--app-surface)]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6 sm:px-6">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#89A39D]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--app-primary)]">
               Acquisto
             </p>
-            <h1 className="mt-1 font-serif text-3xl font-medium tracking-[-0.03em] text-[#20383B]">
+            <h1 className="mt-1 font-serif text-3xl font-medium tracking-[-0.03em] text-[var(--app-text)]">
               Completa il tuo ordine
             </h1>
           </div>
@@ -411,7 +407,7 @@ export default function AcquistaProdottoPage() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-full border border-[#D4DFDB] bg-white px-4 py-2 text-[11px] font-semibold text-[#738682]"
+            className="rounded-full border border-[var(--app-border-strong)] bg-white px-4 py-2 text-[11px] font-semibold text-[var(--app-muted)]"
           >
             ← Indietro
           </button>
@@ -420,8 +416,8 @@ export default function AcquistaProdottoPage() {
 
       <section className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="lg:sticky lg:top-6 lg:self-start">
-          <div className="overflow-hidden rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] shadow-[0_12px_30px_rgba(80,108,105,.06)]">
-            <div className="relative aspect-square bg-[#F3F5F2]">
+          <div className="overflow-hidden rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-[0_12px_30px_rgba(80,108,105,.06)]">
+            <div className="relative aspect-square bg-[var(--app-surface-soft)]">
               {inPromo && (
                 <div className="absolute left-4 top-4 z-10 rounded-full border border-[#E8C8C4] bg-[#F4DCD7] px-3 py-1.5 text-xs font-semibold text-[#8C554F]">
                   PROMO -{Number(prodotto.sconto_percentuale)}%
@@ -452,7 +448,7 @@ export default function AcquistaProdottoPage() {
             </div>
 
             <div className="p-5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#89A39D]">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--app-primary)]">
                 {prodotto.marca || prodotto.categoria}
               </p>
 
@@ -461,7 +457,7 @@ export default function AcquistaProdottoPage() {
               </h2>
 
               {prodotto.modello && (
-                <p className="mt-1 text-sm text-[#7E8F8B]">
+                <p className="mt-1 text-sm text-[var(--app-muted)]">
                   {prodotto.modello}
                 </p>
               )}
@@ -476,7 +472,7 @@ export default function AcquistaProdottoPage() {
                   </span>
                 </div>
               ) : (
-                <p className="mt-4 font-serif text-2xl font-medium text-[#506C69]">
+                <p className="mt-4 font-serif text-2xl font-medium text-[var(--app-text-soft)]">
                   {euro(Number(prodotto.prezzo))}
                 </p>
               )}
@@ -493,7 +489,7 @@ export default function AcquistaProdottoPage() {
                       setVarianteId(e.target.value);
                       setQuantita(1);
                     }}
-                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                    className="w-full rounded-xl border border-[var(--app-border-strong)] bg-white px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
                   >
                     {(prodotto.varianti ?? []).map((v) => (
                       <option
@@ -536,37 +532,35 @@ export default function AcquistaProdottoPage() {
                     );
                     setQuantita(valore);
                   }}
-                  className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                  className="w-full rounded-xl border border-[var(--app-border-strong)] bg-white px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
                 />
               </label>
 
               {varianteSelezionata && (
-                <p className="mt-2 text-xs text-[#8B9C98]">
+                <p className="mt-2 text-xs text-[var(--app-muted)]">
                   Selezione: {descrizioneVariante()}
                 </p>
               )}
 
-              <div className="mt-5 rounded-2xl border border-[#D2DEDA] bg-[#EDF3F0] p-4 text-[#20383B]">
+              <div className="mt-5 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-4 text-[var(--app-text)]">
                 <div className="flex items-center justify-between gap-3 text-sm">
-                  <span className="text-[#738682]">Prodotti</span>
+                  <span className="text-[var(--app-muted)]">Prodotti</span>
                   <span className="font-semibold">
                     {euro(totaleProdotti)}
                   </span>
                 </div>
 
-                {modalitaConsegna === "Spedizione" && (
-                  <div className="mt-2 flex items-center justify-between gap-3 text-sm">
-                    <span className="text-[#738682]">Spedizione</span>
-                    <span className="font-semibold">
-                      {speseSpedizione > 0
-                        ? euro(speseSpedizione)
-                        : "Gratuita"}
-                    </span>
-                  </div>
-                )}
+                <div className="mt-2 flex items-center justify-between gap-3 text-sm">
+                  <span className="text-[var(--app-muted)]">Spedizione</span>
+                  <span className="font-semibold">
+                    {speseSpedizione > 0
+                      ? euro(speseSpedizione)
+                      : "Gratuita"}
+                  </span>
+                </div>
 
-                <div className="mt-3 border-t border-[#D4DFDB] pt-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#89A39D]">
+                <div className="mt-3 border-t border-[var(--app-border-strong)] pt-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--app-primary)]">
                     Totale ordine
                   </p>
                   <p className="mt-1 text-3xl font-semibold">
@@ -578,7 +572,7 @@ export default function AcquistaProdottoPage() {
           </div>
         </div>
 
-        <div className="rounded-[22px] border border-[#D9E2DF] bg-[#FBFAF7] p-5 shadow-[0_12px_30px_rgba(80,108,105,.06)] sm:p-6">
+        <div className="rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[0_12px_30px_rgba(80,108,105,.06)] sm:p-6">
           {errore && (
             <div className="mb-5 rounded-2xl border border-[#E9D1CD] bg-[#F8ECE9] p-4 text-sm font-semibold text-[#9A615A]">
               {errore}
@@ -586,7 +580,7 @@ export default function AcquistaProdottoPage() {
           )}
 
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
               Cliente
             </p>
             <h2 className="mt-1 font-serif text-2xl font-medium">
@@ -602,7 +596,7 @@ export default function AcquistaProdottoPage() {
               <input
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full rounded-xl border border-[var(--app-border-strong)] bg-white px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
               />
             </label>
 
@@ -613,7 +607,7 @@ export default function AcquistaProdottoPage() {
               <input
                 value={cognome}
                 onChange={(e) => setCognome(e.target.value)}
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full rounded-xl border border-[var(--app-border-strong)] bg-white px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
               />
             </label>
 
@@ -625,7 +619,7 @@ export default function AcquistaProdottoPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full rounded-xl border border-[var(--app-border-strong)] bg-white px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
               />
             </label>
 
@@ -637,149 +631,134 @@ export default function AcquistaProdottoPage() {
                 type="tel"
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                className="w-full rounded-xl border border-[var(--app-border-strong)] bg-white px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
               />
             </label>
           </div>
 
-          <div className="mt-7 border-t border-[#E1E7E4] pt-6">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+          <div className="mt-7 border-t border-[var(--app-border)] pt-6">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
               Consegna
             </p>
 
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={() =>
-                  setModalitaConsegna("Ritiro in negozio")
-                }
-                className={`rounded-2xl border px-4 py-4 text-left ${
-                  modalitaConsegna === "Ritiro in negozio"
-                    ? "border-[#8FB8B2] bg-[#EDF3F0]"
-                    : "border-[#D9E2DF] bg-white"
-                }`}
-              >
-                <p className="font-semibold">Ritiro in negozio</p>
-                <p className="mt-1 text-xs text-[#7E8F8B]">
-                  Pagamento al ritiro.
-                </p>
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setModalitaConsegna("Spedizione")
-                }
-                className={`rounded-2xl border px-4 py-4 text-left ${
-                  modalitaConsegna === "Spedizione"
-                    ? "border-[#8FB8B2] bg-[#EDF3F0]"
-                    : "border-[#D9E2DF] bg-white"
-                }`}
-              >
-                <p className="font-semibold">Spedizione</p>
-                <p className="mt-1 text-xs text-[#7E8F8B]">
-                  {totaleProdotti >= sogliaSpedizioneGratuita
-                    ? "Spedizione gratuita."
-                    : `Costo ${euro(costoSpedizione)}.`}
-                </p>
-              </button>
-            </div>
-
-            <div className="mt-3 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4 text-sm">
-              <p className="font-black text-[#506C69]">
+            <div className="mt-3 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-4">
+              <p className="font-semibold text-[var(--app-text)]">
+                Spedizione
+              </p>
+              <p className="mt-1 text-sm leading-6 text-[var(--app-muted)]">
+                {totaleProdotti >= sogliaSpedizioneGratuita
+                  ? "Spedizione gratuita."
+                  : `Costo spedizione ${euro(costoSpedizione)}.`}
+              </p>
+              <p className="mt-3 text-xs font-semibold text-[var(--app-text-soft)]">
                 Spedizione gratuita da {euro(sogliaSpedizioneGratuita)}
               </p>
-
-              {modalitaConsegna === "Spedizione" &&
-                totaleProdotti < sogliaSpedizioneGratuita && (
-                  <p className="mt-1 text-xs leading-5 text-[#7E8F8B]">
-                    Aggiungi ancora {euro(mancanoPerSpedizioneGratis)} di prodotti
-                    per ottenere la spedizione gratuita.
-                  </p>
-                )}
-
-              {modalitaConsegna === "Spedizione" &&
-                totaleProdotti >= sogliaSpedizioneGratuita && (
-                  <p className="mt-1 text-xs font-semibold text-[#5D7C73]">
-                    Hai ottenuto la spedizione gratuita.
-                  </p>
-                )}
+              {totaleProdotti < sogliaSpedizioneGratuita && (
+                <p className="mt-1 text-xs leading-5 text-[var(--app-muted)]">
+                  Aggiungi ancora {euro(mancanoPerSpedizioneGratis)} di prodotti
+                  per ottenere la spedizione gratuita.
+                </p>
+              )}
             </div>
 
-            {modalitaConsegna === "Spedizione" && (
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <label className="sm:col-span-2">
-                  <span className="mb-2 block text-sm font-semibold">
-                    Indirizzo *
-                  </span>
-                  <input
-                    value={indirizzo}
-                    onChange={(e) => setIndirizzo(e.target.value)}
-                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
-                </label>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <label className="sm:col-span-2">
+                <span className="mb-2 block text-sm font-semibold">
+                  Indirizzo *
+                </span>
+                <input
+                  value={indirizzo}
+                  onChange={(e) => setIndirizzo(e.target.value)}
+                  className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
+                />
+              </label>
 
-                <label>
-                  <span className="mb-2 block text-sm font-semibold">
-                    Civico *
-                  </span>
-                  <input
-                    value={civico}
-                    onChange={(e) => setCivico(e.target.value)}
-                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
-                </label>
+              <label>
+                <span className="mb-2 block text-sm font-semibold">
+                  Civico *
+                </span>
+                <input
+                  value={civico}
+                  onChange={(e) => setCivico(e.target.value)}
+                  className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
+                />
+              </label>
 
-                <label>
-                  <span className="mb-2 block text-sm font-semibold">
-                    CAP *
-                  </span>
-                  <input
-                    value={cap}
-                    onChange={(e) => setCap(e.target.value)}
-                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
-                </label>
+              <label>
+                <span className="mb-2 block text-sm font-semibold">
+                  CAP *
+                </span>
+                <input
+                  value={cap}
+                  onChange={(e) => setCap(e.target.value)}
+                  className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
+                />
+              </label>
 
-                <label>
-                  <span className="mb-2 block text-sm font-semibold">
-                    Città *
-                  </span>
-                  <input
-                    value={citta}
-                    onChange={(e) => setCitta(e.target.value)}
-                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
-                </label>
+              <label>
+                <span className="mb-2 block text-sm font-semibold">
+                  Città *
+                </span>
+                <input
+                  value={citta}
+                  onChange={(e) => setCitta(e.target.value)}
+                  className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
+                />
+              </label>
 
-                <label>
-                  <span className="mb-2 block text-sm font-semibold">
-                    Provincia *
-                  </span>
-                  <input
-                    maxLength={2}
-                    value={provincia}
-                    onChange={(e) =>
-                      setProvincia(e.target.value.toUpperCase())
-                    }
-                    placeholder="NA"
-                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 uppercase text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
-                </label>
-              </div>
-            )}
+              <label>
+                <span className="mb-2 block text-sm font-semibold">
+                  Provincia *
+                </span>
+                <input
+                  maxLength={2}
+                  value={provincia}
+                  onChange={(e) =>
+                    setProvincia(e.target.value.toUpperCase())
+                  }
+                  placeholder="NA"
+                  className="w-full rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-3 uppercase text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
+                />
+              </label>
+            </div>
           </div>
 
-          <div className="mt-7 border-t border-[#E1E7E4] pt-6">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#89A39D]">
+          <div className="mt-7 border-t border-[var(--app-border)] pt-6">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
               Pagamento
             </p>
 
-            <div className="mt-3 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4">
-              <p className="font-semibold">Pagamento in negozio</p>
-              <p className="mt-1 text-sm leading-6 text-[#7E8F8B]">
-                Per questa prima versione l'ordine viene prenotato
-                online e pagato direttamente in negozio.
+            <div className="mt-3 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-semibold text-[var(--app-text)]">
+                    Pagamento online sicuro
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-[var(--app-muted)]">
+                    Paga tramite PayPal oppure con una carta di credito o debito
+                    supportata dal checkout PayPal.
+                  </p>
+                </div>
+
+                <div className="shrink-0 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-2 text-sm font-bold text-[var(--app-primary)]">
+                  PayPal
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {["VISA", "Mastercard", "American Express"].map((carta) => (
+                  <span
+                    key={carta}
+                    className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-2 text-xs font-semibold text-[var(--app-text-soft)]"
+                  >
+                    {carta}
+                  </span>
+                ))}
+              </div>
+
+              <p className="mt-3 text-xs leading-5 text-[var(--app-muted)]">
+                I dati della carta non vengono memorizzati da questa app:
+                il pagamento viene gestito dal provider di pagamento.
               </p>
             </div>
           </div>
@@ -793,13 +772,13 @@ export default function AcquistaProdottoPage() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Eventuali richieste..."
-              className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+              className="w-full rounded-xl border border-[var(--app-border-strong)] bg-white px-4 py-3 text-[var(--app-text)] outline-none transition focus:border-[var(--app-primary)]"
             />
           </label>
 
-          <div className="mt-6 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4">
+          <div className="mt-6 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] p-4">
             <div className="flex items-center justify-between gap-4">
-              <span className="text-sm font-medium text-[#738682]">
+              <span className="text-sm font-medium text-[var(--app-muted)]">
                 {prodotto.nome} × {quantita}
               </span>
               <span className="font-semibold">
@@ -814,28 +793,18 @@ export default function AcquistaProdottoPage() {
               </p>
             )}
 
-            {modalitaConsegna === "Spedizione" && (
-              <div className="mt-3 flex items-center justify-between gap-4 text-sm">
-                <span className="font-medium text-[#738682]">
-                  Spedizione
-                </span>
-                <span
-                  className={`font-semibold ${
-                    speseSpedizione === 0
-                      ? "text-[#5D7C73]"
-                      : "text-[#20383B]"
-                  }`}
-                >
-                  {speseSpedizione > 0
-                    ? euro(speseSpedizione)
-                    : "Gratuita"}
-                </span>
-              </div>
-            )}
+            <div className="mt-3 flex items-center justify-between gap-4 text-sm">
+              <span className="font-medium text-[var(--app-muted)]">
+                Spedizione
+              </span>
+              <span className="font-semibold text-[var(--app-text)]">
+                {speseSpedizione > 0 ? euro(speseSpedizione) : "Gratuita"}
+              </span>
+            </div>
 
-            <div className="mt-4 flex items-end justify-between border-t border-[#D9E2DF] pt-4">
+            <div className="mt-4 flex items-end justify-between border-t border-[var(--app-border)] pt-4">
               <span className="font-semibold">Totale</span>
-              <span className="font-serif text-2xl font-medium text-[#506C69]">
+              <span className="font-serif text-2xl font-medium text-[var(--app-text-soft)]">
                 {euro(totale)}
               </span>
             </div>
@@ -845,17 +814,17 @@ export default function AcquistaProdottoPage() {
             type="button"
             onClick={confermaOrdine}
             disabled={invio || maxQuantita <= 0}
-            className="mt-6 w-full rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-6 w-full rounded-xl bg-[var(--app-primary)] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[var(--app-primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {invio
               ? "Registrazione ordine..."
               : inPromo
               ? "CONFERMA ACQUISTO CON PROMO"
-              : "CONFERMA ACQUISTO"}
+              : "PROCEDI AL PAGAMENTO"}
           </button>
 
-          <p className="mt-3 text-center text-[11px] leading-5 text-[#8B9C98]">
-            Confermando l'ordine non viene effettuato alcun addebito online.
+          <p className="mt-3 text-center text-[11px] leading-5 text-[var(--app-muted)]">
+            L'ordine verrà creato e il pagamento sarà completato online tramite PayPal.
           </p>
         </div>
       </section>

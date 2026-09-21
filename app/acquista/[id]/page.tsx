@@ -184,14 +184,17 @@ export default function AcquistaProdottoPage() {
     prodottoConDisponibilita?.quantita ?? 0
   );
 
-  const flagDisponibile = prodottoConDisponibilita?.disponibile;
+  const flagDisponibile = String(
+    prodottoConDisponibilita?.disponibile ?? ""
+  )
+    .trim()
+    .toLowerCase();
 
   const prodottoDisponibile = haVarianti
     ? disponibilitaVarianti
     : quantitaProdotto > 0 ||
-      flagDisponibile === true ||
-      flagDisponibile === 1 ||
-      flagDisponibile === "1";
+      flagDisponibile === "1" ||
+      flagDisponibile === "true";
 
   const maxQuantita = haVarianti
     ? varianteSelezionata

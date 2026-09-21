@@ -28,6 +28,14 @@ type RispostaElenco = {
   errore?: string;
 };
 
+type RispostaNegozio = {
+  ok: boolean;
+  negozio?: {
+    nome_negozio?: string;
+  };
+  errore?: string;
+};
+
 function oggiISO() {
   const oggi = new Date();
   const anno = oggi.getFullYear();
@@ -120,6 +128,7 @@ export default function AdminAppuntamentiPage() {
     "Gentile cliente, ti informiamo che per un imprevisto dobbiamo modificare l'appuntamento previsto. Ti contatteremo per concordare una nuova disponibilità. Ci scusiamo per il disagio."
   );
   const [mostraInvioMultiplo, setMostraInvioMultiplo] = useState(false);
+  const [nomeNegozio, setNomeNegozio] = useState("");
 
   useEffect(() => {
     const admin = sessionStorage.getItem("ottica_admin");
@@ -130,7 +139,28 @@ export default function AdminAppuntamentiPage() {
     }
 
     caricaAppuntamenti();
+    caricaNegozio();
   }, [router]);
+
+  async function caricaNegozio() {
+    try {
+      const risposta = await fetch("/api/admin/negozio", {
+        cache: "no-store",
+      });
+
+      const dati = (await risposta.json()) as RispostaNegozio;
+
+      if (!risposta.ok || !dati.ok) {
+        throw new Error(
+          dati.errore || "Impossibile caricare i dati del negozio."
+        );
+      }
+
+      setNomeNegozio((dati.negozio?.nome_negozio ?? "").trim());
+    } catch {
+      setNomeNegozio("");
+    }
+  }
 
   async function caricaAppuntamenti() {
     setCaricamento(true);
@@ -273,28 +303,76 @@ export default function AdminAppuntamentiPage() {
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
-  function apriWhatsAppSelezionato(appuntamento: Appuntamento) {
+  async function aggiornaStatoSenzaRicaricare(id: number, stato: string) {
+    const risposta = await fetch("/api/admin/appuntamenti/stato", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, stato }),
+    });
+
+    const dati = await risposta.json();
+
+    if (!risposta.ok || !dati.ok) {
+      throw new Error(
+        dati.errore || "Impossibile aggiornare lo stato."
+      );
+    }
+  }
+
+  function creaMessaggioMultiploConFirma() {
     const testo = messaggioMultiplo.trim();
+
+    if (!testo) return "";
+
+    if (!nomeNegozio) return testo;
+
+    return `${testo}\n\n${nomeNegozio}`;
+  }
+
+  async function apriWhatsAppSelezionato(appuntamento: Appuntamento) {
+    const testo = creaMessaggioMultiploConFirma();
 
     if (!testo) {
       setErrore("Scrivi prima il messaggio da inviare.");
       return;
     }
 
+    setErrore("");
+    setInAggiornamento(appuntamento.id);
+
     const url = creaUrlWhatsApp(appuntamento.telefono, testo);
     window.open(url, "_blank", "noopener,noreferrer");
+
+    try {
+      await aggiornaStatoSenzaRicaricare(appuntamento.id, "Annullato");
+      await caricaAppuntamenti();
+    } catch (erroreAggiornamento) {
+      setErrore(
+        erroreAggiornamento instanceof Error
+          ? erroreAggiornamento.message
+          : "WhatsApp è stato aperto, ma non è stato possibile annullare l'appuntamento."
+      );
+    } finally {
+      setInAggiornamento(null);
+    }
   }
 
-  function provaApriTutti() {
+  async function provaApriTutti() {
     if (appuntamentiSelezionati.length === 0) {
       setErrore("Seleziona almeno un appuntamento.");
       return;
     }
 
-    if (!messaggioMultiplo.trim()) {
+    const testo = creaMessaggioMultiploConFirma();
+
+    if (!testo) {
       setErrore("Scrivi prima il messaggio da inviare.");
       return;
     }
+
+    setErrore("");
 
     /*
       WhatsApp non consente a una normale pagina web di inviare automaticamente
@@ -304,13 +382,29 @@ export default function AdminAppuntamentiPage() {
     */
     appuntamentiSelezionati.forEach((appuntamento, indice) => {
       window.setTimeout(() => {
-        const url = creaUrlWhatsApp(
-          appuntamento.telefono,
-          messaggioMultiplo.trim()
-        );
+        const url = creaUrlWhatsApp(appuntamento.telefono, testo);
         window.open(url, "_blank", "noopener,noreferrer");
       }, indice * 250);
     });
+
+    try {
+      await Promise.all(
+        appuntamentiSelezionati.map((appuntamento) =>
+          aggiornaStatoSenzaRicaricare(appuntamento.id, "Annullato")
+        )
+      );
+
+      await caricaAppuntamenti();
+      setSelezionati([]);
+      setMostraInvioMultiplo(false);
+    } catch (erroreAggiornamento) {
+      setErrore(
+        erroreAggiornamento instanceof Error
+          ? erroreAggiornamento.message
+          : "Le chat WhatsApp sono state aperte, ma non è stato possibile annullare tutti gli appuntamenti."
+      );
+      await caricaAppuntamenti();
+    }
   }
 
   return (
@@ -474,6 +568,10 @@ export default function AdminAppuntamentiPage() {
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--app-muted)]">
                   Lo stesso testo verrà preparato per tutti gli appuntamenti selezionati.
+                  {nomeNegozio
+                    ? ` Il messaggio verrà firmato automaticamente con ${nomeNegozio}.`
+                    : ""}
+                  Gli appuntamenti verranno impostati automaticamente come Annullati.
                 </p>
               </div>
 
@@ -493,6 +591,12 @@ export default function AdminAppuntamentiPage() {
               className="mt-4 w-full resize-y rounded-xl border border-[var(--app-border)] bg-[var(--app-background)] px-4 py-3 text-sm leading-6 text-[var(--app-text)] outline-none focus:border-[var(--app-primary)]"
               placeholder="Scrivi il messaggio da inviare..."
             />
+
+            {nomeNegozio && (
+              <p className="mt-2 text-xs text-[var(--app-muted)]">
+                Firma automatica: <strong>{nomeNegozio}</strong>
+              </p>
+            )}
 
             <div className="mt-4 rounded-xl bg-[var(--app-surface-soft)] p-4">
               <p className="text-xs font-semibold text-[var(--app-text-soft)]">
@@ -534,7 +638,7 @@ export default function AdminAppuntamentiPage() {
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3 text-sm font-semibold text-white"
               >
                 <IconaWhatsApp className="h-5 w-5" />
-                Apri WhatsApp per tutti
+                Invia e annulla selezionati
               </button>
 
               <p className="text-xs leading-5 text-[var(--app-muted)]">

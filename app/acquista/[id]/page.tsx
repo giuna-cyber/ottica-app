@@ -80,7 +80,7 @@ export default function AcquistaProdottoPage() {
 
   async function caricaImpostazioniSpedizione() {
     try {
-      const risposta = await fetch("/api/spedizione", {
+      const risposta = await fetch("/api/spedizioni", {
         cache: "no-store",
       });
 

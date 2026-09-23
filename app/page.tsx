@@ -391,7 +391,7 @@ export default function HomePage() {
         <div className="mt-7 grid gap-4 sm:grid-cols-3">
           <Link
             href="/catalogo"
-            className="group relative min-h-[220px] overflow-hidden rounded-[22px] border border-[var(--app-border-strong)] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
+            className="group relative min-h-[270px] overflow-hidden rounded-[22px] border border-[var(--app-border-strong)] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
           >
             <img
               src="/images/catalogo-bg.jpg"
@@ -400,7 +400,7 @@ export default function HomePage() {
               className="absolute inset-0 h-full w-full object-cover"
             />
 
-            <div className="relative flex h-full min-h-[220px] flex-col">
+            <div className="relative flex h-full min-h-[270px] flex-col">
               <div className="p-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#6F918B]/20 bg-white/95 text-[var(--app-primary-hover)] shadow-sm">
                   <IconaCatalogoOttica />
@@ -421,7 +421,7 @@ export default function HomePage() {
 
           <Link
             href="/appuntamenti"
-            className="group relative min-h-[220px] overflow-hidden rounded-[22px] border border-[#D7E0DD] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
+            className="group relative min-h-[270px] overflow-hidden rounded-[22px] border border-[#D7E0DD] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
           >
             <img
               src="/images/visita-bg.jpg"
@@ -430,7 +430,7 @@ export default function HomePage() {
               className="absolute inset-0 h-full w-full object-cover"
             />
 
-            <div className="relative flex h-full min-h-[220px] flex-col">
+            <div className="relative flex h-full min-h-[270px] flex-col">
               <div className="p-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#6F918B]/20 bg-white/95 text-[var(--app-primary-hover)] shadow-sm">
                   <IconaPrenotaOttica />
@@ -451,7 +451,7 @@ export default function HomePage() {
 
           <Link
             href="/promozioni"
-            className="group relative min-h-[220px] overflow-hidden rounded-[22px] border border-[#DEDCD4] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
+            className="group relative min-h-[270px] overflow-hidden rounded-[22px] border border-[#DEDCD4] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
           >
             <img
               src="/images/promozioni-bg.jpg"
@@ -460,7 +460,7 @@ export default function HomePage() {
               className="absolute inset-0 h-full w-full object-cover"
             />
 
-            <div className="relative flex h-full min-h-[220px] flex-col">
+            <div className="relative flex h-full min-h-[270px] flex-col">
               <div className="p-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#7E8F89]/20 bg-white/95 text-[#6E8C86] shadow-sm">
                   <IconaPromoOttica />

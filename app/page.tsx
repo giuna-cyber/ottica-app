@@ -18,6 +18,9 @@ type DatiNegozio = {
   indirizzo: string;
   citta: string;
   whatsapp: string;
+  slide_1_url: string;
+  slide_2_url: string;
+  slide_3_url: string;
 };
 
 type ClienteSalvato = {
@@ -83,8 +86,12 @@ export default function HomePage() {
     indirizzo: "",
     citta: "",
     whatsapp: "",
+    slide_1_url: "",
+    slide_2_url: "",
+    slide_3_url: "",
   });
 
+  const [slideAttiva, setSlideAttiva] = useState(0);
   const [clienteSalvato, setClienteSalvato] = useState<ClienteSalvato | null>(null);
 
   useEffect(() => {
@@ -117,6 +124,9 @@ export default function HomePage() {
             indirizzo: String(dati.negozio.indirizzo || ""),
             citta: String(dati.negozio.citta || ""),
             whatsapp: String(dati.negozio.whatsapp || ""),
+            slide_1_url: String(dati.negozio.slide_1_url || ""),
+            slide_2_url: String(dati.negozio.slide_2_url || ""),
+            slide_3_url: String(dati.negozio.slide_3_url || ""),
           });
         }
       } catch {
@@ -126,6 +136,31 @@ export default function HomePage() {
 
     caricaNegozio();
   }, []);
+
+  const immaginiSlider = [
+    negozio.slide_1_url,
+    negozio.slide_2_url,
+    negozio.slide_3_url,
+  ].filter((url) => url.trim() !== "");
+
+  const immaginiHero =
+    immaginiSlider.length > 0 ? immaginiSlider : ["/images/home-bg.png"];
+
+  useEffect(() => {
+    if (slideAttiva >= immaginiHero.length) {
+      setSlideAttiva(0);
+    }
+  }, [immaginiHero.length, slideAttiva]);
+
+  useEffect(() => {
+    if (immaginiHero.length <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setSlideAttiva((corrente) => (corrente + 1) % immaginiHero.length);
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, [immaginiHero.length]);
 
   function apriWhatsApp() {
     const numero = preparaNumeroWhatsApp(negozio.whatsapp);
@@ -195,15 +230,23 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section
-        className="relative mx-auto min-h-[610px] max-w-6xl overflow-hidden text-white sm:min-h-[680px]"
-        style={{
-          backgroundImage: "url('/images/home-bg.png')",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center center",
-        }}
-      >
+      <section className="relative mx-auto min-h-[610px] max-w-6xl overflow-hidden text-white sm:min-h-[680px]">
+        <div className="absolute inset-0">
+          {immaginiHero.map((url, indice) => (
+            <img
+              key={`${url}-${indice}`}
+              src={url}
+              alt=""
+              aria-hidden="true"
+              className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[2200ms] ease-in-out ${
+                indice === slideAttiva
+                  ? "scale-100 opacity-100"
+                  : "scale-[1.015] opacity-0"
+              }`}
+            />
+          ))}
+        </div>
+
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(78,108,105,.82)_0%,rgba(95,133,128,.58)_38%,rgba(143,184,178,.20)_72%,rgba(169,199,207,.08)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(32,56,59,.03)_0%,rgba(32,56,59,.05)_55%,rgba(80,108,105,.30)_100%)]" />
 
@@ -251,11 +294,23 @@ export default function HomePage() {
               </p>
             )}
 
-            <div className="mt-7 flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-white" />
-              <span className="h-2 w-2 rounded-full border border-white/70" />
-              <span className="h-2 w-2 rounded-full border border-white/70" />
-            </div>
+            {immaginiHero.length > 1 && (
+              <div className="mt-7 flex items-center gap-2">
+                {immaginiHero.map((_, indice) => (
+                  <button
+                    key={indice}
+                    type="button"
+                    onClick={() => setSlideAttiva(indice)}
+                    aria-label={`Vai alla slide ${indice + 1}`}
+                    className={`h-2.5 w-2.5 rounded-full transition ${
+                      indice === slideAttiva
+                        ? "bg-white"
+                        : "border border-white/70 bg-transparent"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

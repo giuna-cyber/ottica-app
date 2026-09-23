@@ -409,7 +409,7 @@ export default function HomePage() {
 
               <div className="mt-auto bg-white/95 px-5 py-3.5 backdrop-blur-[1px]">
                 <h3 className="font-serif text-2xl font-medium text-[var(--app-text)]">Catalogo</h3>
-                <p className="mt-1 max-w-[220px] text-sm leading-5 text-[#738682]">
+                <p className="mt-1 whitespace-nowrap text-sm leading-5 text-[#738682]">
                   Scopri modelli, colori e disponibilità.
                 </p>
                 <div className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--app-surface)] text-[var(--app-primary-hover)] transition group-active:translate-x-1">
@@ -439,7 +439,7 @@ export default function HomePage() {
 
               <div className="mt-auto bg-white/95 px-5 py-3.5 backdrop-blur-[1px]">
                 <h3 className="font-serif text-2xl font-medium text-[var(--app-text)]">Prenota visita</h3>
-                <p className="mt-1 max-w-[220px] text-sm leading-5 text-[#738682]">
+                <p className="mt-1 whitespace-nowrap text-sm leading-5 text-[#738682]">
                   Scegli il servizio, il giorno e l’orario.
                 </p>
                 <div className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--app-surface)] text-[var(--app-primary-hover)] transition group-active:translate-x-1">
@@ -469,7 +469,7 @@ export default function HomePage() {
 
               <div className="mt-auto bg-white/95 px-5 py-3.5 backdrop-blur-[1px]">
                 <h3 className="font-serif text-2xl font-medium text-[#425B5B]">Promozioni</h3>
-                <p className="mt-1 max-w-[220px] text-sm leading-5 text-[#7A8986]">
+                <p className="mt-1 whitespace-nowrap text-sm leading-5 text-[#7A8986]">
                   Consulta le offerte attive del centro.
                 </p>
                 <div className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--app-surface)] text-[#6E8C86] transition group-active:translate-x-1">

@@ -324,7 +324,7 @@ export default function HomePage() {
 
               {clienteSalvato ? (
                 <>
-                  <h2 className="mt-2 font-serif text-2xl font-medium tracking-[-0.03em] text-[var(--app-text)] sm:text-3xl">
+                  <h2 className="font-serif text-2xl font-medium tracking-[-0.03em] text-[var(--app-text)] sm:text-3xl">
                     Ciao {clienteSalvato.nome}.
                   </h2>
                   <p className="mt-2 max-w-xl text-sm leading-6 text-[var(--app-muted)]">
@@ -333,7 +333,7 @@ export default function HomePage() {
                 </>
               ) : (
                 <>
-                  <h2 className="mt-2 font-serif text-2xl font-medium tracking-[-0.03em] text-[var(--app-text)] sm:text-3xl">
+                  <h2 className="font-serif text-2xl font-medium tracking-[-0.03em] text-[var(--app-text)] sm:text-3xl">
                     Entra in Ottica App.
                   </h2>
                   <p className="mt-2 max-w-xl text-sm leading-6 text-[var(--app-muted)]">
@@ -391,7 +391,7 @@ export default function HomePage() {
         <div className="mt-7 grid gap-4 sm:grid-cols-3">
           <Link
             href="/catalogo"
-            className="group relative min-h-[240px] overflow-hidden rounded-[22px] border border-[var(--app-border-strong)] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
+            className="group relative min-h-[220px] overflow-hidden rounded-[22px] border border-[var(--app-border-strong)] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
           >
             <img
               src="/images/catalogo-bg.jpg"
@@ -400,20 +400,19 @@ export default function HomePage() {
               className="absolute inset-0 h-full w-full object-cover"
             />
 
-            <div className="relative flex h-full min-h-[240px] flex-col">
+            <div className="relative flex h-full min-h-[220px] flex-col">
               <div className="p-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#6F918B]/20 bg-white/95 text-[var(--app-primary-hover)] shadow-sm">
                   <IconaCatalogoOttica />
                 </div>
               </div>
 
-              <div className="mt-auto bg-white/95 p-5 backdrop-blur-[1px]">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#879B96]">01</p>
-                <h3 className="mt-2 font-serif text-2xl font-medium text-[var(--app-text)]">Catalogo</h3>
-                <p className="mt-2 max-w-[220px] text-sm leading-5 text-[#738682]">
+              <div className="mt-auto bg-white/95 px-5 py-3.5 backdrop-blur-[1px]">
+                <h3 className="font-serif text-2xl font-medium text-[var(--app-text)]">Catalogo</h3>
+                <p className="mt-1 max-w-[220px] text-sm leading-5 text-[#738682]">
                   Scopri modelli, colori e disponibilità.
                 </p>
-                <div className="mt-4 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--app-surface)] text-[var(--app-primary-hover)] transition group-active:translate-x-1">
+                <div className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--app-surface)] text-[var(--app-primary-hover)] transition group-active:translate-x-1">
                   <IconaFreccia />
                 </div>
               </div>
@@ -422,7 +421,7 @@ export default function HomePage() {
 
           <Link
             href="/appuntamenti"
-            className="group relative min-h-[240px] overflow-hidden rounded-[22px] border border-[#D7E0DD] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
+            className="group relative min-h-[220px] overflow-hidden rounded-[22px] border border-[#D7E0DD] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
           >
             <img
               src="/images/visita-bg.jpg"
@@ -431,20 +430,19 @@ export default function HomePage() {
               className="absolute inset-0 h-full w-full object-cover"
             />
 
-            <div className="relative flex h-full min-h-[240px] flex-col">
+            <div className="relative flex h-full min-h-[220px] flex-col">
               <div className="p-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#6F918B]/20 bg-white/95 text-[var(--app-primary-hover)] shadow-sm">
                   <IconaPrenotaOttica />
                 </div>
               </div>
 
-              <div className="mt-auto bg-white/95 p-5 backdrop-blur-[1px]">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#879B96]">02</p>
-                <h3 className="mt-2 font-serif text-2xl font-medium text-[var(--app-text)]">Prenota visita</h3>
-                <p className="mt-2 max-w-[220px] text-sm leading-5 text-[#738682]">
+              <div className="mt-auto bg-white/95 px-5 py-3.5 backdrop-blur-[1px]">
+                <h3 className="font-serif text-2xl font-medium text-[var(--app-text)]">Prenota visita</h3>
+                <p className="mt-1 max-w-[220px] text-sm leading-5 text-[#738682]">
                   Scegli il servizio, il giorno e l’orario.
                 </p>
-                <div className="mt-4 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--app-surface)] text-[var(--app-primary-hover)] transition group-active:translate-x-1">
+                <div className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--app-surface)] text-[var(--app-primary-hover)] transition group-active:translate-x-1">
                   <IconaFreccia />
                 </div>
               </div>
@@ -453,7 +451,7 @@ export default function HomePage() {
 
           <Link
             href="/promozioni"
-            className="group relative min-h-[240px] overflow-hidden rounded-[22px] border border-[#DEDCD4] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
+            className="group relative min-h-[220px] overflow-hidden rounded-[22px] border border-[#DEDCD4] shadow-[0_14px_34px_rgba(42,78,75,.08)]"
           >
             <img
               src="/images/promozioni-bg.jpg"
@@ -462,20 +460,19 @@ export default function HomePage() {
               className="absolute inset-0 h-full w-full object-cover"
             />
 
-            <div className="relative flex h-full min-h-[240px] flex-col">
+            <div className="relative flex h-full min-h-[220px] flex-col">
               <div className="p-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#7E8F89]/20 bg-white/95 text-[#6E8C86] shadow-sm">
                   <IconaPromoOttica />
                 </div>
               </div>
 
-              <div className="mt-auto bg-white/95 p-5 backdrop-blur-[1px]">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#89938F]">03</p>
-                <h3 className="mt-2 font-serif text-2xl font-medium text-[#425B5B]">Promozioni</h3>
-                <p className="mt-2 max-w-[220px] text-sm leading-5 text-[#7A8986]">
+              <div className="mt-auto bg-white/95 px-5 py-3.5 backdrop-blur-[1px]">
+                <h3 className="font-serif text-2xl font-medium text-[#425B5B]">Promozioni</h3>
+                <p className="mt-1 max-w-[220px] text-sm leading-5 text-[#7A8986]">
                   Consulta le offerte attive del centro.
                 </p>
-                <div className="mt-4 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--app-surface)] text-[#6E8C86] transition group-active:translate-x-1">
+                <div className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-[var(--app-surface)] text-[#6E8C86] transition group-active:translate-x-1">
                   <IconaFreccia />
                 </div>
               </div>

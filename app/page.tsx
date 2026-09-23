@@ -238,10 +238,8 @@ export default function HomePage() {
               src={url}
               alt=""
               aria-hidden="true"
-              className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[2200ms] ease-in-out ${
-                indice === slideAttiva
-                  ? "scale-100 opacity-100"
-                  : "scale-[1.015] opacity-0"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[3200ms] ease-in-out ${
+                indice === slideAttiva ? "opacity-100" : "opacity-0"
               }`}
             />
           ))}

@@ -1,50 +1,43 @@
-import { NextResponse } from "next/server";
-
 const API_ARUBA =
   "https://www.agentiplusdb.net/ottica-api/catalogo.php";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
-    const risposta = await fetch(
-      `${API_ARUBA}?t=${Date.now()}`,
-      {
-        cache: "no-store",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
+    const risposta = await fetch(`${API_ARUBA}?t=${Date.now()}`, {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
     const testo = await risposta.text();
 
-    let dati;
-
-    try {
-      dati = JSON.parse(testo);
-    } catch {
-      return NextResponse.json(
-        {
-          ok: false,
-          errore: "La risposta di Aruba non è JSON valido.",
-          dettaglio: testo,
-        },
-        { status: 502 }
-      );
-    }
-
-    return NextResponse.json(dati, {
-      status: risposta.ok ? 200 : risposta.status,
+    return new Response(testo, {
+      status: risposta.status,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+      },
     });
   } catch (errore) {
-    return NextResponse.json(
+    return Response.json(
       {
         ok: false,
+        articoli: [],
         errore:
           errore instanceof Error
             ? errore.message
-            : "Impossibile caricare il catalogo.",
+            : "Errore di collegamento al server del catalogo.",
       },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        },
+      }
     );
   }
 }

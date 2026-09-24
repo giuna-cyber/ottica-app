@@ -20,6 +20,115 @@ function euro(valore: number) {
   }).format(valore);
 }
 
+function coloreCss(valore: string | null | undefined) {
+  const testo = (valore ?? "").trim().toLowerCase();
+
+  const colori: Record<string, string> = {
+    nero: "#111111",
+    nera: "#111111",
+    black: "#111111",
+    bianco: "#FFFFFF",
+    bianca: "#FFFFFF",
+    white: "#FFFFFF",
+    grigio: "#808080",
+    grigia: "#808080",
+    grey: "#808080",
+    gray: "#808080",
+    argento: "#C0C0C0",
+    silver: "#C0C0C0",
+    oro: "#D4AF37",
+    gold: "#D4AF37",
+    dorato: "#D4AF37",
+    dorata: "#D4AF37",
+    rosso: "#D64545",
+    rossa: "#D64545",
+    bordeaux: "#7B1E2B",
+    blu: "#315C9B",
+    blue: "#315C9B",
+    azzurro: "#6FAED9",
+    azzurra: "#6FAED9",
+    verde: "#5A8F63",
+    green: "#5A8F63",
+    oliva: "#7A7D45",
+    marrone: "#7A5238",
+    brown: "#7A5238",
+    beige: "#D8C5A5",
+    avana: "#A67645",
+    tartaruga: "#8A5B3D",
+    rosa: "#D98FA5",
+    pink: "#D98FA5",
+    fucsia: "#D13C86",
+    viola: "#76528F",
+    purple: "#76528F",
+    giallo: "#E3C548",
+    yellow: "#E3C548",
+    arancione: "#E58A3A",
+    orange: "#E58A3A",
+    trasparente: "#F8F8F8",
+    cristallo: "#F8F8F8",
+    fumé: "#6F7478",
+    fume: "#6F7478",
+    fumo: "#6F7478",
+    smoke: "#6F7478",
+    ambra: "#C98B3C",
+    verdeacqua: "#64B3A6",
+  };
+
+  const compatto = testo.replace(/[\s_-]+/g, "");
+
+  if (colori[testo]) return colori[testo];
+  if (colori[compatto]) return colori[compatto];
+
+  for (const chiave of Object.keys(colori)) {
+    if (testo.includes(chiave) || compatto.includes(chiave)) {
+      return colori[chiave];
+    }
+  }
+
+  return "#D1D5DB";
+}
+
+function testoVariante(
+  montatura: string | null | undefined,
+  lente: string | null | undefined
+) {
+  const m = (montatura ?? "").trim();
+  const l = (lente ?? "").trim();
+
+  if (m && l) return `${m}/${l}`;
+  if (m) return m;
+  if (l) return l;
+  return "—";
+}
+
+function variantiUniche(articolo: Articolo) {
+  return Array.from(
+    new Map(
+      (articolo.varianti ?? [])
+        .map((v) => {
+          const montatura = (v.colore_montatura ?? "").trim();
+          const lente = (v.colore_lente ?? "").trim();
+          const key = `${montatura}||${lente}`;
+
+          return [
+            key,
+            {
+              key,
+              montatura,
+              lente,
+              etichetta: testoVariante(montatura, lente),
+            },
+          ] as const;
+        })
+        .filter(
+          ([key, value]) =>
+            key !== "||" &&
+            (value.montatura !== "" || value.lente !== "")
+        )
+    ).values()
+  );
+}
+
 export default function CatalogoClient({
   articoli,
   prodotti,
@@ -111,7 +220,7 @@ export default function CatalogoClient({
       </header>
 
       <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-        <div className="rounded-[22px] border border-[var(--app-border)] bg-[var(--app-surface)] p-4 shadow-[0_12px_30px_rgba(80,108,105,.06)] sm:p-5">
+        <div className="rounded-[22px] border border-[color-mix(in_srgb,var(--app-text)_14%,white)] bg-[var(--app-surface)] p-4 shadow-[0_12px_30px_rgba(80,108,105,.06)] sm:p-5">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--app-primary)]">
@@ -176,59 +285,200 @@ export default function CatalogoClient({
               return (
                 <article
                   key={articolo.id}
-                  className="group relative flex min-h-full w-full flex-col overflow-hidden rounded-[18px] border border-[var(--app-border-strong)] bg-[var(--app-surface)] shadow-[0_10px_24px_rgba(80,108,105,.06)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--app-border-strong)] hover:shadow-[0_14px_30px_rgba(80,108,105,.10)] sm:rounded-[22px]"
+                  className="group relative flex min-h-full w-full flex-col overflow-hidden rounded-[18px] border border-[color-mix(in_srgb,var(--app-text)_16%,white)] bg-[var(--app-surface)] shadow-[0_10px_24px_rgba(80,108,105,.06)] transition duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--app-text)_22%,white)] hover:shadow-[0_14px_30px_rgba(80,108,105,.10)] sm:rounded-[22px]"
                 >
 
-                  <Link
-                    href={`/catalogo/${articolo.id}`}
-                    className="relative block"
-                  >
-                    <div className="relative aspect-square overflow-hidden border-b border-[var(--app-border)] bg-[linear-gradient(180deg,var(--app-surface)_0%,var(--app-background)_100%)]">
-                      {articolo.in_promozione &&
-                        articolo.sconto_percentuale !== null && (
-                          <div
-                            className="absolute left-2 top-2 z-20 rounded-full border border-[color-mix(in_srgb,var(--app-danger)_35%,white)] bg-[color-mix(in_srgb,var(--app-danger)_16%,white)] px-2 py-1 text-[8px] font-semibold tracking-[0.02em] text-[var(--app-danger)] sm:left-3 sm:top-3 sm:px-2.5 sm:py-1.5 sm:text-[10px]"
-                          >
-                            PROMO -{Number(articolo.sconto_percentuale)}%
+                  <div className="border-b border-[color-mix(in_srgb,var(--app-text)_14%,white)] bg-white">
+                    <Link
+                      href={`/catalogo/${articolo.id}?foto=copertina`}
+                      className="relative block"
+                    >
+                      <div className="relative aspect-square overflow-hidden bg-white">
+                        {articolo.in_promozione &&
+                          articolo.sconto_percentuale !== null && (
+                            <div
+                              className="absolute left-2 top-2 z-20 rounded-full border border-[color-mix(in_srgb,var(--app-danger)_35%,white)] bg-[color-mix(in_srgb,var(--app-danger)_16%,white)] px-2 py-1 text-[8px] font-semibold tracking-[0.02em] text-[var(--app-danger)] sm:left-3 sm:top-3 sm:px-2.5 sm:py-1.5 sm:text-[10px]"
+                            >
+                              PROMO -{Number(articolo.sconto_percentuale)}%
+                            </div>
+                          )}
+
+                        <div
+                          className="absolute right-2 top-2 z-10 max-w-[48%] truncate rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/90 px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.08em] text-[var(--app-text-soft)] backdrop-blur-sm sm:right-3 sm:top-3 sm:px-2.5 sm:text-[9px]"
+                        >
+                          {articolo.categoria || "Ottica App"}
+                        </div>
+
+                        {articolo.immagine_url ? (
+                          <img
+                            src={articolo.immagine_url}
+                            alt={articolo.nome}
+                            className="h-full w-full object-contain p-3 transition duration-300 group-hover:scale-[1.03] sm:p-5"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-[var(--app-primary)]">
+                            <IconaOcchiali />
                           </div>
                         )}
-
-                      <div
-                        className="absolute right-2 top-2 z-10 max-w-[48%] truncate rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/90 px-2 py-1 text-[7px] font-semibold uppercase tracking-[0.08em] text-[var(--app-text-soft)] backdrop-blur-sm sm:right-3 sm:top-3 sm:px-2.5 sm:text-[9px]"
-                      >
-                        {articolo.categoria || "Ottica App"}
                       </div>
+                    </Link>
 
-                      {articolo.immagine_url ? (
-                        <img
-                          src={articolo.immagine_url}
-                          alt={articolo.nome}
-                          className="h-full w-full object-contain p-3 transition duration-300 group-hover:scale-[1.03] sm:p-5"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-[var(--app-primary)]">
-                          <IconaOcchiali />
-                        </div>
-                      )}
+                    <div className="px-3 pb-3 pt-2 sm:px-5 sm:pb-4">
+                      <div className="flex flex-wrap items-center justify-center gap-2">
+                        {variantiUniche(articolo).length > 0 ? (
+                          variantiUniche(articolo).map((variante, indice) => {
+                            const coloreMontatura = coloreCss(variante.montatura);
+                            const coloreLente = coloreCss(
+                              variante.lente || variante.montatura
+                            );
+
+                            return (
+                              <span
+                                key={variante.key}
+                                className={`h-5 w-5 rounded-full border border-black/20 shadow-sm ${
+                                  indice === 0
+                                    ? "ring-2 ring-[#63A5FF] ring-offset-2"
+                                    : ""
+                                }`}
+                                style={{
+                                  background:
+                                    variante.montatura && variante.lente
+                                      ? `linear-gradient(90deg, ${coloreMontatura} 0 50%, ${coloreLente} 50% 100%)`
+                                      : variante.montatura
+                                        ? coloreMontatura
+                                        : coloreLente,
+                                }}
+                                title={variante.etichetta}
+                                aria-label={variante.etichetta}
+                              />
+                            );
+                          })
+                        ) : articolo.colore_lente ? (
+                          <span
+                            className="h-5 w-5 rounded-full border border-black/20 shadow-sm ring-2 ring-[#63A5FF] ring-offset-2"
+                            style={{
+                              backgroundColor: coloreCss(articolo.colore_lente),
+                            }}
+                            title={articolo.colore_lente}
+                            aria-label={articolo.colore_lente}
+                          />
+                        ) : null}
+                      </div>
                     </div>
-                  </Link>
+                  </div>
 
                   <div className="flex flex-1 flex-col bg-[var(--app-surface)] p-3 sm:p-5">
                     <p className="truncate text-[8px] font-semibold uppercase tracking-[0.14em] text-[var(--app-text-soft)] sm:text-[10px] sm:tracking-[0.18em]">
                       {articolo.marca || "OTTICA APP"}
                     </p>
 
-                    <Link href={`/catalogo/${articolo.id}`}>
+                    <Link href={`/catalogo/${articolo.id}?foto=copertina`}>
                       <h2 className="mt-1 line-clamp-2 h-[34px] font-serif text-[14px] font-medium leading-[1.2] tracking-[-0.015em] text-[var(--app-text)] sm:h-[46px] sm:text-[1.2rem]">
                         {articolo.nome}
                       </h2>
                     </Link>
 
-                    <p className="mt-1 h-[14px] truncate text-[10px] font-medium leading-[14px] text-[var(--app-muted)] sm:h-[20px] sm:text-sm sm:leading-5">
-                      {articolo.modello || " "}
-                    </p>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] sm:text-xs">
+                      <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2.5">
+                        <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
+                          Modello
+                        </span>
+                        <span className="mt-1 block truncate font-medium text-[var(--app-text-soft)]">
+                          {articolo.modello || "—"}
+                        </span>
+                      </div>
 
-                    <div className="mt-3 flex min-h-[42px] items-end sm:mt-4 sm:min-h-[48px]">
+                      <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2.5">
+                        <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
+                          Forma
+                        </span>
+                        <span className="mt-1 block truncate font-medium text-[var(--app-text-soft)]">
+                          {articolo.forma || "—"}
+                        </span>
+                      </div>
+
+                      <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2.5">
+                        <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
+                          Materiale
+                        </span>
+                        <span className="mt-1 block truncate font-medium text-[var(--app-text-soft)]">
+                          {articolo.materiale || "—"}
+                        </span>
+                      </div>
+
+                      <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2.5">
+                        <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
+                          Tipo lente
+                        </span>
+                        <span className="mt-1 block truncate font-medium text-[var(--app-text-soft)]">
+                          {articolo.tipo_lente || "—"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex items-center justify-between border-t border-[var(--app-border)] pt-3 text-[10px] sm:text-xs">
+                      <span className="font-semibold text-[var(--app-text)]">
+                        Colore lente
+                      </span>
+
+                      {articolo.colore_lente ? (
+                        <span
+                          className="h-4 w-4 rounded-full border border-black/20 shadow-sm"
+                          style={{
+                            backgroundColor: coloreCss(
+                              articolo.colore_lente
+                            ),
+                          }}
+                          title={articolo.colore_lente}
+                          aria-label={`Colore lente ${articolo.colore_lente}`}
+                        />
+                      ) : (
+                        <span className="text-[var(--app-muted)]">—</span>
+                      )}
+                    </div>
+
+                    <div className="mt-3 space-y-2 text-[10px] sm:text-xs">
+                      <span className="block font-semibold text-[var(--app-text)]">
+                        Varianti disponibili
+                      </span>
+
+                      <div className="flex flex-wrap gap-2">
+                        {variantiUniche(articolo).length > 0 ? (
+                          variantiUniche(articolo).map((variante) => {
+                            const coloreMontatura = coloreCss(variante.montatura);
+                            const coloreLente = coloreCss(
+                              variante.lente || variante.montatura
+                            );
+
+                            return (
+                              <span
+                                key={variante.key}
+                                className="inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-2.5 py-1.5 text-[10px] font-medium text-[var(--app-text-soft)]"
+                              >
+                                <span
+                                  className="h-4 w-4 shrink-0 rounded-full border border-black/20 shadow-sm"
+                                  style={{
+                                    background:
+                                      variante.montatura && variante.lente
+                                        ? `linear-gradient(90deg, ${coloreMontatura} 0 50%, ${coloreLente} 50% 100%)`
+                                        : variante.montatura
+                                          ? coloreMontatura
+                                          : coloreLente,
+                                  }}
+                                  title={variante.etichetta}
+                                  aria-label={variante.etichetta}
+                                />
+                                <span>{variante.etichetta}</span>
+                              </span>
+                            );
+                          })
+                        ) : (
+                          <span className="text-[var(--app-muted)]">—</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex min-h-[42px] items-end border-t border-[var(--app-border)] pt-4 sm:min-h-[48px]">
                       {promo ? (
                         <div className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:items-end sm:gap-x-2">
                           <span
@@ -253,33 +503,9 @@ export default function CatalogoClient({
                       )}
                     </div>
 
-                    <div className="mt-4 hidden grid-cols-2 gap-2 text-[10px] text-[var(--app-text-soft)] sm:grid">
-                      {articolo.forma && (
-                        <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2">
-                          <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
-                            Forma
-                          </span>
-                          <span className="mt-0.5 block truncate font-medium">
-                            {articolo.forma}
-                          </span>
-                        </div>
-                      )}
-
-                      {articolo.materiale && (
-                        <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-soft)] px-3 py-2">
-                          <span className="block text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
-                            Materiale
-                          </span>
-                          <span className="mt-0.5 block truncate font-medium">
-                            {articolo.materiale}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
                     <Link
-                      href={`/catalogo/${articolo.id}`}
-                      className="mt-auto flex h-[42px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[var(--app-primary)] px-2.5 text-[10px] font-semibold text-white shadow-[0_7px_16px_rgba(80,108,105,.10)] transition hover:bg-[var(--app-primary-hover)] sm:h-[48px] sm:rounded-xl sm:px-4 sm:text-sm"
+                      href={`/catalogo/${articolo.id}?foto=copertina`}
+                      className="mt-5 flex h-[42px] w-full shrink-0 items-center justify-center gap-1.5 rounded-xl bg-[var(--app-primary)] px-2.5 text-[10px] font-semibold text-white shadow-[0_7px_16px_rgba(80,108,105,.10)] transition hover:bg-[var(--app-primary-hover)] sm:mt-6 sm:h-[48px] sm:rounded-xl sm:px-4 sm:text-sm"
                       style={{
                         textDecoration: "none",
                       }}

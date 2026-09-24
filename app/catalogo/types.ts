@@ -1,9 +1,9 @@
 export type Variante = {
   id: number;
   articolo_id: number;
-  taglia: string | null;
+  colore_montatura: string | null;
+  colore_lente: string | null;
   misura: string | null;
-  colore: string | null;
   quantita: number;
 };
 

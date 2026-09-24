@@ -1,57 +1,46 @@
 import CatalogoClient from "./catalogo-client";
 import type { Articolo } from "./types";
 
-const API_ARUBA =
+const API_CATALOGO =
   "https://www.agentiplusdb.net/ottica-api/catalogo.php";
 
-type RispostaCatalogo = {
-  ok: boolean;
-  articoli?: Articolo[];
-  errore?: string;
-};
-
-async function caricaCatalogo(): Promise<{
-  articoli: Articolo[];
-}> {
+async function caricaCatalogo(): Promise<Articolo[]> {
   try {
-    const risposta = await fetch(
-      `${API_ARUBA}?t=${Date.now()}`,
-      {
-        method: "GET",
-        cache: "no-store",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
+    const risposta = await fetch(API_CATALOGO, {
+      cache: "no-store",
+    });
 
     if (!risposta.ok) {
-      return {
-        articoli: [],
-      };
+      throw new Error(
+        `Errore caricamento catalogo: ${risposta.status}`
+      );
     }
 
-    const dati =
-      (await risposta.json()) as RispostaCatalogo;
+    const dati = await risposta.json();
 
-    if (!dati.ok) {
-      return {
-        articoli: [],
-      };
+    if (Array.isArray(dati)) {
+      return dati;
     }
 
-    return {
-      articoli: dati.articoli ?? [],
-    };
-  } catch {
-    return {
-      articoli: [],
-    };
+    if (dati?.ok && Array.isArray(dati.articoli)) {
+      return dati.articoli;
+    }
+
+    if (Array.isArray(dati?.articoli)) {
+      return dati.articoli;
+    }
+
+    return [];
+  } catch (errore) {
+    console.error("Errore catalogo:", errore);
+    return [];
   }
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function CatalogoPage() {
-  const { articoli } = await caricaCatalogo();
+  const articoli = await caricaCatalogo();
 
   return <CatalogoClient articoli={articoli} />;
 }

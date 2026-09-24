@@ -14,6 +14,48 @@ type CampoColore = {
   descrizione: string;
 };
 
+type DatiNegozioAdmin = {
+  nome_negozio: string;
+  ragione_sociale: string;
+  indirizzo: string;
+  cap: string;
+  citta: string;
+  provincia: string;
+  telefono: string;
+  whatsapp: string;
+  email: string;
+  sito_web: string;
+  partita_iva: string;
+  codice_fiscale: string;
+  orari_apertura: string;
+  logo_url: string;
+  slide_1_url: string;
+  slide_2_url: string;
+  slide_3_url: string;
+};
+
+type ChiaveSlide = "slide_1_url" | "slide_2_url" | "slide_3_url";
+
+const NEGOZIO_VUOTO: DatiNegozioAdmin = {
+  nome_negozio: "",
+  ragione_sociale: "",
+  indirizzo: "",
+  cap: "",
+  citta: "",
+  provincia: "",
+  telefono: "",
+  whatsapp: "",
+  email: "",
+  sito_web: "",
+  partita_iva: "",
+  codice_fiscale: "",
+  orari_apertura: "",
+  logo_url: "",
+  slide_1_url: "",
+  slide_2_url: "",
+  slide_3_url: "",
+};
+
 const CAMPI: CampoColore[] = [
   {
     chiave: "primary",
@@ -113,6 +155,8 @@ export default function PersonalizzaAppPage() {
   const [salvataggio, setSalvataggio] = useState(false);
   const [messaggio, setMessaggio] = useState("");
   const [errore, setErrore] = useState("");
+  const [negozio, setNegozio] = useState<DatiNegozioAdmin>(NEGOZIO_VUOTO);
+  const [slideInCaricamento, setSlideInCaricamento] = useState<number | null>(null);
 
   useEffect(() => {
     async function carica() {
@@ -120,25 +164,39 @@ export default function PersonalizzaAppPage() {
       setErrore("");
 
       try {
-        const risposta = await fetch("/api/admin/tema", {
-          cache: "no-store",
-        });
+        const [rispostaTema, rispostaNegozio] = await Promise.all([
+          fetch("/api/admin/tema", { cache: "no-store" }),
+          fetch("/api/admin/negozio", { cache: "no-store" }),
+        ]);
 
-        const dati = await risposta.json();
+        const datiTema = await rispostaTema.json();
+        const datiNegozio = await rispostaNegozio.json();
 
-        if (!risposta.ok || !dati.ok) {
+        if (!rispostaTema.ok || !datiTema.ok) {
           throw new Error(
-            dati.errore || "Impossibile caricare la personalizzazione."
+            datiTema.errore || "Impossibile caricare la personalizzazione."
+          );
+        }
+
+        if (!rispostaNegozio.ok || !datiNegozio.ok) {
+          throw new Error(
+            datiNegozio.errore || "Impossibile caricare le immagini della Home."
           );
         }
 
         const ricevuto: TemaApp = {
           ...TEMA_DEFAULT,
-          ...(dati.tema || {}),
+          ...(datiTema.tema || {}),
+        };
+
+        const negozioRicevuto: DatiNegozioAdmin = {
+          ...NEGOZIO_VUOTO,
+          ...(datiNegozio.negozio || {}),
         };
 
         setTema(ricevuto);
         setTemaSalvato(ricevuto);
+        setNegozio(negozioRicevuto);
         applicaTema(ricevuto);
       } catch (e) {
         setErrore(
@@ -190,6 +248,109 @@ export default function PersonalizzaAppPage() {
     applicaTema(temaSalvato);
     setMessaggio("");
     setErrore("");
+  }
+
+  async function salvaNegozio(aggiornato: DatiNegozioAdmin) {
+    const risposta = await fetch("/api/admin/negozio", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(aggiornato),
+    });
+
+    const dati = await risposta.json();
+
+    if (!risposta.ok || !dati.ok) {
+      throw new Error(
+        dati.errore || "Impossibile salvare le immagini della Home."
+      );
+    }
+  }
+
+  async function caricaSlide(
+    numero: 1 | 2 | 3,
+    file: File | undefined
+  ) {
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setErrore("Seleziona un file immagine.");
+      return;
+    }
+
+    if (file.size > 8 * 1024 * 1024) {
+      setErrore("L’immagine non può superare 8 MB.");
+      return;
+    }
+
+    setSlideInCaricamento(numero);
+    setErrore("");
+    setMessaggio("");
+
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      form.append("slide", String(numero));
+
+      const rispostaUpload = await fetch("/api/admin/slider-upload", {
+        method: "POST",
+        body: form,
+      });
+
+      const datiUpload = await rispostaUpload.json();
+
+      if (!rispostaUpload.ok || !datiUpload.ok || !datiUpload.url) {
+        throw new Error(
+          datiUpload.errore || "Impossibile caricare l’immagine."
+        );
+      }
+
+      const chiave: ChiaveSlide = `slide_${numero}_url` as ChiaveSlide;
+      const aggiornato: DatiNegozioAdmin = {
+        ...negozio,
+        [chiave]: String(datiUpload.url),
+      };
+
+      await salvaNegozio(aggiornato);
+      setNegozio(aggiornato);
+      setMessaggio(`Slide ${numero} aggiornata.`);
+    } catch (e) {
+      setErrore(
+        e instanceof Error
+          ? e.message
+          : "Impossibile caricare l’immagine."
+      );
+    } finally {
+      setSlideInCaricamento(null);
+    }
+  }
+
+  async function eliminaSlide(numero: 1 | 2 | 3) {
+    const chiave: ChiaveSlide = `slide_${numero}_url` as ChiaveSlide;
+
+    setSlideInCaricamento(numero);
+    setErrore("");
+    setMessaggio("");
+
+    try {
+      const aggiornato: DatiNegozioAdmin = {
+        ...negozio,
+        [chiave]: "",
+      };
+
+      await salvaNegozio(aggiornato);
+      setNegozio(aggiornato);
+      setMessaggio(`Slide ${numero} eliminata.`);
+    } catch (e) {
+      setErrore(
+        e instanceof Error
+          ? e.message
+          : "Impossibile eliminare l’immagine."
+      );
+    } finally {
+      setSlideInCaricamento(null);
+    }
   }
 
   async function salva() {
@@ -279,9 +440,8 @@ export default function PersonalizzaAppPage() {
                 Personalizza la tua app
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--app-muted)]">
-                Scegli i colori del tuo centro ottico. L’anteprima viene
-                aggiornata immediatamente; il cambiamento diventa definitivo
-                quando premi Salva colori.
+                Personalizza i colori del centro ottico e gestisci le tre
+                immagini che scorrono nella Home.
               </p>
             </div>
           </div>
@@ -301,6 +461,104 @@ export default function PersonalizzaAppPage() {
               {messaggio}
             </div>
           )}
+
+          <div className="mb-7 rounded-[24px] border border-[var(--app-border)] bg-[var(--app-surface)] p-5">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--app-primary)]">
+                  Slider Home
+                </p>
+                <h2 className="mt-1 font-serif text-2xl font-medium">
+                  Immagini in evidenza
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--app-muted)]">
+                  Puoi caricare fino a tre immagini. Nella Home scorreranno
+                  automaticamente; se ne lasci una sola, resterà fissa.
+                </p>
+              </div>
+              <p className="text-xs text-[var(--app-muted)]">
+                JPG, PNG o WEBP · max 8 MB
+              </p>
+            </div>
+
+            <div className="mt-5 grid gap-4 md:grid-cols-3">
+              {([1, 2, 3] as const).map((numero) => {
+                const chiave = `slide_${numero}_url` as ChiaveSlide;
+                const url = negozio[chiave];
+                const occupata = slideInCaricamento === numero;
+
+                return (
+                  <div
+                    key={numero}
+                    className="overflow-hidden rounded-[20px] border border-[var(--app-border)] bg-[var(--app-background)]"
+                  >
+                    <div className="relative aspect-[16/9] overflow-hidden bg-[var(--app-surface-soft)]">
+                      {url ? (
+                        <img
+                          src={url}
+                          alt={`Slide ${numero}`}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center px-4 text-center text-xs text-[var(--app-muted)]">
+                          Nessuna immagine caricata
+                        </div>
+                      )}
+
+                      <div className="absolute left-3 top-3 rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold text-white">
+                        Slide {numero}
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2 p-3">
+                      <label
+                        className={`cursor-pointer rounded-xl bg-[var(--app-primary)] px-3 py-2.5 text-center text-xs font-semibold text-white ${
+                          occupata ? "pointer-events-none opacity-50" : ""
+                        }`}
+                      >
+                        {occupata
+                          ? "Caricamento..."
+                          : url
+                            ? "Sostituisci immagine"
+                            : "Carica immagine"}
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          className="hidden"
+                          disabled={occupata}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            void caricaSlide(numero, file);
+                            e.currentTarget.value = "";
+                          }}
+                        />
+                      </label>
+
+                      {url && (
+                        <button
+                          type="button"
+                          disabled={occupata}
+                          onClick={() => void eliminaSlide(numero)}
+                          className="rounded-xl border border-[var(--app-border)] bg-white px-3 py-2.5 text-xs font-semibold text-[var(--app-text-soft)] disabled:opacity-50"
+                        >
+                          Elimina
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--app-primary)]">
+              Colori app
+            </p>
+            <h2 className="mt-1 font-serif text-2xl font-medium">
+              Tema grafico
+            </h2>
+          </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             {CAMPI.map((campo) => (

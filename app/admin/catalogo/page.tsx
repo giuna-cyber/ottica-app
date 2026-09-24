@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 
 type Variante = {
   id?: number;
-  taglia: string;
+  colore_montatura: string;
+  colore_lente: string;
   misura: string;
-  colore: string;
+  immagine_url: string;
   quantita: number;
 };
 
@@ -27,14 +28,16 @@ type Prodotto = {
   forma: string | null;
   genere: string | null;
   tipo_lente: string | null;
+  colore_montatura: string | null;
   colore_lente: string | null;
   varianti: Variante[];
 };
 
 const varianteVuota = (): Variante => ({
-  taglia: "",
+  colore_montatura: "",
+  colore_lente: "",
   misura: "",
-  colore: "",
+  immagine_url: "",
   quantita: 0,
 });
 
@@ -44,7 +47,6 @@ export default function AdminCatalogoPage() {
   const [prodotti, setProdotti] = useState<Prodotto[]>([]);
   const [id, setId] = useState(0);
 
-  const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [categoria, setCategoria] = useState("Vista");
   const [prezzo, setPrezzo] = useState("");
@@ -53,11 +55,11 @@ export default function AdminCatalogoPage() {
   const [marca, setMarca] = useState("");
   const [modello, setModello] = useState("");
   const [codiceArticolo, setCodiceArticolo] = useState("");
-  const [materiale, setMateriale] = useState("");
-  const [forma, setForma] = useState("");
-  const [genere, setGenere] = useState("");
   const [tipoLente, setTipoLente] = useState("");
+  const [coloreMontatura, setColoreMontatura] = useState("");
   const [coloreLente, setColoreLente] = useState("");
+  const [misuraPrincipale, setMisuraPrincipale] = useState("");
+  const [quantitaPrincipale, setQuantitaPrincipale] = useState(0);
   const [varianti, setVarianti] = useState<Variante[]>([
     varianteVuota(),
   ]);
@@ -68,6 +70,8 @@ export default function AdminCatalogoPage() {
   const [caricamento, setCaricamento] = useState(true);
   const [salvataggio, setSalvataggio] = useState(false);
   const [uploadInCorso, setUploadInCorso] = useState(false);
+  const [uploadVarianteInCorso, setUploadVarianteInCorso] =
+    useState<number | null>(null);
 
   useEffect(() => {
     caricaCatalogo();
@@ -109,7 +113,6 @@ export default function AdminCatalogoPage() {
 
   function nuovoProdotto() {
     setId(0);
-    setNome("");
     setDescrizione("");
     setCategoria("Vista");
     setPrezzo("");
@@ -118,11 +121,11 @@ export default function AdminCatalogoPage() {
     setMarca("");
     setModello("");
     setCodiceArticolo("");
-    setMateriale("");
-    setForma("");
-    setGenere("");
     setTipoLente("");
+    setColoreMontatura("");
     setColoreLente("");
+    setMisuraPrincipale("");
+    setQuantitaPrincipale(0);
     setVarianti([varianteVuota()]);
     setErrore("");
     setMessaggio("");
@@ -131,7 +134,6 @@ export default function AdminCatalogoPage() {
 
   function modificaProdotto(p: Prodotto) {
     setId(p.id);
-    setNome(p.nome);
     setDescrizione(p.descrizione ?? "");
     setCategoria(p.categoria || "Vista");
     setPrezzo(String(p.prezzo ?? ""));
@@ -140,18 +142,60 @@ export default function AdminCatalogoPage() {
     setMarca(p.marca ?? "");
     setModello(p.modello ?? "");
     setCodiceArticolo(p.codice_articolo ?? "");
-    setMateriale(p.materiale ?? "");
-    setForma(p.forma ?? "");
-    setGenere(p.genere ?? "");
     setTipoLente(p.tipo_lente ?? "");
-    setColoreLente(p.colore_lente ?? "");
+
+    const tutteVarianti = p.varianti ?? [];
+    const indicePrincipalePerFoto = tutteVarianti.findIndex(
+      (v) =>
+        Boolean(v.immagine_url) &&
+        (v.immagine_url ?? "") === (p.immagine_url ?? "")
+    );
+    const indicePrincipale =
+      indicePrincipalePerFoto >= 0
+        ? indicePrincipalePerFoto
+        : tutteVarianti.length > 0
+          ? 0
+          : -1;
+
+    const variantePrincipaleEsistente =
+      indicePrincipale >= 0
+        ? tutteVarianti[indicePrincipale]
+        : null;
+
+    setColoreMontatura(
+      variantePrincipaleEsistente?.colore_montatura ??
+        p.colore_montatura ??
+        ""
+    );
+    setColoreLente(
+      variantePrincipaleEsistente?.colore_lente ??
+        p.colore_lente ??
+        ""
+    );
+    setMisuraPrincipale(
+      variantePrincipaleEsistente?.misura ?? ""
+    );
+    setQuantitaPrincipale(
+      Number(variantePrincipaleEsistente?.quantita ?? 0)
+    );
+
+    const variantiAggiuntive =
+      indicePrincipale >= 0
+        ? tutteVarianti.filter(
+            (_, indice) => indice !== indicePrincipale
+          )
+        : tutteVarianti;
+
     setVarianti(
-      p.varianti?.length
-        ? p.varianti.map((v) => ({
+      variantiAggiuntive.length
+        ? variantiAggiuntive.map((v) => ({
             id: v.id,
-            taglia: v.taglia ?? "",
+            colore_montatura:
+              v.colore_montatura ?? "",
+            colore_lente:
+              v.colore_lente ?? "",
             misura: v.misura ?? "",
-            colore: v.colore ?? "",
+            immagine_url: v.immagine_url ?? "",
             quantita: Number(v.quantita ?? 0),
           }))
         : [varianteVuota()]
@@ -201,6 +245,60 @@ export default function AdminCatalogoPage() {
       );
     } finally {
       setUploadInCorso(false);
+    }
+  }
+
+  async function caricaImmagineVariante(
+    indice: number,
+    file: File
+  ) {
+    setUploadVarianteInCorso(indice);
+    setErrore("");
+    setMessaggio("");
+
+    try {
+      const formData = new FormData();
+      formData.append("immagine", file);
+
+      const risposta = await fetch(
+        "/api/admin/catalogo/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (risposta.status === 401) {
+        router.replace("/login");
+        return;
+      }
+
+      const dati = await risposta.json();
+
+      if (!risposta.ok || !dati.ok) {
+        throw new Error(
+          dati.errore ||
+            "Upload immagine variante non riuscito."
+        );
+      }
+
+      aggiornaVariante(
+        indice,
+        "immagine_url",
+        String(dati.url ?? "")
+      );
+
+      setMessaggio(
+        "Immagine variante caricata correttamente."
+      );
+    } catch (e) {
+      setErrore(
+        e instanceof Error
+          ? e.message
+          : "Upload immagine variante non riuscito."
+      );
+    } finally {
+      setUploadVarianteInCorso(null);
     }
   }
 
@@ -276,10 +374,35 @@ export default function AdminCatalogoPage() {
     setMessaggio("");
 
     try {
+      const nomeProdotto =
+        [marca.trim(), modello.trim()]
+          .filter(Boolean)
+          .join(" ") || codiceArticolo.trim() || "Prodotto";
+
+      const variantePrincipale: Variante = {
+        colore_montatura: coloreMontatura.trim(),
+        colore_lente: coloreLente.trim(),
+        misura: misuraPrincipale.trim(),
+        immagine_url: immagineUrl,
+        quantita: Number(quantitaPrincipale || 0),
+      };
+
+      const variantiDaSalvare = [
+        variantePrincipale,
+        ...varianti.filter(
+          (v) =>
+            v.colore_montatura.trim() ||
+            v.colore_lente.trim() ||
+            v.misura.trim() ||
+            v.immagine_url.trim() ||
+            Number(v.quantita) > 0
+        ),
+      ];
+
       const dati = await inviaAzione({
         azione: "salva",
         id,
-        nome,
+        nome: nomeProdotto,
         descrizione,
         categoria,
         prezzo: Number(prezzo || 0),
@@ -288,12 +411,10 @@ export default function AdminCatalogoPage() {
         marca,
         modello,
         codice_articolo: codiceArticolo,
-        materiale,
-        forma,
-        genere,
         tipo_lente: tipoLente,
+        colore_montatura: coloreMontatura,
         colore_lente: coloreLente,
-        varianti,
+        varianti: variantiDaSalvare,
       });
 
       if (!dati) return;
@@ -387,7 +508,6 @@ export default function AdminCatalogoPage() {
         p.modello,
         p.codice_articolo,
         p.categoria,
-        p.genere,
       ].some((valore) =>
         (valore ?? "").toLowerCase().includes(testo)
       )
@@ -459,17 +579,6 @@ export default function AdminCatalogoPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <label>
               <span className="mb-2 block text-sm font-semibold">
-                Nome *
-              </span>
-              <input
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-              />
-            </label>
-
-            <label>
-              <span className="mb-2 block text-sm font-semibold">
                 Marca
               </span>
               <input
@@ -522,23 +631,6 @@ export default function AdminCatalogoPage() {
 
             <label>
               <span className="mb-2 block text-sm font-semibold">
-                Genere
-              </span>
-              <select
-                value={genere}
-                onChange={(e) => setGenere(e.target.value)}
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-              >
-                <option value="">Non specificato</option>
-                <option value="Uomo">Uomo</option>
-                <option value="Donna">Donna</option>
-                <option value="Unisex">Unisex</option>
-                <option value="Bambino">Bambino</option>
-              </select>
-            </label>
-
-            <label>
-              <span className="mb-2 block text-sm font-semibold">
                 Prezzo €
               </span>
               <input
@@ -547,30 +639,6 @@ export default function AdminCatalogoPage() {
                 step="0.01"
                 value={prezzo}
                 onChange={(e) => setPrezzo(e.target.value)}
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-              />
-            </label>
-
-            <label>
-              <span className="mb-2 block text-sm font-semibold">
-                Materiale
-              </span>
-              <input
-                value={materiale}
-                onChange={(e) =>
-                  setMateriale(e.target.value)
-                }
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-              />
-            </label>
-
-            <label>
-              <span className="mb-2 block text-sm font-semibold">
-                Forma
-              </span>
-              <input
-                value={forma}
-                onChange={(e) => setForma(e.target.value)}
                 className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
             </label>
@@ -588,14 +656,15 @@ export default function AdminCatalogoPage() {
               />
             </label>
 
-            <label>
+            <label className="sm:col-span-2 lg:col-span-3">
               <span className="mb-2 block text-sm font-semibold">
-                Colore lente
+                Descrizione
               </span>
-              <input
-                value={coloreLente}
+              <textarea
+                rows={4}
+                value={descrizione}
                 onChange={(e) =>
-                  setColoreLente(e.target.value)
+                  setDescrizione(e.target.value)
                 }
                 className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
               />
@@ -603,7 +672,7 @@ export default function AdminCatalogoPage() {
 
             <div className="sm:col-span-2 lg:col-span-3">
               <span className="mb-2 block text-sm font-semibold">
-                Immagine prodotto
+                Immagine principale / copertina
               </span>
 
               <div className="grid gap-4 rounded-[20px] border border-[#D9E2DF] bg-[#F3F5F2] p-4 sm:grid-cols-[180px_1fr]">
@@ -671,6 +740,73 @@ export default function AdminCatalogoPage() {
               </div>
             </div>
 
+            <div className="sm:col-span-2 lg:col-span-3 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#89A39D]">
+                Variante principale
+              </p>
+
+              <div className="grid gap-3 md:grid-cols-4">
+                <label>
+                  <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                    Colore montatura
+                  </span>
+                  <input
+                    value={coloreMontatura}
+                    onChange={(e) =>
+                      setColoreMontatura(e.target.value)
+                    }
+                    placeholder="Es. Argento"
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-sm text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                  />
+                </label>
+
+                <label>
+                  <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                    Colore lente
+                  </span>
+                  <input
+                    value={coloreLente}
+                    onChange={(e) =>
+                      setColoreLente(e.target.value)
+                    }
+                    placeholder="Es. Viola"
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-sm text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                  />
+                </label>
+
+                <label>
+                  <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                    Misura
+                  </span>
+                  <input
+                    value={misuraPrincipale}
+                    onChange={(e) =>
+                      setMisuraPrincipale(e.target.value)
+                    }
+                    placeholder="Es. 52-18-140"
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-sm text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                  />
+                </label>
+
+                <label>
+                  <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                    Quantità
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={quantitaPrincipale}
+                    onChange={(e) =>
+                      setQuantitaPrincipale(
+                        Math.max(0, Number(e.target.value || 0))
+                      )
+                    }
+                    className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2.5 text-sm text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                  />
+                </label>
+              </div>
+            </div>
+
             <label className="flex items-center gap-3 rounded-xl border border-[#D9E2DF] bg-[#F3F5F2] p-4">
               <input
                 type="checkbox"
@@ -684,19 +820,7 @@ export default function AdminCatalogoPage() {
               </span>
             </label>
 
-            <label className="sm:col-span-2 lg:col-span-3">
-              <span className="mb-2 block text-sm font-semibold">
-                Descrizione
-              </span>
-              <textarea
-                rows={4}
-                value={descrizione}
-                onChange={(e) =>
-                  setDescrizione(e.target.value)
-                }
-                className="w-full rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-              />
-            </label>
+
           </div>
 
           <div className="mt-7 border-t border-[#E1E7E4] pt-6">
@@ -706,7 +830,7 @@ export default function AdminCatalogoPage() {
                   Magazzino
                 </p>
                 <h3 className="mt-1 font-serif text-xl font-medium">
-                  Varianti
+                  Altre varianti
                 </h3>
               </div>
 
@@ -723,71 +847,160 @@ export default function AdminCatalogoPage() {
               {varianti.map((v, indice) => (
                 <div
                   key={indice}
-                  className="grid gap-3 rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_120px_auto]"
+                  className="rounded-2xl border border-[#D9E2DF] bg-[#F3F5F2] p-4"
                 >
-                  <input
-                    value={v.taglia}
-                    onChange={(e) =>
-                      aggiornaVariante(
-                        indice,
-                        "taglia",
-                        e.target.value
-                      )
-                    }
-                    placeholder="Taglia"
-                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
+                  <div className="grid gap-4 lg:grid-cols-[140px_1fr]">
+                    <div>
+                      <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                        Foto variante
+                      </span>
 
-                  <input
-                    value={v.misura}
-                    onChange={(e) =>
-                      aggiornaVariante(
-                        indice,
-                        "misura",
-                        e.target.value
-                      )
-                    }
-                    placeholder="Misura"
-                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
+                      <div className="aspect-square overflow-hidden rounded-xl border border-[#D4DFDB] bg-white">
+                        {v.immagine_url ? (
+                          <img
+                            src={v.immagine_url}
+                            alt={`Variante ${indice + 1}`}
+                            className="h-full w-full object-contain p-2"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-center text-[10px] font-semibold uppercase tracking-[0.1em] text-[#9AA9A5]">
+                            Nessuna foto
+                          </div>
+                        )}
+                      </div>
 
-                  <input
-                    value={v.colore}
-                    onChange={(e) =>
-                      aggiornaVariante(
-                        indice,
-                        "colore",
-                        e.target.value
-                      )
-                    }
-                    placeholder="Colore"
-                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
+                      <label className="mt-2 block cursor-pointer rounded-xl border border-[#8FB8B2] bg-white px-3 py-2 text-center text-xs font-semibold text-[#6F918B] transition hover:bg-[#EDF3F0]">
+                        {uploadVarianteInCorso === indice
+                          ? "Caricamento..."
+                          : v.immagine_url
+                          ? "Cambia foto"
+                          : "Carica foto"}
 
-                  <input
-                    type="number"
-                    min="0"
-                    value={v.quantita}
-                    onChange={(e) =>
-                      aggiornaVariante(
-                        indice,
-                        "quantita",
-                        e.target.value
-                      )
-                    }
-                    placeholder="Q.tà"
-                    className="rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
-                  />
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp"
+                          disabled={uploadVarianteInCorso !== null}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      eliminaVariante(indice)
-                    }
-                    className="rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-3 py-2 text-xs font-semibold text-[#9A615A]"
-                  >
-                    Elimina
-                  </button>
+                            if (file) {
+                              caricaImmagineVariante(
+                                indice,
+                                file
+                              );
+                            }
+
+                            e.target.value = "";
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+
+                      {v.immagine_url && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            aggiornaVariante(
+                              indice,
+                              "immagine_url",
+                              ""
+                            )
+                          }
+                          className="mt-2 w-full rounded-xl border border-[#E7C9C5] bg-white px-3 py-2 text-xs font-semibold text-[#9A615A]"
+                        >
+                          Rimuovi foto
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_120px]">
+                      <label className="block">
+                        <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                          Colore montatura
+                        </span>
+                        <input
+                          value={v.colore_montatura}
+                          onChange={(e) =>
+                            aggiornaVariante(
+                              indice,
+                              "colore_montatura",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Es. Argento"
+                          className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                        />
+                      </label>
+
+                      <label className="block">
+                        <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                          Colore lente
+                        </span>
+                        <input
+                          value={v.colore_lente}
+                          onChange={(e) =>
+                            aggiornaVariante(
+                              indice,
+                              "colore_lente",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Es. Nera"
+                          className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                        />
+                      </label>
+
+                      <label className="block">
+                        <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                          Misura
+                        </span>
+                        <input
+                          value={v.misura}
+                          onChange={(e) =>
+                            aggiornaVariante(
+                              indice,
+                              "misura",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Es. 52-18-140"
+                          className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                        />
+                      </label>
+
+                      <label className="block">
+                        <span className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.12em] text-[#89A39D]">
+                          Quantità
+                        </span>
+                        <input
+                          type="number"
+                          min="0"
+                          value={v.quantita}
+                          onChange={(e) =>
+                            aggiornaVariante(
+                              indice,
+                              "quantita",
+                              e.target.value
+                            )
+                          }
+                          placeholder="0"
+                          className="w-full rounded-xl border border-[#D4DFDB] bg-white px-3 py-2 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
+                        />
+                      </label>
+
+                      <div className="sm:col-span-2 lg:col-span-4">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            eliminaVariante(indice)
+                          }
+                          className="rounded-xl border border-[#E7C9C5] bg-[#F6E7E4] px-4 py-2 text-xs font-semibold text-[#9A615A]"
+                        >
+                          Elimina variante
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -796,7 +1009,11 @@ export default function AdminCatalogoPage() {
           <button
             type="button"
             onClick={salvaProdotto}
-            disabled={salvataggio || uploadInCorso}
+            disabled={
+              salvataggio ||
+              uploadInCorso ||
+              uploadVarianteInCorso !== null
+            }
             className="mt-6 w-full rounded-xl bg-[#7FA39A] px-5 py-4 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(80,108,105,.12)] transition hover:bg-[#6F918B] disabled:opacity-50"
           >
             {salvataggio
@@ -866,7 +1083,9 @@ export default function AdminCatalogoPage() {
                         {p.marca || "Senza marca"}
                       </p>
                       <h3 className="mt-1 font-serif text-lg font-medium">
-                        {p.nome}
+                        {[p.marca, p.modello]
+                          .filter(Boolean)
+                          .join(" ") || p.codice_articolo || "Prodotto"}
                       </h3>
                     </div>
 

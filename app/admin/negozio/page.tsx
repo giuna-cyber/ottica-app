@@ -19,6 +19,12 @@ type Negozio = {
   codice_fiscale: string;
   orari_apertura: string;
   logo_url: string;
+  paypal_merchant_id: string;
+  paypal_account_status: string;
+  paypal_email_confirmed: number;
+  paypal_payments_receivable: number;
+  paypal_collegato: number;
+  paypal_tracking_id: string;
 };
 
 const vuoto: Negozio = {
@@ -36,6 +42,12 @@ const vuoto: Negozio = {
   codice_fiscale: "",
   orari_apertura: "",
   logo_url: "",
+  paypal_merchant_id: "",
+  paypal_account_status: "",
+  paypal_email_confirmed: 0,
+  paypal_payments_receivable: 0,
+  paypal_collegato: 0,
+  paypal_tracking_id: "",
 };
 
 export default function AdminNegozioPage() {
@@ -47,6 +59,8 @@ export default function AdminNegozioPage() {
   const [messaggio, setMessaggio] = useState("");
   const [caricamentoLogo, setCaricamentoLogo] = useState(false);
   const [erroreLogo, setErroreLogo] = useState("");
+  const [collegamentoPayPal, setCollegamentoPayPal] = useState(false);
+  const [errorePayPal, setErrorePayPal] = useState("");
   const inputLogoRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -212,6 +226,99 @@ export default function AdminNegozioPage() {
       "Logo rimosso. Premi “Salva dati centro ottico” per confermare."
     );
   }
+
+  async function collegaPayPal() {
+    setCollegamentoPayPal(true);
+    setErrorePayPal("");
+    setErrore("");
+    setMessaggio("");
+
+    try {
+      const risposta = await fetch("/api/paypal/onboarding", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const testo = await risposta.text();
+
+      let payload: {
+        ok?: boolean;
+        errore?: string;
+        tracking_id?: string;
+        onboarding_url?: string;
+        referral_url?: string;
+      };
+
+      try {
+        payload = JSON.parse(testo);
+      } catch {
+        throw new Error("Il server ha restituito una risposta PayPal non valida.");
+      }
+
+      if (!risposta.ok || !payload.ok) {
+        throw new Error(
+          payload.errore || "Impossibile avviare il collegamento PayPal."
+        );
+      }
+
+      const onboardingUrl = payload.onboarding_url || payload.referral_url;
+
+      if (!onboardingUrl) {
+        throw new Error("PayPal non ha restituito il link di collegamento.");
+      }
+
+      if (payload.tracking_id) {
+        const datiAggiornati: Negozio = {
+          ...dati,
+          paypal_tracking_id: payload.tracking_id,
+        };
+
+        const salvaTracking = await fetch("/api/admin/negozio", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(datiAggiornati),
+        });
+
+        const testoSalvataggio = await salvaTracking.text();
+
+        let esitoSalvataggio: {
+          ok?: boolean;
+          errore?: string;
+        };
+
+        try {
+          esitoSalvataggio = JSON.parse(testoSalvataggio);
+        } catch {
+          throw new Error(
+            "Impossibile salvare il riferimento del collegamento PayPal."
+          );
+        }
+
+        if (!salvaTracking.ok || !esitoSalvataggio.ok) {
+          throw new Error(
+            esitoSalvataggio.errore ||
+              "Impossibile salvare il riferimento del collegamento PayPal."
+          );
+        }
+
+        setDati(datiAggiornati);
+      }
+
+      window.location.href = onboardingUrl;
+    } catch (e) {
+      setErrorePayPal(
+        e instanceof Error
+          ? e.message
+          : "Impossibile avviare il collegamento PayPal."
+      );
+      setCollegamentoPayPal(false);
+    }
+  }
+
 
   async function salva(evento: FormEvent) {
     evento.preventDefault();
@@ -458,6 +565,109 @@ export default function AdminNegozioPage() {
                   className="w-full resize-y rounded-xl border border-[#D4DFDB] bg-white px-4 py-3 text-[#20383B] outline-none transition focus:border-[#8FB8B2]"
                 />
               </label>
+
+              <div className="sm:col-span-2">
+                <span className="mb-2 block text-sm font-semibold text-[#20383B]">
+                  Pagamenti
+                </span>
+
+                <div className="rounded-[20px] border border-[#D9E2DF] bg-[#F3F5F2] p-4 sm:p-5">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h2 className="text-base font-black text-[#20383B]">
+                          PayPal
+                        </h2>
+
+                        {dati.paypal_collegato === 1 ? (
+                          <span className="rounded-full bg-[#E3F1E9] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.08em] text-[#55766D]">
+                            Collegato
+                          </span>
+                        ) : dati.paypal_merchant_id ? (
+                          <span className="rounded-full bg-[#FFF3D9] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.08em] text-[#8A6A2F]">
+                            Verifica richiesta
+                          </span>
+                        ) : (
+                          <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.08em] text-[#879B96]">
+                            Non collegato
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="mt-2 max-w-2xl text-sm leading-6 text-[#738682]">
+                        Collega il conto PayPal Business del centro ottico. I pagamenti
+                        dei clienti saranno accreditati direttamente sul conto PayPal
+                        del negozio.
+                      </p>
+
+                      {dati.paypal_merchant_id && (
+                        <p className="mt-2 text-xs text-[#879B96]">
+                          Merchant ID:{" "}
+                          <span className="font-semibold text-[#55766D]">
+                            {dati.paypal_merchant_id}
+                          </span>
+                        </p>
+                      )}
+
+                      {dati.paypal_merchant_id && (
+                        <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
+                          <span
+                            className={`rounded-full px-2.5 py-1 ${
+                              dati.paypal_email_confirmed === 1
+                                ? "bg-[#E3F1E9] text-[#55766D]"
+                                : "bg-[#FFF3D9] text-[#8A6A2F]"
+                            }`}
+                          >
+                            Email PayPal{" "}
+                            {dati.paypal_email_confirmed === 1
+                              ? "confermata"
+                              : "da confermare"}
+                          </span>
+
+                          <span
+                            className={`rounded-full px-2.5 py-1 ${
+                              dati.paypal_payments_receivable === 1
+                                ? "bg-[#E3F1E9] text-[#55766D]"
+                                : "bg-[#FFF3D9] text-[#8A6A2F]"
+                            }`}
+                          >
+                            Pagamenti{" "}
+                            {dati.paypal_payments_receivable === 1
+                              ? "abilitati"
+                              : "non ancora abilitati"}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={collegaPayPal}
+                      disabled={collegamentoPayPal}
+                      className="shrink-0 rounded-xl bg-[#0070BA] px-5 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {collegamentoPayPal
+                        ? "Apertura PayPal..."
+                        : dati.paypal_merchant_id
+                          ? "Ricollega PayPal"
+                          : "Collega PayPal"}
+                    </button>
+                  </div>
+
+                  {errorePayPal && (
+                    <div className="mt-4 rounded-xl border border-[#E9D1CD] bg-[#F8ECE9] p-3 text-sm font-semibold text-[#9A615A]">
+                      {errorePayPal}
+                    </div>
+                  )}
+
+                  {dati.paypal_collegato === 1 && (
+                    <div className="mt-4 rounded-xl border border-[#CFE0D8] bg-[#EDF5F0] p-3 text-sm font-semibold text-[#55766D]">
+                      PayPal è configurato e il centro ottico risulta abilitato a
+                      ricevere pagamenti.
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
             <button
